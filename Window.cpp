@@ -28,11 +28,6 @@ bool Window::CheckIfWindowWasCreated()
     return true;
 }
 
-void Window::framebuffer_size_callback()
-{
-    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-}
-
 void Window::SetViewPort(int width, int height)
 {
     glViewport(0, 0, width, height);

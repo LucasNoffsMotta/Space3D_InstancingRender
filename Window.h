@@ -13,7 +13,6 @@ public:
 	int  SCREEN_HEIGHT;
 	int  SCREEN_WIDTH;
 	GLFWwindow* window;
-	void framebuffer_size_callback();
 	bool CheckIfWindowWasCreated();
 	void SetViewPort(int width, int height);
 	void Update();
