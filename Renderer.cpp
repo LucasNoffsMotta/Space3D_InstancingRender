@@ -50,13 +50,13 @@ void Renderer::InitRenderData()
 
     view = glm::mat4(1.0f);
     projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)1300 / 1200, 0.1f, 1000.f);
+    projection = glm::perspective(glm::radians(45.0f), (float)1300 / 1200, 0.1f, 10000000.f);
 
     vao = VAO();
     VBO vbo = VBO(square, sizeof(square));
     vao.Bind();
     vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(float) * 6, (void*)0);
-    vao.LinkAttrib(vbo, 1, 3, GL_FLOAT, sizeof(float) * 6, (void*)(3 * sizeof(float)));
+    vao.LinkAttrib(vbo, 2, 3, GL_FLOAT, sizeof(float) * 6, (void*)(3 * sizeof(float)));
 }
 
 Renderer::Renderer()
@@ -71,23 +71,25 @@ void Renderer::SetActiveShader(Shader& shader)
 
 void Renderer::SetModelMatrices(glm::vec3* translations, int ammount)
 {
-    modelMatrices = new glm::mat4[ammount*ammount];
+    modelMatrices = new glm::mat4[ammount];
+    glm::vec3* dummtPtr = translations;
 
-    for (int i = 0; i < ammount* ammount; i++)
+    for (int i = 0; i < ammount; i++)
     {
-        glm::vec3 trans = *translations;
+        glm::vec3 trans = *dummtPtr;
         glm::mat4 model = glm::mat4(1.f);
         model = glm::translate(model, trans);
         modelMatrices[i] = model;
-        translations++;
+        float scale = static_cast<float>((rand() % 20) / 100.0 + 0.05);
+        model = glm::scale(model, glm::vec3(scale));
+        dummtPtr++;
     }
 }
 
 void Renderer::SetInstancesBuffers(int amount)
 {
-    //glm::vec3* translations = SetInstancedTranslations(amount);
-    //SetModelMatrices(translations, amount);
-    //vao.LinkInstancedMat4(modelMatrices, amount);
+    SetModelMatrices(instancesTranslationPtr, amount);
+    vao.LinkInstancedMat4(modelMatrices, amount);
 }
 
 glm::vec3 Renderer::GetTranslationPos(int index)
@@ -159,27 +161,28 @@ void Renderer::DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis
     shader.SetUniformMatrix4fv("view", view);
 
     vao.Bind();
-    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, amount * amount);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, amount);
     vao.Unbind();
 }
 
 void Renderer::SetInstancedTranslations(int amount)
 {
-    instancesTranslationPtr = new glm::vec3[100];
+    instancesTranslationPtr = new glm::vec3[amount];
 
-    int index = 0;
-    float offset = 0.1f;
+    srand(static_cast<unsigned int>(glfwGetTime())); // initialize random seed
+    float radius = 1500.0;
+    float offset = 250.0f;
 
-    for (int x = -10; x < 10; x+=2)
+    for (int i = 0; i < amount; i++)
     {
-        for (int z = -10; z < 10; z+=2)
-        {
-            glm::vec3 translation;
-            translation.x = (float)x / 10.0f + offset;
-            translation.y = 0.f;
-            translation.z = (float)z / 10.0f + offset;
-            instancesTranslationPtr[index++] = translation;
-            std::cout << index << std::endl;
-        }
+        float angle = (float)i / (float)amount * 360.0f;
+        float displacement = (rand() % (int)(2 * offset * 100000)) / 10.0f - offset;
+        float x = sin(angle) * radius + displacement;
+        displacement = (rand() % (int)(2 * offset * 100000)) / 10.0f - offset;
+        float y = displacement * 0.4f; // keep height of asteroid field smaller compared to width of x and z
+        displacement = (rand() % (int)(2 * offset * 100000)) / 10.0f - offset;
+        float z = cos(angle) * radius + displacement;
+        glm::vec3 translation = glm::vec3(x,y,z);
+        instancesTranslationPtr[i] = translation;
     }
 }

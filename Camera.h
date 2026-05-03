@@ -15,7 +15,7 @@ private:
 	float Pitch = 0.0f;
 	float LastX = 650;
 	float LastY = 600;
-	float MoveSpeed = 2.f;
+	float MoveSpeed = 200.f;
 	bool FirstMouseMovement = true;
 
 

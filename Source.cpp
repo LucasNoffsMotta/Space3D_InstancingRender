@@ -42,7 +42,6 @@ int main()
         return -1;
     }
 
-
     glfwSetFramebufferSizeCallback(window.window, framebuffer_size_callback);
     window.SetViewPort(window.SCREEN_WIDTH, window.SCREEN_HEIGHT);
 
@@ -50,14 +49,15 @@ int main()
     Shader instancedLayoutShader = ContentManager::LoadShader("instancedLayoutVertex.vert", "basicFragmentShader.frag", "instancedLayout");
     Shader basicShader = ContentManager::LoadShader("basicVertex.vert", "basicFragmentShader.frag", "basicShader");
 
-
     ContentManager::InitColors();
     Renderer renderer = Renderer();
 
     glm::vec3 scale = glm::vec3(1.f);
     glm::vec3 rotation = glm::vec3(1.0f);
     glm::vec3 rotationAxis = glm::vec3(1.f);
-    glm::vec3 color = ContentManager::GetColor("green");
+    glm::vec3 planetColor = ContentManager::GetColor("yellow");
+    glm::vec3 asteroidColor = ContentManager::GetColor("red");
+
 
     glm::vec3 camPos = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 camFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -68,9 +68,9 @@ int main()
     float lastFrame = 0.f;
     float camSpeed = 10.f;
 
-    int amount = 10;
-
-    renderer.SetInstancedTranslations(100);
+    int amount = 1000000;
+    renderer.SetInstancedTranslations(amount);
+    renderer.SetInstancesBuffers(amount);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -83,7 +83,10 @@ int main()
         lastFrame = currentFrame;
         renderer.view = cam.Update(window);
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
-        renderer.DrawInstances(scale, rotationAxis, 1.f, color, instancedUniformShader);       
+        //renderer.DrawInstances(scale, rotationAxis, 1.f, color, instancedUniformShader);          // -> Draw instances by uniform  
+        renderer.DrawInstances(amount, scale, rotationAxis, 1.f, asteroidColor, instancedLayoutShader);   // -> Draw instances by layout
+        renderer.Draw(glm::vec3(0.0f, -3.0f, 0.0f), glm::vec3(100.f), rotationAxis, 0.f, planetColor, basicShader);
+        
         window.Update();
     }
 
