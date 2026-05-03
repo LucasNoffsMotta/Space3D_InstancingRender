@@ -5,13 +5,15 @@
 #include "Renderer.h"
 #include "ContentManager.h"
 #include <assimp/Importer.hpp>
+#include "Camera.h"
 #include <assimp/scene.h>
+
 #include <iostream>
+#include "TimeHelper.h"
 
 
 const unsigned int SCR_WIDTH = 1300;
 const unsigned int SCR_HEIGHT = 1200;
-
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -44,39 +46,48 @@ int main()
     glfwSetFramebufferSizeCallback(window.window, framebuffer_size_callback);
     window.SetViewPort(window.SCREEN_WIDTH, window.SCREEN_HEIGHT);
 
-    Shader basicShader = ContentManager::LoadShader("basicVertexShader.vert", "basicFragmentShader.frag", "basicShader");
+    Shader instancedUniformShader = ContentManager::LoadShader("instancedUniformVertex.vert", "basicFragmentShader.frag", "instancedUniform");
+    Shader instancedLayoutShader = ContentManager::LoadShader("instancedLayoutVertex.vert", "basicFragmentShader.frag", "instancedLayout");
+    Shader basicShader = ContentManager::LoadShader("basicVertex.vert", "basicFragmentShader.frag", "basicShader");
+
+
     ContentManager::InitColors();
     Renderer renderer = Renderer();
-    glm::vec3 translation = glm::vec3(0.0f, 0.0f, -2.5f);
+
     glm::vec3 scale = glm::vec3(1.f);
     glm::vec3 rotation = glm::vec3(1.0f);
     glm::vec3 rotationAxis = glm::vec3(1.f);
-    glm::vec3 color = ContentManager::GetColor("red");
+    glm::vec3 color = ContentManager::GetColor("green");
 
+    glm::vec3 camPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    glm::vec3 camFront = glm::vec3(0.0f, 0.0f, -1.0f);
+    glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
+    Camera cam = Camera(camPos, camFront, camUp);
+
+    float dt = 0.f;
+    float lastFrame = 0.f;
+    float camSpeed = 10.f;
+
+    int amount = 10;
+
+    renderer.SetInstancedTranslations(100);
+
+    glEnable(GL_DEPTH_TEST);
 
     while (!glfwWindowShouldClose(window.window))
     {
-        double xpos, ypos;
-        glfwGetCursorPos(window.window, &xpos, &ypos); // Retrieves position relative to the content area
-        translation.x = xpos / SCR_WIDTH;
-        translation.y = (ypos / SCR_HEIGHT) * -1;
-
-        std::cout << "Translation x:" << translation.x << std::endl;
-        std::cout << "Translation y:" << translation.x << std::endl;
-
-        renderer.view = glm::mat4(1.0f);
-        renderer.view = glm::translate(renderer.view, glm::vec3(translation.x, translation.y, -1.5f));
-
-        renderer.projection = glm::mat4(1.0f);
-        renderer.projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
-
-
-        window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f);
-        renderer.Draw(translation, scale, rotation, 10.f, color, basicShader);
+        TimeHelper::Update();
+        TimeHelper::ShowFps();
+        float currentFrame = glfwGetTime();
+        dt = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        renderer.view = cam.Update(window);
+        window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
+        renderer.DrawInstances(scale, rotationAxis, 1.f, color, instancedUniformShader);       
         window.Update();
     }
 
-    glfwTerminate();
+    glfwTerminate();     
     return 0;
 }
 
