@@ -51,14 +51,16 @@ void Camera::HandleKeybordInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		CameraPos.x += (MoveSpeed * CameraFront.x) * TimeHelper::GetDeltaTime();
-		CameraPos.z += (MoveSpeed * CameraFront.z) * TimeHelper::GetDeltaTime();
+		//CameraPos.x += (MoveSpeed * CameraFront.x) * TimeHelper::GetDeltaTime();
+		//CameraPos.z += (MoveSpeed * CameraFront.z) * TimeHelper::GetDeltaTime();
+		CameraPos += (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		CameraPos.x -= (MoveSpeed * CameraFront.x) * TimeHelper::GetDeltaTime();
-		CameraPos.z -= (MoveSpeed * CameraFront.z) * TimeHelper::GetDeltaTime();
+		//CameraPos.x -= (MoveSpeed * CameraFront.x) * TimeHelper::GetDeltaTime();
+		//CameraPos.z -= (MoveSpeed * CameraFront.z) * TimeHelper::GetDeltaTime();
+		CameraPos -= (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)

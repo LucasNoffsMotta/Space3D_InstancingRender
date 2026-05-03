@@ -12,6 +12,8 @@ public:
 
 	void DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
 
+	void DrawAimDot(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height);
+
 
 	void SetInstancedTranslations(int amount);
 	Renderer();
@@ -21,6 +23,7 @@ public:
 	void SetInstancesBuffers(int amount);
 
 	glm::vec3 GetTranslationPos(int index);
+	void InitAimDotRenderData();
 
 	glm::mat4 projection;
 	glm::mat4 view;
@@ -30,8 +33,10 @@ public:
 
 private:
 	void InitRenderData();
+
 	Shader shader;
 	VAO vao;
+	VAO aimDotVao;
 
 
 };

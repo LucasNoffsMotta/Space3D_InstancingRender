@@ -59,6 +59,25 @@ void Renderer::InitRenderData()
     vao.LinkAttrib(vbo, 2, 3, GL_FLOAT, sizeof(float) * 6, (void*)(3 * sizeof(float)));
 }
 
+void Renderer::InitAimDotRenderData()
+{
+    float aimDot[] = {
+       -0.5f, -0.5f, -0.5f, 
+        0.5f, -0.5f, -0.5f, 
+        0.5f,  0.5f, -0.5f, 
+        0.5f,  0.5f, -0.5f, 
+       -0.5f,  0.5f, -0.5f, 
+       -0.5f, -0.5f, -0.5f, 
+
+    };
+
+
+    aimDotVao = VAO();
+    VBO vbo = VBO(aimDot, sizeof(aimDot));
+    aimDotVao.Bind();
+    aimDotVao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(float) * 3, (void*)0);
+}
+
 Renderer::Renderer()
 {
     InitRenderData();
@@ -163,6 +182,21 @@ void Renderer::DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis
     vao.Bind();
     glDrawArraysInstanced(GL_TRIANGLES, 0, 36, amount);
     vao.Unbind();
+}
+
+void Renderer::DrawAimDot(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height)
+{
+    shader.Activate();
+    shader.SetUniform3fv("color", color);
+    glm::mat4 model = glm::mat4(1.f);
+    glm::vec3 translation = glm::vec3(0.5, 0.5, 0.f);
+
+    model = glm::scale(model, scale);
+    model = glm::translate(model, translation);
+    shader.SetUniformMatrix4fv("model", model);
+    aimDotVao.Bind();
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    aimDotVao.Unbind();
 }
 
 void Renderer::SetInstancedTranslations(int amount)

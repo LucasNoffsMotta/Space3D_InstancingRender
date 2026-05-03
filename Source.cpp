@@ -48,6 +48,7 @@ int main()
     Shader instancedUniformShader = ContentManager::LoadShader("instancedUniformVertex.vert", "basicFragmentShader.frag", "instancedUniform");
     Shader instancedLayoutShader = ContentManager::LoadShader("instancedLayoutVertex.vert", "basicFragmentShader.frag", "instancedLayout");
     Shader basicShader = ContentManager::LoadShader("basicVertex.vert", "basicFragmentShader.frag", "basicShader");
+    Shader aimDotShader = ContentManager::LoadShader("2dVertex.vert", "basicFragmentShader.frag", "aimDotShader");
 
     ContentManager::InitColors();
     Renderer renderer = Renderer();
@@ -56,7 +57,8 @@ int main()
     glm::vec3 rotation = glm::vec3(1.0f);
     glm::vec3 rotationAxis = glm::vec3(1.f);
     glm::vec3 planetColor = ContentManager::GetColor("yellow");
-    glm::vec3 asteroidColor = ContentManager::GetColor("red");
+    glm::vec3 asteroidColor = ContentManager::GetColor("green");
+    glm::vec3 aimDotColor = ContentManager::GetColor("red");
 
 
     glm::vec3 camPos = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -71,6 +73,7 @@ int main()
     int amount = 1000000;
     renderer.SetInstancedTranslations(amount);
     renderer.SetInstancesBuffers(amount);
+    renderer.InitAimDotRenderData();
 
     glEnable(GL_DEPTH_TEST);
 
@@ -83,9 +86,11 @@ int main()
         lastFrame = currentFrame;
         renderer.view = cam.Update(window);
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
+        renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
         //renderer.DrawInstances(scale, rotationAxis, 1.f, color, instancedUniformShader);          // -> Draw instances by uniform  
         renderer.DrawInstances(amount, scale, rotationAxis, 1.f, asteroidColor, instancedLayoutShader);   // -> Draw instances by layout
         renderer.Draw(glm::vec3(0.0f, -3.0f, 0.0f), glm::vec3(100.f), rotationAxis, 0.f, planetColor, basicShader);
+
         
         window.Update();
     }
