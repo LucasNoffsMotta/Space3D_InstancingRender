@@ -1,4 +1,4 @@
-# 3D Rendering Framework (Space3D)
+# Instancing Render (Space3D)
 
 Lightweight OpenGL-based 3D rendering demo and small framework showcasing instanced rendering, a simple camera, projectile logic and utility helpers.
 
