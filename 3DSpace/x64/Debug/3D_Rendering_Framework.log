@@ -1,0 +1,9 @@
+﻿  Source.cpp
+D:\Projetos\c++\OpenGL\Space3D\3D_Rendering_Framework\Header\Helper\ContentManager.h(18,2): warning C4091: 'static ': ignored on left of 'ContentManager' when no variable is declared
+  (compiling source file 'Source/Source.cpp')
+  
+D:\Projetos\c++\OpenGL\Space3D\3D_Rendering_Framework\Header\Helper\TimeHelper.h(15,2): warning C4091: 'static ': ignored on left of 'TimeHelper' when no variable is declared
+  (compiling source file 'Source/Source.cpp')
+  
+D:\Projetos\c++\OpenGL\Space3D\3D_Rendering_Framework\Source\Source.cpp(103,28): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  3D_Rendering_Framework.vcxproj -> D:\Projetos\c++\OpenGL\Space3D\3D_Rendering_Framework\x64\Debug\3DSpace.exe
