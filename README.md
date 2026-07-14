@@ -56,9 +56,6 @@ Important files:
 - `Source/Game/Projectile.cpp` — projectile logic
 - `Source/Helper/ContentManager.cpp` — shader & color loading utilities
 
-## Contributing
-See `CONTRIBUTING.md` for project conventions and pull request guidance. Follow the project's formatting and naming rules in `.editorconfig` and `CONTRIBUTING.md` when submitting changes.
-
 ## License
 No license file is included. Add a `LICENSE` (for example MIT) to clarify reuse and distribution terms.
 
