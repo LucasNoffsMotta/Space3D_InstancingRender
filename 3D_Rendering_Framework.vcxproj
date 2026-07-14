@@ -18,12 +18,46 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Header\Game\Camera.h" />
+    <ClInclude Include="Header\Game\Projectile.h" />
+    <ClInclude Include="Header\GL\Window.h" />
+    <ClInclude Include="Header\Helper\ContentManager.h" />
+    <ClInclude Include="Header\Helper\TimeHelper.h" />
+    <ClInclude Include="Header\Render\EBO.h" />
+    <ClInclude Include="Header\Render\Renderer.h" />
+    <ClInclude Include="Header\Render\Shader.h" />
+    <ClInclude Include="Header\Render\VAO.h" />
+    <ClInclude Include="Header\Render\VBO.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\basicFragmentShader.frag" />
+    <None Include="Shader\basicVertex.vert" />
+    <None Include="Shader\instancedLayoutVertex.vert" />
+    <None Include="Shader\instancedUniformVertex.vert" />
+    <None Include="Shader\SimpleColorFragmentShader.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\GraphicsProgramming\glad.c" />
+    <ClCompile Include="Source\Game\Camera.cpp" />
+    <ClCompile Include="Source\Game\Projectile.cpp" />
+    <ClCompile Include="Source\GL\Window.cpp" />
+    <ClCompile Include="Source\Helper\ContentManager.cpp" />
+    <ClCompile Include="Source\Helper\TimeHelper.cpp" />
+    <ClCompile Include="Source\Render\EBO.cpp" />
+    <ClCompile Include="Source\Render\Renderer.cpp" />
+    <ClCompile Include="Source\Render\Shader.cpp" />
+    <ClCompile Include="Source\Render\VAO.cpp" />
+    <ClCompile Include="Source\Render\VBO.cpp" />
+    <ClCompile Include="Source\Source.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{0d95c625-f6cc-4836-b88d-30fb25070e8f}</ProjectGuid>
     <RootNamespace>My3DRenderingFramework</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>3DSpace</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -107,6 +141,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>D:\Projetos\c++\OpenGL\Space3D\3D_Rendering_Framework\Header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,30 +163,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\GraphicsProgramming\glad.c" />
-    <ClCompile Include="ContentManager.cpp" />
-    <ClCompile Include="EBO.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="VAO.cpp" />
-    <ClCompile Include="VBO.cpp" />
-    <ClCompile Include="Window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ContentManager.h" />
-    <ClInclude Include="EBO.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="VAO.h" />
-    <ClInclude Include="VBO.h" />
-    <ClInclude Include="Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="basicFragmentShader.frag" />
-    <None Include="basicVertexShader.vert" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

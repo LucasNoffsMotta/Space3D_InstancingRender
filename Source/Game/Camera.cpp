@@ -1,5 +1,5 @@
-#include "Camera.h"
-#include "TimeHelper.h"
+#include "Game/Camera.h"
+#include "Helper/TimeHelper.h"
 
 Camera::Camera(glm::vec3& camPos, glm::vec3& camFront, glm::vec3& camUp)
 {

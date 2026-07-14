@@ -1,7 +1,7 @@
 #ifndef  CONTENT_MANAGER_CLASS_H
 #define CONTENT_MANAGER_CLASS_H
 
-#include "Shader.h"
+#include "Render/Shader.h"
 #include <map>
 
 static class ContentManager

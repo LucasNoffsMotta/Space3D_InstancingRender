@@ -1,5 +1,5 @@
-#include "Renderer.h"
-#include "VAO.h"
+#include "Render/Renderer.h"
+#include "Render/VAO.h"
 
 
 void Renderer::InitRenderData()

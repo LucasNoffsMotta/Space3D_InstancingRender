@@ -4,7 +4,7 @@
 #include<GLAD/glad.h>
 #include<GLFW/glfw3.h>
 #include <glm/fwd.hpp>
-#include "VBO.h"
+#include "Render/VBO.h"
 #include <glm/ext/matrix_float4x4.hpp>
 
 class VAO

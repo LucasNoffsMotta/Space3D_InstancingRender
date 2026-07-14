@@ -1,5 +1,6 @@
-#include "Projectile.h"
-#include "TimeHelper.h"
+#include "Game/Projectile.h"
+#include "Helper/TimeHelper.h"
+#include <Render/Shader.h>
 
 Projectile::Projectile(glm::vec3& color, glm::vec3& position, glm::vec3& scale, glm::vec3& rotation, glm::vec3& direction)
 {

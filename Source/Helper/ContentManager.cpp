@@ -1,4 +1,5 @@
-#include "ContentManager.h"
+#include "Helper/ContentManager.h"
+#include <Render/Shader.h>
 
 std::map<std::string, Shader>       ContentManager::Shaders;
 std::map<std::string, glm::vec3>       ContentManager::Colors;

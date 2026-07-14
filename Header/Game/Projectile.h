@@ -1,8 +1,8 @@
 #ifndef  PROJECTILE_CLASS_h
 #define PROJECTILE_CLASS_H
 
-#include "Renderer.h"
-#include "Shader.h"
+#include "Render/Shader.h"
+#include <Render/Renderer.h>
 
 class Projectile {
 

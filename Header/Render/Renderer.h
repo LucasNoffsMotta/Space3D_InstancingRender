@@ -1,5 +1,5 @@
-#include "Shader.h"
-#include "VAO.h"
+#include "Render/Shader.h"
+#include "Render/VAO.h"
 #ifndef RENDERER_CLASS_H
 #define RENDERER_CLASS_H
 

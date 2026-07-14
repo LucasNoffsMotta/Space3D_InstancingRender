@@ -1,14 +1,14 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h> 
-#include "Window.h"
-#include "Shader.h"
-#include "Renderer.h"
-#include "ContentManager.h"
-#include "Camera.h"
+#include "GL/Window.h"
+#include "Render/Shader.h"
+#include "Render/Renderer.h"
+#include "Helper/ContentManager.h"
+#include "Game/Camera.h"
 
 #include <iostream>
-#include "TimeHelper.h"
-#include "Projectile.h"
+#include "Helper/TimeHelper.h"
+#include "Game/Projectile.h"
 #include <vector>
 
 
@@ -45,10 +45,25 @@ int main()
     glfwSetFramebufferSizeCallback(window.window, framebuffer_size_callback);
     window.SetViewPort(window.SCREEN_WIDTH, window.SCREEN_HEIGHT);
 
-    Shader instancedUniformShader = ContentManager::LoadShader("instancedUniformVertex.vert", "basicFragmentShader.frag", "instancedUniform");
-    Shader instancedLayoutShader = ContentManager::LoadShader("instancedLayoutVertex.vert", "basicFragmentShader.frag", "instancedLayout");
-    Shader basicShader = ContentManager::LoadShader("basicVertex.vert", "basicFragmentShader.frag", "basicShader");
-    Shader aimDotShader = ContentManager::LoadShader("2dVertex.vert", "SimpleColorFragmentShader.frag", "aimDotShader");
+    Shader instancedUniformShader = ContentManager::LoadShader(
+        "Shader/instancedUniformVertex.vert",
+        "Shader/basicFragmentShader.frag",
+        "instancedUniform");
+
+    Shader instancedLayoutShader = ContentManager::LoadShader(
+        "Shader/instancedLayoutVertex.vert",
+        "Shader/basicFragmentShader.frag",
+        "instancedLayout");
+
+    Shader basicShader = ContentManager::LoadShader(
+        "Shader/basicVertex.vert",
+        "Shader/basicFragmentShader.frag",
+        "basicShader");
+
+    Shader aimDotShader = ContentManager::LoadShader(
+        "Shader/2dVertex.vert",
+        "Shader/SimpleColorFragmentShader.frag",
+        "aimDotShader");
 
     ContentManager::InitColors();
     Renderer renderer = Renderer();
@@ -71,7 +86,7 @@ int main()
     float lastFrame = 0.f;
     float camSpeed = 10.f;
 
-    int amount = 10000000;
+    int amount = 1000000;
     renderer.SetInstancedTranslations(amount);
     renderer.SetInstancesBuffers(amount);
     renderer.InitAimDotRenderData();
