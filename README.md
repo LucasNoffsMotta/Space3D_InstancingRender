@@ -1,4 +1,4 @@
-# Instancing Render (Space3D)
+# Instancing Render (Space3D) - Supports more than 1 million meshes rendered with only 1 draw call
 
 Lightweight OpenGL-based 3D rendering demo and small framework showcasing instanced rendering, a simple camera, projectile logic and utility helpers.
 
