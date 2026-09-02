@@ -86,9 +86,9 @@ int main()
     float lastFrame = 0.f;
     float camSpeed = 10.f;
 
-    int amount = 1000000;
-    renderer.SetInstancedTranslations(amount);
-    renderer.SetInstancesBuffers(amount);
+    int instances = 10000;
+    renderer.SetInstancedTranslations(instances);
+    renderer.SetInstancesBuffers(instances);
     renderer.InitAimDotRenderData();
     renderer.InitBulletRenderData();
     renderer.bulletShoot = false;
@@ -108,7 +108,7 @@ int main()
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
         //renderer.DrawInstances(scale, rotationAxis, 1.f, color, instancedUniformShader);          // -> Draw instances by uniform  
-        renderer.DrawInstances(amount, scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
+        renderer.DrawInstances(instances, scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader, cam);   // -> Draw instances by layout
 
        if (glfwGetKey(window.window, GLFW_KEY_SPACE) == GLFW_PRESS)
        {

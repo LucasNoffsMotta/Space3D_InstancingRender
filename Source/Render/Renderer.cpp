@@ -2,51 +2,53 @@
 #include "Render/VAO.h"
 
 
+
 void Renderer::InitRenderData()
 {
     float square[] = {
-             -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
-             0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
-             0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,
-             0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,
-            -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,
-            -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.f, 0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f, -1.0f,
 
-            -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,
-             0.5f, -0.5f,  0.5f, 1.0, 0.1, 1.0,
-             0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,
-             0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,
-            -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,
-            -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,
+        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f, 1.0, 0.1, 1.0, 0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f,  1.0f,
 
-            -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,
-            -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,
-            -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
-            -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
-            -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,
-            -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,
+        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,  -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,  0.0f,
 
-             0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,
-             0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,
-             0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
-             0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
-             0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,
-             0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,  1.0f,  0.0f,  0.0f,
 
-            -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
-             0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
-             0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,
-             0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,
-            -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,
-            -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,  0.0f,
 
-            -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,
-             0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,
-             0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,
-             0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,
-            -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,
-            -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,
+        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f,  1.0f,  0.0f,
     };
+
 
     view = glm::mat4(1.0f);
     projection = glm::mat4(1.0f);
@@ -55,8 +57,9 @@ void Renderer::InitRenderData()
     vao = VAO();
     VBO vbo = VBO(square, sizeof(square));
     vao.Bind();
-    vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(float) * 6, (void*)0);
-    vao.LinkAttrib(vbo, 2, 3, GL_FLOAT, sizeof(float) * 6, (void*)(3 * sizeof(float)));
+    vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(float) * 9, (void*)0);
+    vao.LinkAttrib(vbo, 2, 3, GL_FLOAT, sizeof(float) * 9, (void*)(3 * sizeof(float)));
+    vao.LinkAttrib(vbo, 3, 3, GL_FLOAT, sizeof(float) * 9, (void*)(6 * sizeof(float)));
 }
 
 void Renderer::InitAimDotRenderData()
@@ -80,7 +83,7 @@ void Renderer::InitAimDotRenderData()
 void Renderer::InitBulletRenderData()
 {
     float square[] = {
-            -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
+           -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
             0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,
             0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,
             0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,
@@ -233,17 +236,17 @@ void Renderer::DrawInstances(glm::vec3 scale, glm::vec3 rotationAxis, float rota
     }
 
     shader.SetUniform3fv("color", color);
-    shader.SetUniformFloat("time", glfwGetTime() / 2);
     shader.SetUniformMatrix4fv("model", model);
     shader.SetUniformMatrix4fv("projection", projection);
-    shader.SetUniformMatrix4fv("view", view);
+    shader.SetUniformMatrix4fv("view", view);    
+    shader.SetUniformFloat("cutOff", glm::cos(glm::radians(12.5f)));
 
     vao.Bind();
     glDrawArraysInstanced(GL_TRIANGLES, 0, 36, 100);
     vao.Unbind();
 }
 
-void Renderer::DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
+void Renderer::DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader, Camera& cam)
 {
     //Keep on draw:
     shader.Activate();
@@ -252,6 +255,8 @@ void Renderer::DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis
     shader.SetUniformFloat("time", glfwGetTime() / 2);
     shader.SetUniformMatrix4fv("projection", projection);
     shader.SetUniformMatrix4fv("view", view);
+    shader.SetUniform3fv("lightPos", cam.CameraPos);
+    shader.SetUniform3fv("lightDirection", cam.CameraFront);
 
     vao.Bind();
     glDrawArraysInstanced(GL_TRIANGLES, 0, 36, amount);
@@ -294,5 +299,6 @@ void Renderer::SetInstancedTranslations(int amount)
         float z = cos(angle) * radius + displacement;
         glm::vec3 translation = glm::vec3(x,y,z);
         instancesTranslationPtr[i] = translation;
+        std::cout << i << std::endl;
     }
 }

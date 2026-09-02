@@ -1,5 +1,6 @@
 #include "Render/Shader.h"
 #include "Render/VAO.h"
+#include <Game/Camera.h>
 #ifndef RENDERER_CLASS_H
 #define RENDERER_CLASS_H
 
@@ -10,7 +11,7 @@ public:
 	void DrawInstances(glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
 
 
-	void DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
+	void DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader, Camera& cam);
 
 	void DrawAimDot(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height);
 
