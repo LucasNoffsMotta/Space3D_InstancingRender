@@ -187,9 +187,13 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
     shader.Activate();
     texture.BindTexture();
 
-    shader.SetUniformInt("material.diffuse", 0);
-    shader.SetUniformInt("material.specular", 1);
-    shader.SetUniformFloat("material.shininess", 100.0f);
+    glm::vec3 pos1 = glm::vec3(0, 10, 0);
+
+    glm::vec3 pos2 = glm::vec3(10, 10, 0);
+
+    glm::vec3 pos3 = glm::vec3(50, 10, 0);
+
+    glm::vec3 pos4 = glm::vec3(80, 10, 0);
 
     shader.SetUniform3fv("color", glm::vec3(1));
     shader.SetUniformFloat("time", glfwGetTime() / 2);
@@ -198,16 +202,59 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
     model = glm::translate(model, translation);
     model = glm::scale(model, scale);
 
+    shader.SetUniform3fv("viewPos", ContentManager::Cameras["main"]->CameraPos);
     shader.SetUniformMatrix4fv("model", model);
     shader.SetUniformMatrix4fv("projection", projection);
     shader.SetUniformMatrix4fv("view", view);
+
+    shader.SetUniformInt("material.diffuse", 0);
+    shader.SetUniformInt("material.specular", 1);
+    shader.SetUniformFloat("material.shininess", 100.0f);
 
     shader.SetUniform3fv("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
     shader.SetUniform3fv("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
     shader.SetUniform3fv("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
     shader.SetUniform3fv("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
     shader.SetUniform3fv("dirLight.color", glm::vec3(0.01f, 0.01f, 0.01f));
-    shader.SetUniform3fv("viewPos", ContentManager::Cameras["main"]->CameraPos);
+
+
+    shader.SetUniform3fv("pointLight[0].position", pos1);
+    shader.SetUniform3fv("pointLight[0].color", glm::vec3(1.0, 0.0, 0.0));
+    shader.SetUniform3fv("pointLight[0].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+    shader.SetUniform3fv("pointLight[0].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+    shader.SetUniform3fv("pointLight[0].specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.SetUniformFloat("pointLight[0].constant", 1.0f);
+    shader.SetUniformFloat("pointLight[0].linear", 0.09f);
+    shader.SetUniformFloat("pointLight[0].quadratic", 0.032f);
+
+    shader.SetUniform3fv("pointLight[1].position", pos2);
+    shader.SetUniform3fv("pointLight[1].color", glm::vec3(1.0, 0.0, 0.0));
+    shader.SetUniform3fv("pointLight[1].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+    shader.SetUniform3fv("pointLight[1].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+    shader.SetUniform3fv("pointLight[1].specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.SetUniformFloat("pointLight[1].constant", 1.0f);
+    shader.SetUniformFloat("pointLight[1].linear", 0.09f);
+    shader.SetUniformFloat("pointLight[1].quadratic", 0.032f);
+
+    shader.SetUniform3fv("pointLight[2].position", pos3);
+    shader.SetUniform3fv("pointLight[2].color", glm::vec3(1.0, 0.0, 0.0));
+    shader.SetUniform3fv("pointLight[2].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+    shader.SetUniform3fv("pointLight[2].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+    shader.SetUniform3fv("pointLight[2].specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.SetUniformFloat("pointLight[2].constant", 1.0f);
+    shader.SetUniformFloat("pointLight[2].linear", 0.09f);
+    shader.SetUniformFloat("pointLight[2].quadratic", 0.032f);
+
+    shader.SetUniform3fv("pointLight[3].position", pos4);
+    shader.SetUniform3fv("pointLight[3].color", glm::vec3(1.0, 0.0, 0.0));
+    shader.SetUniform3fv("pointLight[3].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+    shader.SetUniform3fv("pointLight[3].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+    shader.SetUniform3fv("pointLight[3].specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.SetUniformFloat("pointLight[3].constant", 1.0f);
+    shader.SetUniformFloat("pointLight[3].linear", 0.09f);
+    shader.SetUniformFloat("pointLight[3].quadratic", 0.032f);
+
+
     shader.SetUniform3fv("spotLight.position", ContentManager::Cameras["main"]->CameraPos);
     shader.SetUniform3fv("spotLight.color", glm::vec3(1.0, 1.0, 0.0));
     shader.SetUniform3fv("spotLight.direction", ContentManager::Cameras["main"]->CameraFront);
@@ -245,54 +292,42 @@ void Renderer::DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rota
     glDrawArrays(GL_TRIANGLES, 0, 36);
     bulletVao.Unbind();
 }
-//
-//void Renderer::DrawInstances(glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
-//{
-//    shader.Activate();
-//    glm::mat4 model = glm::mat4(1.0f);
-//    model = glm::rotate(model, rotationAngle, glm::vec3(rotationAxis.x, rotationAxis.y, rotationAxis.z));
-//    model = glm::scale(model, scale);
-//    glm::vec3* ptrDummy = instancesTranslationPtr;
-//
-//    for (int i = 0; i < 100; i++)
-//    {
-//        glm::vec3 trans = *ptrDummy;
-//        std::string uniform = "offsets[" + std::to_string(i) + "]";
-//        shader.SetUniform3fv(("offsets[" + std::to_string(i) + "]").c_str(), trans);
-//        ptrDummy++;
-//    }
-//
-//    shader.SetUniform3fv("color", color);
-//    shader.SetUniformMatrix4fv("model", model);
-//    shader.SetUniformMatrix4fv("projection", projection);
-//    shader.SetUniformMatrix4fv("view", view);    
-//
-//
-//    vao.Bind();
-//    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, 100);
-//    vao.Unbind();
-//}
 
-void Renderer::DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
+void Renderer::DrawInstances(int amount, Texture& texture, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
 {
     //Keep on draw:
     shader.Activate();
+    texture.BindTexture();
     shader.SetUniformFloat("material.shininess", 40.0f);
+    shader.SetUniformInt("material.diffuse", 0);
+    shader.SetUniformInt("material.specular", 1);
 
     shader.SetUniform3fv("color", color);
     shader.SetUniformFloat("time", glfwGetTime() / 2);
+    shader.SetUniform3fv("viewPos", ContentManager::Cameras["main"]->CameraPos);
     shader.SetUniformMatrix4fv("projection", projection);
     shader.SetUniformMatrix4fv("view", view);
 
-    shader.SetUniform3fv("dirLight.direction", glm::vec3(- 0.2f, -1.0f, -0.3f));
+
+    shader.SetUniform3fv("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
     shader.SetUniform3fv("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
     shader.SetUniform3fv("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
     shader.SetUniform3fv("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-    shader.SetUniform3fv("dirLight.color", glm::vec3(0.f, 0.f, 0.5f));
+    shader.SetUniform3fv("dirLight.color", glm::vec3(0.01f, 0.01f, 0.01f));
 
-    shader.SetUniform3fv("viewPos", ContentManager::Cameras["main"]->CameraPos);
+
+    shader.SetUniform3fv("pointLight[0].position", glm::vec3(0, 10, 0));
+    shader.SetUniform3fv("pointLight[0].color", glm::vec3(1.0, 0.0, 0.0));
+    shader.SetUniform3fv("pointLight[0].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+    shader.SetUniform3fv("pointLight[0].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+    shader.SetUniform3fv("pointLight[0].specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.SetUniformFloat("pointLight[0].constant", 1.0f);
+    shader.SetUniformFloat("pointLight[0].linear", 0.09f);
+    shader.SetUniformFloat("pointLight[0].quadratic", 0.032f);
+
+
     shader.SetUniform3fv("spotLight.position", ContentManager::Cameras["main"]->CameraPos);
-    shader.SetUniform3fv("spotLight.color", glm::vec3(1.0, 0.0, 1.0));
+    shader.SetUniform3fv("spotLight.color", glm::vec3(1.0, 1.0, 0.0));
     shader.SetUniform3fv("spotLight.direction", ContentManager::Cameras["main"]->CameraFront);
     shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 1.0f));
     shader.SetUniform3fv("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -300,9 +335,8 @@ void Renderer::DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis
     shader.SetUniformFloat("spotLight.constant", 1.0f);
     shader.SetUniformFloat("spotLight.linear", 0.0014);
     shader.SetUniformFloat("spotLight.quadratic", 0.000007);
-    shader.SetUniformFloat("spotLight.innerCutoff", glm::cos(glm::radians(12.5f)));
+    shader.SetUniformFloat("spotLight.innerCutoff", glm::cos(glm::radians(9.5f)));
     shader.SetUniformFloat("spotLight.outerCutoff", glm::cos(glm::radians(25.0f)));
-
 
     vao.Bind();
     glDrawArraysInstanced(GL_TRIANGLES, 0, 36, amount);

@@ -12,6 +12,13 @@
 #include <vector>
 
 
+/*
+* T
+*  TODO: point lights, Multiple lights
+*/
+
+
+
 const unsigned int SCR_WIDTH = 1300;
 const unsigned int SCR_HEIGHT = 1300;
 
@@ -115,37 +122,8 @@ int main()
 
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
-        renderer.DrawInstances(instances, scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
-        renderer.Draw(glm::vec3(0), woodenFloor, glm::vec3(200, 10, 200), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
-
-
-
-
-
-
-
-
-       //if (glfwGetKey(window.window, GLFW_KEY_SPACE) == GLFW_PRESS)
-       //{
-       //    glm::vec3 pos = glm::vec3(cam.CameraPos.x, cam.CameraPos.y, cam.CameraPos.z);
-       //     Projectile bullet = Projectile(asteroidColor,pos, bulletScale, rotation, cam.CameraFront);
-       //     projectiles.push_back(bullet);
-       //}
-
-       /* if (projectiles.size() > 0)
-        {
-            for (auto& projectile : projectiles)
-            {
-                projectile.Update();
-                projectile.Draw(renderer, basicShader);
-
-                if (projectile.lifeTime >= projectile.lifeSpan)
-                {
-                    projectile.~Projectile();
-                }
-            }
-        }*/
-    
+        renderer.DrawInstances(instances, woodenFloor, scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
+        renderer.Draw(glm::vec3(0), woodenFloor, glm::vec3(400, 1, 400), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);    
         window.Update();
     }
 

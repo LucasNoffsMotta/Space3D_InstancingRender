@@ -1,5 +1,7 @@
 #version 330 core
 
+
+
 struct Material {
     sampler2D  diffuse;
     sampler2D  specular;
@@ -47,8 +49,9 @@ struct PointLight
     float quadratic;	
 };
 
+#define MAX_POINTLIGHTS  4
 
-uniform PointLight pointLight;
+uniform PointLight pointLight[MAX_POINTLIGHTS];
 uniform SpotLight spotLight;
 uniform DirLight dirLight;
 uniform vec3 viewPos;
@@ -73,6 +76,28 @@ vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir)
 	vec3 ambient = light.ambient *  light.color * vec3(texture(material.diffuse, texCoord)); 
 	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, texCoord));
 	vec3 specular = light.specular * spec * vec3(texture(material.specular, texCoord));
+	return ambient + diffuse + specular;
+}
+
+vec3 GetPointLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
+{
+	vec3 lightToFragmentDirection = normalize(light.position - FragPos);
+	float diff = max(dot(Normal, lightToFragmentDirection), 0.0);
+
+	vec3 reflectDir = reflect(-lightToFragmentDirection, Normal);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+
+	float dist = length(light.position - FragPos);
+	float atenuation = 1.0 / (light.constant + light.linear * dist +  light.quadratic * (dist * dist)); 
+
+	vec3 ambient = light.ambient * light.color * vec3(texture(material.diffuse, texCoord));
+	vec3 diffuse = light.diffuse * diff *  vec3(texture(material.diffuse, texCoord));
+	vec3 specular = light.specular * spec *  vec3(texture(material.specular, texCoord));
+
+	ambient *= atenuation;
+	diffuse *= atenuation;
+	specular *= atenuation;
+
 	return ambient + diffuse + specular;
 }
 
@@ -112,5 +137,11 @@ void main()
 
     vec3 result = GetDirLight(dirLight, normal, viewDir);
 	result += GetSpotLight(spotLight, normal, FragPos, viewDir);
+
+	for (int i = 0; i < MAX_POINTLIGHTS; i++)
+	{
+			result += GetPointLight(pointLight[i], normal, FragPos, viewDir);
+	}
+
 	FragColor = vec4(result, 1);
 }
