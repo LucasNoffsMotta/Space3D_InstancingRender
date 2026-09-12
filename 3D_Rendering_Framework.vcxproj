@@ -29,8 +29,11 @@
     <ClInclude Include="Header\Render\Shader.h" />
     <ClInclude Include="Header\Render\VAO.h" />
     <ClInclude Include="Header\Render\VBO.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="object3DFragment.vert" />
     <None Include="Shader\frag.frag" />
     <None Include="Shader\basicVertex.vert" />
     <None Include="Shader\instancedLayoutVertex.vert" />
@@ -50,6 +53,8 @@
     <ClCompile Include="Source\Render\VAO.cpp" />
     <ClCompile Include="Source\Render\VBO.cpp" />
     <ClCompile Include="Source\Source.cpp" />
+    <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

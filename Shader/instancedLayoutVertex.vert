@@ -1,8 +1,9 @@
 #version 330 core
+
 layout (location = 0) in vec3 aPos;
 layout (location = 2) in vec3 aColor;
 layout (location = 3) in vec3 aNormal;
-layout (location = 4) in mat4 instanceModel;
+layout (location = 5) in mat4 instanceModel;
 
 out vec3 fColor;
 out vec3 Normal;

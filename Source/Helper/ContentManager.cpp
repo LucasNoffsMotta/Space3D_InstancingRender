@@ -1,8 +1,12 @@
 #include "Helper/ContentManager.h"
 #include <Render/Shader.h>
 
+
 std::map<std::string, Shader>       ContentManager::Shaders;
 std::map<std::string, glm::vec3>       ContentManager::Colors;
+std::map<std::string, Camera*> ContentManager::Cameras;
+std::map<std::string, Texture*> ContentManager::Textures;
+
 
 Shader ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)
 {
@@ -40,3 +44,9 @@ void ContentManager::InitColors()
     InsertColor("yellow", yellow);
     InsertColor("brown", brown);
 }
+
+void ContentManager::AddCamera(Camera* cam, std::string name)
+{
+    ContentManager::Cameras[name] = cam;
+}
+

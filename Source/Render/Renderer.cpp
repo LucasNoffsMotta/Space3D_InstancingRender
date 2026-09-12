@@ -1,52 +1,54 @@
 #include "Render/Renderer.h"
 #include "Render/VAO.h"
+#include <Helper/ContentManager.h>
 
 
 
 void Renderer::InitRenderData()
 {
-    float square[] = {
-        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.f,   0.0f, -1.0f,
-         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,
-         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,
-         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,
-        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,
-        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,
+    float square[] = { 
+        //Position          //Color        // Normal            //Text
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.f,   0.0f, -1.0f,     0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,     1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,     1.0f,  1.0f,
+         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,     1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,     0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,     0.0f,  0.0f,
 
-        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f,  0.5f, 1.0, 0.1, 1.0, 0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f,  1.0f,
-        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f,    1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f, 1.0, 0.1, 1.0, 0.0f,  0.0f,    1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f,   1.0f, 1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f,     1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f,    1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f,    1.0f,  0.0f,  0.0f,
 
-        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,  -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,   0.0f, 1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,   0.0f, 1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,   0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,   0.0f,   0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,  -1.0f,  0.0f,  0.0f, 0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, -1.0f,  0.0f,   0.0f,  1.0f,  0.0f,
 
-         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,   0.0f, 1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,   0.0f, 1.0f,  1.0f,
+         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,  1.0f,  0.0f,  0.0f, 0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,   0.0f, 0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 1.0f,  0.0f,   0.0f, 0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,   0.0f, 1.0f,  1.0f,
+         0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,   0.0f, 1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,   0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,   0.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f, -1.0f,   0.0f, 0.0f,  1.0f,
 
-        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,   0.0f, 0.0f,  1.0f,
+         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,   0.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,   0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0,  0.0f,  1.0f,  0.0f, 1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0, 1.0, 1.0, 0.0f,  1.0f,   0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f,  1.0f,   0.0f, 0.0f,  1.0f
     };
 
 
@@ -57,9 +59,10 @@ void Renderer::InitRenderData()
     vao = VAO();
     VBO vbo = VBO(square, sizeof(square));
     vao.Bind();
-    vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(float) * 9, (void*)0);
-    vao.LinkAttrib(vbo, 2, 3, GL_FLOAT, sizeof(float) * 9, (void*)(3 * sizeof(float)));
-    vao.LinkAttrib(vbo, 3, 3, GL_FLOAT, sizeof(float) * 9, (void*)(6 * sizeof(float)));
+    vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(float) * 11, (void*)0);
+    vao.LinkAttrib(vbo, 2, 3, GL_FLOAT, sizeof(float) * 11, (void*)(3 * sizeof(float)));
+    vao.LinkAttrib(vbo, 3, 3, GL_FLOAT, sizeof(float) * 11, (void*)(6 * sizeof(float)));
+    vao.LinkAttrib(vbo, 4, 2, GL_FLOAT, sizeof(float) * 11, (void*)(9 * sizeof(float)));
 }
 
 void Renderer::InitAimDotRenderData()
@@ -178,21 +181,44 @@ glm::vec3 Renderer::GetTranslationPos(int index)
 
 
 
-void Renderer::Draw(glm::vec3 translation, glm::vec3 scale, glm::vec3 rotation, float rotationAngle, glm::vec3 color, Shader& shader)
+void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
 {
+    //Keep on draw:
     shader.Activate();
+    texture.BindTexture();
 
-    glm::mat4 model = glm::mat4(1.0f);
+    shader.SetUniformInt("material.diffuse", 0);
+    shader.SetUniformInt("material.specular", 1);
+    shader.SetUniformFloat("material.shininess", 100.0f);
 
-    model = glm::translate(model, bulletPosition);
-    model = glm::rotate(model, rotationAngle, glm::vec3(rotation.x, rotation.y, rotation.z));
+    shader.SetUniform3fv("color", glm::vec3(1));
+    shader.SetUniformFloat("time", glfwGetTime() / 2);
+
+    glm::mat4 model = glm::mat4(1);
+    model = glm::translate(model, translation);
     model = glm::scale(model, scale);
 
-    shader.SetUniform3fv("color", color);
-    shader.SetUniformFloat("time", glfwGetTime() / 2);
     shader.SetUniformMatrix4fv("model", model);
     shader.SetUniformMatrix4fv("projection", projection);
     shader.SetUniformMatrix4fv("view", view);
+
+    shader.SetUniform3fv("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+    shader.SetUniform3fv("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+    shader.SetUniform3fv("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+    shader.SetUniform3fv("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    shader.SetUniform3fv("dirLight.color", glm::vec3(0.01f, 0.01f, 0.01f));
+    shader.SetUniform3fv("viewPos", ContentManager::Cameras["main"]->CameraPos);
+    shader.SetUniform3fv("spotLight.position", ContentManager::Cameras["main"]->CameraPos);
+    shader.SetUniform3fv("spotLight.color", glm::vec3(1.0, 1.0, 0.0));
+    shader.SetUniform3fv("spotLight.direction", ContentManager::Cameras["main"]->CameraFront);
+    shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 1.0f));
+    shader.SetUniform3fv("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.SetUniform3fv("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.SetUniformFloat("spotLight.constant", 1.0f);
+    shader.SetUniformFloat("spotLight.linear", 0.0014);
+    shader.SetUniformFloat("spotLight.quadratic", 0.000007);
+    shader.SetUniformFloat("spotLight.innerCutoff", glm::cos(glm::radians(9.5f)));
+    shader.SetUniformFloat("spotLight.outerCutoff", glm::cos(glm::radians(25.0f)));
 
     vao.Bind();
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -247,7 +273,7 @@ void Renderer::DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rota
 //    vao.Unbind();
 //}
 
-void Renderer::DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader, Camera& cam)
+void Renderer::DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
 {
     //Keep on draw:
     shader.Activate();
@@ -264,10 +290,10 @@ void Renderer::DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis
     shader.SetUniform3fv("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
     shader.SetUniform3fv("dirLight.color", glm::vec3(0.f, 0.f, 0.5f));
 
-    shader.SetUniform3fv("viewPos", cam.CameraPos);
-    shader.SetUniform3fv("spotLight.position", cam.CameraPos);
+    shader.SetUniform3fv("viewPos", ContentManager::Cameras["main"]->CameraPos);
+    shader.SetUniform3fv("spotLight.position", ContentManager::Cameras["main"]->CameraPos);
     shader.SetUniform3fv("spotLight.color", glm::vec3(1.0, 0.0, 1.0));
-    shader.SetUniform3fv("spotLight.direction", cam.CameraFront);
+    shader.SetUniform3fv("spotLight.direction", ContentManager::Cameras["main"]->CameraFront);
     shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 1.0f));
     shader.SetUniform3fv("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
     shader.SetUniform3fv("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));

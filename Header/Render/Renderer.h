@@ -1,18 +1,20 @@
+
+
 #include "Render/Shader.h"
 #include "Render/VAO.h"
 #include <Game/Camera.h>
+#include "../Texture.h"
 #include <glm/glm.hpp>
+
 #ifndef RENDERER_CLASS_H
 #define RENDERER_CLASS_H
+
 
 class Renderer
 {
 public:
-	void Draw(glm::vec3 translation, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
-	void DrawInstances(glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
-
-
-	void DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader, Camera& cam);
+	void Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
+	void DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
 
 	void DrawAimDot(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height);
 
