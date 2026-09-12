@@ -47,17 +47,17 @@ int main()
 
     Shader instancedUniformShader = ContentManager::LoadShader(
         "Shader/instancedUniformVertex.vert",
-        "Shader/basicFragmentShader.frag",
+        "Shader/frag.frag",
         "instancedUniform");
 
     Shader instancedLayoutShader = ContentManager::LoadShader(
         "Shader/instancedLayoutVertex.vert",
-        "Shader/basicFragmentShader.frag",
+        "Shader/frag.frag",
         "instancedLayout");
 
     Shader basicShader = ContentManager::LoadShader(
         "Shader/basicVertex.vert",
-        "Shader/basicFragmentShader.frag",
+        "Shader/frag.frag",
         "basicShader");
 
     Shader aimDotShader = ContentManager::LoadShader(
@@ -68,7 +68,7 @@ int main()
     ContentManager::InitColors();
     Renderer renderer = Renderer();
 
-    glm::vec3 scale = glm::vec3(10.f);
+    glm::vec3 scale = glm::vec3(10000.f);
     glm::vec3 bulletScale = glm::vec3(0.5f);
     glm::vec3 rotation = glm::vec3(1.0f);
     glm::vec3 rotationAxis = glm::vec3(1.f);
@@ -86,7 +86,7 @@ int main()
     float lastFrame = 0.f;
     float camSpeed = 10.f;
 
-    int instances = 10000;
+    int instances = 1000;
     renderer.SetInstancedTranslations(instances);
     renderer.SetInstancesBuffers(instances);
     renderer.InitAimDotRenderData();
@@ -107,7 +107,6 @@ int main()
 
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
-        //renderer.DrawInstances(scale, rotationAxis, 1.f, color, instancedUniformShader);          // -> Draw instances by uniform  
         renderer.DrawInstances(instances, scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader, cam);   // -> Draw instances by layout
 
        if (glfwGetKey(window.window, GLFW_KEY_SPACE) == GLFW_PRESS)

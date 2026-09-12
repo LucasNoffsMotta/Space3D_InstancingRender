@@ -6,12 +6,12 @@
 void Renderer::InitRenderData()
 {
     float square[] = {
-        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.f, 0.0f, -1.0f,
-         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f, -1.0f,
-         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.f,   0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,
          0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,
-        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f, -1.0f,
-        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 1.0, 1.0, 0.0f,  0.0f, -1.0f,
 
         -0.5f, -0.5f,  0.5f, 1.0, 1.0, 1.0,  0.0f,  0.0f,  1.0f,
          0.5f, -0.5f,  0.5f, 1.0, 0.1, 1.0, 0.0f,  0.0f,  1.0f,
@@ -153,6 +153,7 @@ void Renderer::SetModelMatrices(glm::vec3* translations, int ammount)
         glm::vec3 trans = *dummtPtr;
         glm::mat4 model = glm::mat4(1.f);
         model = glm::translate(model, trans);
+        model = glm::scale(model, glm::vec3(100));
         modelMatrices[i] = model;
         float scale = static_cast<float>((rand() % 20) / 100.0 + 0.05);
         model = glm::scale(model, glm::vec3(scale));
@@ -218,45 +219,64 @@ void Renderer::DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rota
     glDrawArrays(GL_TRIANGLES, 0, 36);
     bulletVao.Unbind();
 }
-
-void Renderer::DrawInstances(glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
-{
-    shader.Activate();
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::rotate(model, rotationAngle, glm::vec3(rotationAxis.x, rotationAxis.y, rotationAxis.z));
-    model = glm::scale(model, scale);
-    glm::vec3* ptrDummy = instancesTranslationPtr;
-
-    for (int i = 0; i < 100; i++)
-    {
-        glm::vec3 trans = *ptrDummy;
-        std::string uniform = "offsets[" + std::to_string(i) + "]";
-        shader.SetUniform3fv(("offsets[" + std::to_string(i) + "]").c_str(), trans);
-        ptrDummy++;
-    }
-
-    shader.SetUniform3fv("color", color);
-    shader.SetUniformMatrix4fv("model", model);
-    shader.SetUniformMatrix4fv("projection", projection);
-    shader.SetUniformMatrix4fv("view", view);    
-    shader.SetUniformFloat("cutOff", glm::cos(glm::radians(12.5f)));
-
-    vao.Bind();
-    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, 100);
-    vao.Unbind();
-}
+//
+//void Renderer::DrawInstances(glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
+//{
+//    shader.Activate();
+//    glm::mat4 model = glm::mat4(1.0f);
+//    model = glm::rotate(model, rotationAngle, glm::vec3(rotationAxis.x, rotationAxis.y, rotationAxis.z));
+//    model = glm::scale(model, scale);
+//    glm::vec3* ptrDummy = instancesTranslationPtr;
+//
+//    for (int i = 0; i < 100; i++)
+//    {
+//        glm::vec3 trans = *ptrDummy;
+//        std::string uniform = "offsets[" + std::to_string(i) + "]";
+//        shader.SetUniform3fv(("offsets[" + std::to_string(i) + "]").c_str(), trans);
+//        ptrDummy++;
+//    }
+//
+//    shader.SetUniform3fv("color", color);
+//    shader.SetUniformMatrix4fv("model", model);
+//    shader.SetUniformMatrix4fv("projection", projection);
+//    shader.SetUniformMatrix4fv("view", view);    
+//
+//
+//    vao.Bind();
+//    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, 100);
+//    vao.Unbind();
+//}
 
 void Renderer::DrawInstances(int amount, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader, Camera& cam)
 {
     //Keep on draw:
     shader.Activate();
+    shader.SetUniformFloat("material.shininess", 40.0f);
 
     shader.SetUniform3fv("color", color);
     shader.SetUniformFloat("time", glfwGetTime() / 2);
     shader.SetUniformMatrix4fv("projection", projection);
     shader.SetUniformMatrix4fv("view", view);
-    shader.SetUniform3fv("lightPos", cam.CameraPos);
-    shader.SetUniform3fv("lightDirection", cam.CameraFront);
+
+    shader.SetUniform3fv("dirLight.direction", glm::vec3(- 0.2f, -1.0f, -0.3f));
+    shader.SetUniform3fv("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+    shader.SetUniform3fv("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+    shader.SetUniform3fv("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    shader.SetUniform3fv("dirLight.color", glm::vec3(0.f, 0.f, 0.5f));
+
+    shader.SetUniform3fv("viewPos", cam.CameraPos);
+    shader.SetUniform3fv("spotLight.position", cam.CameraPos);
+    shader.SetUniform3fv("spotLight.color", glm::vec3(1.0, 0.0, 1.0));
+    shader.SetUniform3fv("spotLight.direction", cam.CameraFront);
+    shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 1.0f));
+    shader.SetUniform3fv("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.SetUniform3fv("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.SetUniformFloat("spotLight.constant", 1.0f);
+    shader.SetUniformFloat("spotLight.linear", 0.0014);
+    shader.SetUniformFloat("spotLight.quadratic", 0.000007);
+    shader.SetUniformFloat("spotLight.innerCutoff", glm::cos(glm::radians(12.5f)));
+    shader.SetUniformFloat("spotLight.outerCutoff", glm::cos(glm::radians(25.0f)));
+
 
     vao.Bind();
     glDrawArraysInstanced(GL_TRIANGLES, 0, 36, amount);
@@ -284,9 +304,11 @@ void Renderer::SetInstancedTranslations(int amount)
 {
     instancesTranslationPtr = new glm::vec3[amount];
 
+
     srand(static_cast<unsigned int>(glfwGetTime())); // initialize random seed
     float radius = 1500.0;
     float offset = 250.0f;
+
 
     for (int i = 0; i < amount; i++)
     {

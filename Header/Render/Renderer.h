@@ -1,6 +1,7 @@
 #include "Render/Shader.h"
 #include "Render/VAO.h"
 #include <Game/Camera.h>
+#include <glm/glm.hpp>
 #ifndef RENDERER_CLASS_H
 #define RENDERER_CLASS_H
 

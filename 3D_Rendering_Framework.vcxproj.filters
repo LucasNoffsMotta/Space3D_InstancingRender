@@ -47,7 +47,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\basicFragmentShader.frag">
+    <None Include="Shader\frag.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Shader\basicVertex.vert">

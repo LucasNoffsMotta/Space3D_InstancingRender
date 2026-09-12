@@ -31,7 +31,7 @@
     <ClInclude Include="Header\Render\VBO.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\basicFragmentShader.frag" />
+    <None Include="Shader\frag.frag" />
     <None Include="Shader\basicVertex.vert" />
     <None Include="Shader\instancedLayoutVertex.vert" />
     <None Include="Shader\instancedUniformVertex.vert" />
