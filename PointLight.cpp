@@ -31,3 +31,8 @@ void PointLight::SetUniforms(Shader& shader)
 	shader.SetUniformFloat((prefix + "linear").c_str(), this->linear);
 	shader.SetUniformFloat((prefix + "quadratic").c_str(), this->quadratic);
 }
+
+void PointLight::Draw(Shader& shader, Renderer& renderer)
+{
+	renderer.Draw(position, *ContentManager::Textures["woodenFloor"], scale, glm::vec3(0), 0.f, color, shader);
+}

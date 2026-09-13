@@ -125,6 +125,12 @@ int main()
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
         renderer.DrawInstances(instances, *ContentManager::Textures["woodenFloor"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
         renderer.Draw(glm::vec3(0), *ContentManager::Textures["woodenFloor"], glm::vec3(400, 1, 400), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
+
+
+        for (const auto& [key, value] : ContentManager::PointLights) {
+            value->Draw(C);
+        }
+
         window.Update();
     }
 

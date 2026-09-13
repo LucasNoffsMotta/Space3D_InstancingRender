@@ -1,6 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <Render/Shader.h>
+#include "Helper/ContentManager.h"
+#include <Render/Renderer.h>
 
 class PointLight
 {
@@ -14,6 +16,8 @@ private:
     float linear = 0.09f;
     float quadratic = 0.032f;
     int lightIndex;
+    glm::mat4 model;
+    glm::vec3 scale = glm::vec3(0.1);
 
 public:
 
@@ -22,6 +26,7 @@ public:
     void SetColor(glm::vec3& color);
     void SetAmbient(glm::vec3& ambient);
     void SetUniforms(Shader& shader);
+    void Draw(Shader& shader, Renderer& renderer);
 
 
     //shader.SetUniform3fv("pointLight[0].position", pos1);

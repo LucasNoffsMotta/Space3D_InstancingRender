@@ -200,14 +200,6 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
     shader.Activate();
     texture.BindTexture();
 
-    glm::vec3 pos1 = glm::vec3(0, 10, 0);
-
-    glm::vec3 pos2 = glm::vec3(10, 10, -10);
-
-    glm::vec3 pos3 = glm::vec3(50, 10, -10);
-
-    glm::vec3 pos4 = glm::vec3(80, 10, -5);
-
     shader.SetUniform3fv("color", glm::vec3(1));
     shader.SetUniformFloat("time", glfwGetTime() / 2);
 
@@ -237,7 +229,6 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
     }
 
     shader.SetUniform3fv("spotLight.position", ContentManager::Cameras["main"]->CameraPos);
-    shader.SetUniform3fv("spotLight.color", glm::vec3(1.0, 1.0, 0.0));
     shader.SetUniform3fv("spotLight.direction", ContentManager::Cameras["main"]->CameraFront);
     shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 1.0f));
     shader.SetUniform3fv("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -302,7 +293,6 @@ void Renderer::DrawInstances(int amount, Texture& texture, glm::vec3 scale, glm:
     }
 
     shader.SetUniform3fv("spotLight.position", ContentManager::Cameras["main"]->CameraPos);
-    shader.SetUniform3fv("spotLight.color", glm::vec3(1.0, 1.0, 0.0));
     shader.SetUniform3fv("spotLight.direction", ContentManager::Cameras["main"]->CameraFront);
     shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 1.0f));
     shader.SetUniform3fv("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));

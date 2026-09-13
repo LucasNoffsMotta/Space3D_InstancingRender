@@ -13,7 +13,6 @@ uniform Material material;
 struct SpotLight {
 	vec3 position;
 	vec3 direction;
-	vec3 color;
 	float outerCutoff;
 	float innerCutoff;
 	
@@ -115,7 +114,7 @@ vec3 GetSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	float epsilon = light.innerCutoff - light.outerCutoff;
 	float intensity = clamp((theta - light.outerCutoff) / epsilon, 0.0, 1.0);
 
-	vec3 ambient = light.ambient * light.color * vec3(texture(material.diffuse, texCoord));
+	vec3 ambient = light.ambient * vec3(texture(material.diffuse, texCoord));
 	vec3 diffuse = light.diffuse * diff *  vec3(texture(material.diffuse, texCoord));
 	vec3 specular = light.specular * spec *  vec3(texture(material.specular, texCoord));
 
