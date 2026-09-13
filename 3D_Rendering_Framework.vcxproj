@@ -29,6 +29,7 @@
     <ClInclude Include="Header\Render\Shader.h" />
     <ClInclude Include="Header\Render\VAO.h" />
     <ClInclude Include="Header\Render\VBO.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
@@ -42,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\GraphicsProgramming\glad.c" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Source\Game\Camera.cpp" />
     <ClCompile Include="Source\Game\Projectile.cpp" />
     <ClCompile Include="Source\GL\Window.cpp" />

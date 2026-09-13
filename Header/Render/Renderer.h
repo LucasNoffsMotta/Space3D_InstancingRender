@@ -10,13 +10,23 @@
 #define RENDERER_CLASS_H
 
 
+
 class Renderer
 {
+private:
+	void InitRenderData();
+	Shader shader;
+	VAO vao;
+	VAO aimDotVao;
+	VAO bulletVao;
+	int MAX_POINT_LIGHTS = 100;
+	void CreatePointLights();
+
 public:
 	void Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
 	void DrawInstances(int amount, Texture& texture, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
-
 	void DrawAimDot(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height);
+	void DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rotation, float rotationAngle, glm::vec3 color, Shader& shader);
 
 
 	void SetInstancedTranslations(int amount);
@@ -29,7 +39,6 @@ public:
 	glm::vec3 GetTranslationPos(int index);
 	void InitAimDotRenderData();
 	void InitBulletRenderData();
-	void DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rotation, float rotationAngle, glm::vec3 color, Shader& shader);
 
 	bool bulletShoot = false;
 	glm::mat4 projection;
@@ -38,21 +47,9 @@ public:
 	glm::vec3* instancesTranslationPtr;
 	glm::vec3 bulletDirection;
 	glm::vec3 bulletPosition;
-
-
-private:
-	void InitRenderData();
-
-	Shader shader;
-	VAO vao;
-	VAO aimDotVao;
-	VAO bulletVao;
-
-
 };
 
 
 
 
 #endif // !RENDERER_CLASS_H
-#pragma once

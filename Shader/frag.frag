@@ -37,9 +37,7 @@ struct DirLight
 
 struct PointLight
 {
-	vec3 position;
-	vec3 color;
-		
+	vec3 position;		
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -49,7 +47,7 @@ struct PointLight
     float quadratic;	
 };
 
-#define MAX_POINTLIGHTS  4
+#define MAX_POINTLIGHTS  10
 
 uniform PointLight pointLight[MAX_POINTLIGHTS];
 uniform SpotLight spotLight;
@@ -90,7 +88,7 @@ vec3 GetPointLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
 	float dist = length(light.position - FragPos);
 	float atenuation = 1.0 / (light.constant + light.linear * dist +  light.quadratic * (dist * dist)); 
 
-	vec3 ambient = light.ambient * light.color * vec3(texture(material.diffuse, texCoord));
+	vec3 ambient = light.ambient * vec3(texture(material.diffuse, texCoord));
 	vec3 diffuse = light.diffuse * diff *  vec3(texture(material.diffuse, texCoord));
 	vec3 specular = light.specular * spec *  vec3(texture(material.specular, texCoord));
 
@@ -134,7 +132,6 @@ void main()
 {
 	vec3 normal = normalize(Normal);
 	vec3 viewDir = normalize(viewPos - FragPos);
-
     vec3 result = GetDirLight(dirLight, normal, viewDir);
 	result += GetSpotLight(spotLight, normal, FragPos, viewDir);
 

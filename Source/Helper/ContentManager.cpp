@@ -2,16 +2,23 @@
 #include <Render/Shader.h>
 
 
-std::map<std::string, Shader>       ContentManager::Shaders;
-std::map<std::string, glm::vec3>       ContentManager::Colors;
-std::map<std::string, Camera*> ContentManager::Cameras;
-std::map<std::string, Texture*> ContentManager::Textures;
+std::map<std::string, Shader>               ContentManager::Shaders;
+std::map<std::string, glm::vec3>            ContentManager::Colors;
+std::map<std::string, Camera*>              ContentManager::Cameras;
+std::map<std::string, Texture*>             ContentManager::Textures;
+std::map<std::string, std::unique_ptr<PointLight>>          ContentManager::PointLights;
 
 
 Shader ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)
 {
     Shaders[shaderName] = Shader(vertexSource, fragmentSource);
     return Shaders[shaderName];
+}
+
+Texture* ContentManager::LoadTexture(const char* texturePath, std::string name)
+{
+    Textures[name] = new Texture(texturePath);
+    return Textures[name];
 }
 
 glm::vec3 ContentManager::GetColor(std::string color)
@@ -48,5 +55,10 @@ void ContentManager::InitColors()
 void ContentManager::AddCamera(Camera* cam, std::string name)
 {
     ContentManager::Cameras[name] = cam;
+}
+
+void ContentManager::AddPointLight(int index)
+{
+    ContentManager::PointLights[std::to_string(index)] = std::make_unique<PointLight>(index);
 }
 

@@ -78,7 +78,8 @@ int main()
         "object3DShader"
     );
 
-    Texture woodenFloor = Texture("D:/Projetos/c++/OpenGL/Space3D/3D_Rendering_Framework/woodenFloor.jpg");
+    //Texture woodenFloor = Texture("D:/Projetos/c++/OpenGL/Assets/woodenFloor.jpg");
+    ContentManager::LoadTexture("D:/Projetos/c++/OpenGL/Assets/woodenFloor.jpg", "woodenFloor");
     ContentManager::InitColors();
     Renderer renderer = Renderer();
 
@@ -122,8 +123,8 @@ int main()
 
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
-        renderer.DrawInstances(instances, woodenFloor, scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
-        renderer.Draw(glm::vec3(0), woodenFloor, glm::vec3(400, 1, 400), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);    
+        renderer.DrawInstances(instances, *ContentManager::Textures["woodenFloor"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
+        renderer.Draw(glm::vec3(0), *ContentManager::Textures["woodenFloor"], glm::vec3(400, 1, 400), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
         window.Update();
     }
 
