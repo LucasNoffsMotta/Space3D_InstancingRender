@@ -127,9 +127,12 @@ int main()
         renderer.Draw(glm::vec3(0), *ContentManager::Textures["woodenFloor"], glm::vec3(400, 1, 400), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
 
 
-        for (const auto& [key, value] : ContentManager::PointLights) {
-            value->Draw(C);
+         for (const auto& [key, value] : ContentManager::PointLights) {
+            value->Draw(obj3DShader, *ContentManager::Textures["woodenFloor"], renderer);
         }
+
+
+
 
         window.Update();
     }

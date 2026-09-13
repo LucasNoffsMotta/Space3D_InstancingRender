@@ -1,4 +1,5 @@
-
+#ifndef RENDERER_CLASS_H
+#define RENDERER_CLASS_H
 
 #include "Render/Shader.h"
 #include "Render/VAO.h"
@@ -6,8 +7,7 @@
 #include "../Texture.h"
 #include <glm/glm.hpp>
 
-#ifndef RENDERER_CLASS_H
-#define RENDERER_CLASS_H
+
 
 
 
@@ -22,7 +22,7 @@ private:
 	void CreatePointLights();
 
 public:
-	int MAX_POINT_LIGHTS = 100;
+	int MAX_POINT_LIGHTS = 10;
 	void Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
 	void DrawInstances(int amount, Texture& texture, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
 	void DrawAimDot(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height);

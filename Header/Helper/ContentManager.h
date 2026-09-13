@@ -4,8 +4,9 @@
 #include "Render/Shader.h"
 #include <map>
 #include <Game/Camera.h>
-#include "../../Texture.h"
-#include "../../PointLight.h"
+#include "../Texture.h"
+#include "../PointLight.h"
+
 
 static class ContentManager
 {
@@ -25,7 +26,6 @@ public:
 	static void InitColors();
 	static void AddCamera(Camera* cam, std::string name);
 	static void AddPointLight(int index);
-
 };
 
 
