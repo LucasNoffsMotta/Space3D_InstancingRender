@@ -54,7 +54,7 @@ void Renderer::InitRenderData()
 
     view = glm::mat4(1.0f);
     projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)1300 / 1200, 0.1f, 10000000.f);
+    projection = glm::perspective(glm::radians(45.0f), (float)1920 / 1200, 0.1f, 10000000.f);
 
     vao = VAO();
     VBO vbo = VBO(square, sizeof(square));
@@ -136,6 +136,22 @@ void Renderer::InitBulletRenderData()
     bulletVao.LinkAttrib(vbo, 1, 3, GL_FLOAT, sizeof(float) * 6, (void*)(3 * sizeof(float)));
 }
 
+void Renderer::ChangeProjection(bool ortho)
+{
+    projection = glm::mat4(1.0f);
+
+    if (ortho)
+    {
+        projection = glm::ortho(0.0f, 1980.0f, 0.0f, 1200.0f, 0.1f, 100.0f);
+    }
+
+    else
+    {
+        projection = glm::perspective(glm::radians(45.0f), (float)1920 / 1200, 0.1f, 10000000.f);
+    }
+
+}
+
 Renderer::Renderer()
 {
     InitRenderData();
@@ -179,8 +195,6 @@ glm::vec3 Renderer::GetTranslationPos(int index)
     pos.z = modelMatrices[index][3].z;
     return pos;
 }
-
-
 
 void Renderer::CreatePointLights()
 {

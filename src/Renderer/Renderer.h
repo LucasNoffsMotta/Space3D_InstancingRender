@@ -40,6 +40,8 @@ public:
 	void InitAimDotRenderData();
 	void InitBulletRenderData();
 
+	void ChangeProjection(bool ortho);
+
 	bool bulletShoot = false;
 	glm::mat4 projection;
 	glm::mat4 view;

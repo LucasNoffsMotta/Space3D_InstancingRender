@@ -19,8 +19,8 @@
 
 
 
-const unsigned int SCR_WIDTH = 1300;
-const unsigned int SCR_HEIGHT = 1300;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1200;
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -132,6 +132,19 @@ int main()
         }
 
 
+         //dumb test
+
+         if (glfwGetKey(window.window, GLFW_KEY_J) == GLFW_PRESS)
+         {
+             renderer.ChangeProjection(true);
+         }
+
+         //dumb test
+
+         if (glfwGetKey(window.window, GLFW_KEY_K) == GLFW_PRESS)
+         {
+             renderer.ChangeProjection(false);
+         }
 
 
         window.Update();
