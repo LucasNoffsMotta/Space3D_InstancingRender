@@ -1,6 +1,6 @@
-#include "Render/Renderer.h"
-#include "Render/VAO.h"
-#include <Helper/ContentManager.h>
+#include "Renderer.h"
+#include "../OpenGL/VAO.h"
+#include "../Helper/ContentManager.h"
 
 
 

@@ -1,5 +1,5 @@
-#include "Helper/ContentManager.h"
-#include <Render/Shader.h>
+#include "ContentManager.h"
+#include "../Renderer/Shader.h"
 
 
 std::map<std::string, Shader>               ContentManager::Shaders;

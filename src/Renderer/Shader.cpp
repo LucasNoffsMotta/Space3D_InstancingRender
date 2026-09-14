@@ -1,4 +1,4 @@
-#include "Render/Shader.h"
+#include "Shader.h"
 #include <string>
 
 const std::string VERTEX_SHADER_ERROR = "Vertex Shader";

@@ -1,14 +1,14 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h> 
-#include "GL/Window.h"
-#include "Render/Shader.h"
-#include "Render/Renderer.h"
+#include "OpenGL/Window.h"
+#include "Renderer/Shader.h"
+#include "Renderer/Renderer.h"
 #include "Helper/ContentManager.h"
-#include "Game/Camera.h"
-#include "../Texture.h"
+#include "Renderer/Camera.h"
+#include "Renderer/Texture.h"
 #include <iostream>
 #include "Helper/TimeHelper.h"
-#include "Game/Projectile.h"
+#include "Misc/Projectile.h"
 #include <vector>
 
 
@@ -53,28 +53,28 @@ int main()
     window.SetViewPort(window.SCREEN_WIDTH, window.SCREEN_HEIGHT);
 
     Shader instancedUniformShader = ContentManager::LoadShader(
-        "Shader/instancedUniformVertex.vert",
-        "Shader/frag.frag",
+        "src/Shader/instancedUniformVertex.vert",
+        "src/Shader/frag.frag",
         "instancedUniform");
 
     Shader instancedLayoutShader = ContentManager::LoadShader(
-        "Shader/instancedLayoutVertex.vert",
+        "src/Shader/instancedLayoutVertex.vert",
         "Shader/frag.frag",
         "instancedLayout");
 
     Shader basicShader = ContentManager::LoadShader(
-        "Shader/basicVertex.vert",
-        "Shader/frag.frag",
+        "src/Shader/basicVertex.vert",
+        "src/Shader/frag.frag",
         "basicShader");
 
     Shader aimDotShader = ContentManager::LoadShader(
-        "Shader/2dVertex.vert",
-        "Shader/SimpleColorFragmentShader.frag",
+        "src/Shader/2dVertex.vert",
+        "src/Shader/SimpleColorFragmentShader.frag",
         "aimDotShader");
 
     Shader obj3DShader = ContentManager::LoadShader(
-        "object3DFragment.vert",
-        "Shader/frag.frag",
+        "src/Shader/object3DFragment.vert",
+        "src/Shader/frag.frag",
         "object3DShader"
     );
 

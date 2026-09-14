@@ -19,44 +19,45 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header\Game\Camera.h" />
-    <ClInclude Include="Header\Game\Projectile.h" />
-    <ClInclude Include="Header\GL\Window.h" />
-    <ClInclude Include="Header\Helper\ContentManager.h" />
-    <ClInclude Include="Header\Helper\TimeHelper.h" />
-    <ClInclude Include="Header\Render\EBO.h" />
-    <ClInclude Include="Header\Render\Renderer.h" />
-    <ClInclude Include="Header\Render\Shader.h" />
-    <ClInclude Include="Header\Render\VAO.h" />
-    <ClInclude Include="Header\Render\VBO.h" />
-    <ClInclude Include="PointLight.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="Texture.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="object3DFragment.vert" />
-    <None Include="Shader\frag.frag" />
-    <None Include="Shader\basicVertex.vert" />
-    <None Include="Shader\instancedLayoutVertex.vert" />
-    <None Include="Shader\instancedUniformVertex.vert" />
-    <None Include="Shader\SimpleColorFragmentShader.frag" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\GraphicsProgramming\glad.c" />
-    <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="Source\Game\Camera.cpp" />
-    <ClCompile Include="Source\Game\Projectile.cpp" />
-    <ClCompile Include="Source\GL\Window.cpp" />
-    <ClCompile Include="Source\Helper\ContentManager.cpp" />
-    <ClCompile Include="Source\Helper\TimeHelper.cpp" />
-    <ClCompile Include="Source\Render\EBO.cpp" />
-    <ClCompile Include="Source\Render\Renderer.cpp" />
-    <ClCompile Include="Source\Render\Shader.cpp" />
-    <ClCompile Include="Source\Render\VAO.cpp" />
-    <ClCompile Include="Source\Render\VBO.cpp" />
-    <ClCompile Include="Source\Source.cpp" />
-    <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="src\Helper\ContentManager.cpp" />
+    <ClCompile Include="src\Helper\TimeHelper.cpp" />
+    <ClCompile Include="src\Misc\Projectile.cpp" />
+    <ClCompile Include="src\OpenGL\EBO.cpp" />
+    <ClCompile Include="src\OpenGL\VAO.cpp" />
+    <ClCompile Include="src\OpenGL\VBO.cpp" />
+    <ClCompile Include="src\OpenGL\Window.cpp" />
+    <ClCompile Include="src\Renderer\Camera.cpp" />
+    <ClCompile Include="src\Renderer\PointLight.cpp" />
+    <ClCompile Include="src\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Renderer\stb_image.cpp" />
+    <ClCompile Include="src\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Helper\ContentManager.h" />
+    <ClInclude Include="src\Helper\TimeHelper.h" />
+    <ClInclude Include="src\Misc\Projectile.h" />
+    <ClInclude Include="src\OpenGL\EBO.h" />
+    <ClInclude Include="src\OpenGL\VAO.h" />
+    <ClInclude Include="src\OpenGL\VBO.h" />
+    <ClInclude Include="src\OpenGL\Window.h" />
+    <ClInclude Include="src\Renderer\Camera.h" />
+    <ClInclude Include="src\Renderer\PointLight.h" />
+    <ClInclude Include="src\Renderer\Renderer.h" />
+    <ClInclude Include="src\Renderer\Shader.h" />
+    <ClInclude Include="src\Renderer\stb_image.h" />
+    <ClInclude Include="src\Renderer\Texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Shader\2dVertex.vert" />
+    <None Include="src\Shader\basicVertex.vert" />
+    <None Include="src\Shader\frag.frag" />
+    <None Include="src\Shader\instancedLayoutVertex.vert" />
+    <None Include="src\Shader\instancedUniformVertex.vert" />
+    <None Include="src\Shader\object3DFragment.vert" />
+    <None Include="src\Shader\SimpleColorFragmentShader.frag" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

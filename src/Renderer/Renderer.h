@@ -1,10 +1,10 @@
 #ifndef RENDERER_CLASS_H
 #define RENDERER_CLASS_H
 
-#include "Render/Shader.h"
-#include "Render/VAO.h"
-#include <Game/Camera.h>
-#include "../Texture.h"
+#include "../Renderer/Shader.h"
+#include "../OpenGL/VAO.h"
+#include "../Renderer/Camera.h"
+#include "../Renderer/Texture.h"
 #include <glm/glm.hpp>
 
 

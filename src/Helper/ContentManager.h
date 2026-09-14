@@ -1,11 +1,11 @@
 #ifndef  CONTENT_MANAGER_CLASS_H
 #define CONTENT_MANAGER_CLASS_H
 
-#include "Render/Shader.h"
+#include "../Renderer/Shader.h"
 #include <map>
-#include <Game/Camera.h>
-#include "../Texture.h"
-#include "../PointLight.h"
+#include "../Renderer/Camera.h"
+#include "../Renderer/Texture.h"
+#include "../Renderer/PointLight.h"
 
 
 static class ContentManager
