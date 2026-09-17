@@ -36,6 +36,7 @@
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="eProjectionType.h" />
     <ClInclude Include="src\Helper\ContentManager.h" />
     <ClInclude Include="src\Helper\TimeHelper.h" />
     <ClInclude Include="src\Misc\Projectile.h" />

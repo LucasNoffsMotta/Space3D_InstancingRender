@@ -59,7 +59,7 @@ int main()
 
     Shader instancedLayoutShader = ContentManager::LoadShader(
         "src/Shader/instancedLayoutVertex.vert",
-        "Shader/frag.frag",
+        "src/Shader/frag.frag",
         "instancedLayout");
 
     Shader basicShader = ContentManager::LoadShader(

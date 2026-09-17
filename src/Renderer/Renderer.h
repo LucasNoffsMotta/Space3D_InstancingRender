@@ -45,8 +45,8 @@ public:
 	bool bulletShoot = false;
 	glm::mat4 projection;
 	glm::mat4 view;
-	glm::mat4* modelMatrices;
-	glm::vec3* instancesTranslationPtr;
+	glm::mat4* modelMatrices;  //Large object array 
+	glm::vec3* instancesTranslationPtr;   //Large object array 
 	glm::vec3 bulletDirection;
 	glm::vec3 bulletPosition;
 };

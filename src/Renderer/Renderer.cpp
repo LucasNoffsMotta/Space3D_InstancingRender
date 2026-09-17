@@ -143,6 +143,10 @@ void Renderer::ChangeProjection(bool ortho)
     if (ortho)
     {
         projection = glm::ortho(0.0f, 1980.0f, 0.0f, 1200.0f, 0.1f, 100.0f);
+        glm::vec3 newpos = glm::vec3(0, 0, 10);
+        ContentManager::Cameras["main"]->SetPos(newpos);
+        ContentManager::Cameras["main"]->SetProjectionType(eProjectionType::Ortho);
+        ContentManager::Cameras["main"]->SetMoveSpeed(10);
     }
 
     else
@@ -219,6 +223,7 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
 
     glm::mat4 model = glm::mat4(1);
     model = glm::translate(model, translation);
+    std::cout << "Floor pos x:" << translation.x << "// Floor pos y: " << translation.y << "/Floor pos z: " << translation.z << std::endl;
     model = glm::scale(model, scale);
 
     shader.SetUniform3fv("viewPos", ContentManager::Cameras["main"]->CameraPos);
