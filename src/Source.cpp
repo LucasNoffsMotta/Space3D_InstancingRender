@@ -124,11 +124,11 @@ int main()
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
         renderer.DrawInstances(instances, *ContentManager::Textures["woodenFloor"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
-        renderer.Draw(glm::vec3(0), *ContentManager::Textures["woodenFloor"], glm::vec3(400, 1, 400), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
+        renderer.Draw(glm::vec3(-500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(1000, 1, 400), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
 
 
          for (const auto& [key, value] : ContentManager::PointLights) {
-            value->Draw(obj3DShader, *ContentManager::Textures["woodenFloor"], renderer);
+            value->DrawPointLight(obj3DShader, *ContentManager::Textures["woodenFloor"], renderer);
         }
 
 

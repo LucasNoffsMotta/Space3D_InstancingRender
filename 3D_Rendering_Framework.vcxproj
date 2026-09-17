@@ -27,10 +27,12 @@
     <ClCompile Include="src\OpenGL\VAO.cpp" />
     <ClCompile Include="src\OpenGL\VBO.cpp" />
     <ClCompile Include="src\OpenGL\Window.cpp" />
+    <ClCompile Include="src\Renderer\BaseLight.cpp" />
     <ClCompile Include="src\Renderer\Camera.cpp" />
     <ClCompile Include="src\Renderer\PointLight.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Renderer\SpotLight.cpp" />
     <ClCompile Include="src\Renderer\stb_image.cpp" />
     <ClCompile Include="src\Renderer\Texture.cpp" />
     <ClCompile Include="src\Source.cpp" />
@@ -44,10 +46,12 @@
     <ClInclude Include="src\OpenGL\VAO.h" />
     <ClInclude Include="src\OpenGL\VBO.h" />
     <ClInclude Include="src\OpenGL\Window.h" />
+    <ClInclude Include="src\Renderer\BaseLight.h" />
     <ClInclude Include="src\Renderer\Camera.h" />
     <ClInclude Include="src\Renderer\PointLight.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
     <ClInclude Include="src\Renderer\Shader.h" />
+    <ClInclude Include="src\Renderer\SpotLight.h" />
     <ClInclude Include="src\Renderer\stb_image.h" />
     <ClInclude Include="src\Renderer\Texture.h" />
   </ItemGroup>

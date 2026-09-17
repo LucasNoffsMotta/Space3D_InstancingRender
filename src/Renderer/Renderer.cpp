@@ -143,8 +143,6 @@ void Renderer::ChangeProjection(bool ortho)
     if (ortho)
     {
         projection = glm::ortho(0.0f, 1980.0f, 0.0f, 1200.0f, 0.1f, 100.0f);
-        glm::vec3 newpos = glm::vec3(0, 0, 10);
-        ContentManager::Cameras["main"]->SetPos(newpos);
         ContentManager::Cameras["main"]->SetProjectionType(eProjectionType::Ortho);
         ContentManager::Cameras["main"]->SetMoveSpeed(10);
     }
@@ -202,13 +200,16 @@ glm::vec3 Renderer::GetTranslationPos(int index)
 
 void Renderer::CreatePointLights()
 {
-    glm::vec3 pos = glm::vec3(0, 10, 0);
+    glm::vec3 pos = glm::vec3(10, 50, 0);
+    glm::vec3 color = glm::vec3(1);
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
         ContentManager::AddPointLight(i);
+        ContentManager::PointLights[std::to_string(i)]->SetColor(color);
         ContentManager::PointLights[std::to_string(i)]->SetPosition(pos);
-        pos.x += 30;
+        pos.x -= 100;
+        color.x -= 0.1;
     }
 }
 
@@ -244,14 +245,14 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        ContentManager::PointLights[std::to_string(i)]->SetUniforms(shader);
+        ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
     }
 
     shader.SetUniform3fv("spotLight.position", ContentManager::Cameras["main"]->CameraPos);
     shader.SetUniform3fv("spotLight.direction", ContentManager::Cameras["main"]->CameraFront);
-    shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 1.0f));
-    shader.SetUniform3fv("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-    shader.SetUniform3fv("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
+    shader.SetUniform3fv("spotLight.diffuse", glm::vec3(0.0f, 0.0f, 0.0f));
+    shader.SetUniform3fv("spotLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
     shader.SetUniformFloat("spotLight.constant", 1.0f);
     shader.SetUniformFloat("spotLight.linear", 0.0014);
     shader.SetUniformFloat("spotLight.quadratic", 0.000007);
@@ -308,14 +309,14 @@ void Renderer::DrawInstances(int amount, Texture& texture, glm::vec3 scale, glm:
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        ContentManager::PointLights[std::to_string(i)]->SetUniforms(shader);
+        ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
     }
 
     shader.SetUniform3fv("spotLight.position", ContentManager::Cameras["main"]->CameraPos);
     shader.SetUniform3fv("spotLight.direction", ContentManager::Cameras["main"]->CameraFront);
-    shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 1.0f));
-    shader.SetUniform3fv("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-    shader.SetUniform3fv("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
+    shader.SetUniform3fv("spotLight.diffuse", glm::vec3(0.0f, 0.0f, 0.0f));
+    shader.SetUniform3fv("spotLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
     shader.SetUniformFloat("spotLight.constant", 1.0f);
     shader.SetUniformFloat("spotLight.linear", 0.0014);
     shader.SetUniformFloat("spotLight.quadratic", 0.000007);
