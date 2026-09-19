@@ -6,7 +6,9 @@ std::map<std::string, Shader>               ContentManager::Shaders;
 std::map<std::string, glm::vec3>            ContentManager::Colors;
 std::map<std::string, Camera*>              ContentManager::Cameras;
 std::map<std::string, Texture*>             ContentManager::Textures;
-std::map<std::string, std::unique_ptr<PointLight>>          ContentManager::PointLights;
+std::map<std::string, std::unique_ptr<PointLight>>                ContentManager::PointLights;
+std::map<std::string, std::unique_ptr<SpotLight>>                 ContentManager::SpotLights;
+std::map<std::string, std::unique_ptr<DirectionalLight>>          ContentManager::DirectionalLights;
 
 
 Shader ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)
@@ -60,5 +62,15 @@ void ContentManager::AddCamera(Camera* cam, std::string name)
 void ContentManager::AddPointLight(int index)
 {
     ContentManager::PointLights[std::to_string(index)] = std::make_unique<PointLight>(index);
+}
+
+void ContentManager::AddSpotLight(int index)
+{
+    ContentManager::SpotLights[std::to_string(index)] = std::make_unique<SpotLight>(index);
+}
+
+void ContentManager::AddDirectionalLight(int index)
+{
+    ContentManager::DirectionalLights[std::to_string(index)] = std::make_unique<DirectionalLight>(index);
 }
 

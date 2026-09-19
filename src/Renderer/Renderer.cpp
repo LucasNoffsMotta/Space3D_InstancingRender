@@ -158,6 +158,8 @@ Renderer::Renderer()
 {
     InitRenderData();
     CreatePointLights();
+    CreateSpotLights();
+    CreateDirectionalLights();
 }
 
 void Renderer::SetActiveShader(Shader& shader)
@@ -213,6 +215,41 @@ void Renderer::CreatePointLights()
     }
 }
 
+void Renderer::CreateSpotLights()
+{
+    glm::vec3 pos = glm::vec3(10, 200, 0);
+    glm::vec3 direction = glm::vec3(0, -1, 0);
+    glm::vec3 color = glm::vec3(1);
+
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+    {
+        ContentManager::AddSpotLight(i);
+        ContentManager::SpotLights[std::to_string(i)]->SetColor(color);
+        ContentManager::SpotLights[std::to_string(i)]->SetPosition(pos);
+        ContentManager::SpotLights[std::to_string(i)]->SetDirection(direction);
+        pos.x -= 30;
+        color.z -= 0.1;
+    }
+}
+
+void Renderer::CreateDirectionalLights()
+{
+    glm::vec3 direction = glm::vec3(-0.2f, -1.0f, -0.3f);
+    glm::vec3 ambient =  glm::vec3(0.05f, 0.05f, 0.05f);
+    glm::vec3 diff = glm::vec3(0.4f, 0.4f, 0.4f);
+    glm::vec3 spec = glm::vec3(0.5f, 0.5f, 0.5f);
+
+    for (int i = 0; i < 1; i++)
+    {
+        ContentManager::AddDirectionalLight(i);
+        ContentManager::DirectionalLights[std::to_string(i)]->SetDirection(direction);
+        ContentManager::DirectionalLights[std::to_string(i)]->SetSpecular(spec);
+        ContentManager::DirectionalLights[std::to_string(i)]->SetDiffuse(diff);
+        ContentManager::DirectionalLights[std::to_string(i)]->SetAmbient(ambient);
+
+    }
+}
+
 void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
 {
     //Keep on draw:
@@ -236,11 +273,10 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
     shader.SetUniformInt("material.specular", 1);
     shader.SetUniformFloat("material.shininess", 100.0f);
 
-    shader.SetUniform3fv("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
-    shader.SetUniform3fv("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
-    shader.SetUniform3fv("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
-    shader.SetUniform3fv("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-    shader.SetUniform3fv("dirLight.color", glm::vec3(0.01f, 0.01f, 0.01f));
+    for (int i = 0; i < 1; i++)
+    {
+        ContentManager::DirectionalLights[std::to_string(i)]->SetDirectionalLightUniforms(shader);
+    }
 
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
@@ -248,16 +284,11 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
         ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
     }
 
-    shader.SetUniform3fv("spotLight.position", ContentManager::Cameras["main"]->CameraPos);
-    shader.SetUniform3fv("spotLight.direction", ContentManager::Cameras["main"]->CameraFront);
-    shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
-    shader.SetUniform3fv("spotLight.diffuse", glm::vec3(0.0f, 0.0f, 0.0f));
-    shader.SetUniform3fv("spotLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-    shader.SetUniformFloat("spotLight.constant", 1.0f);
-    shader.SetUniformFloat("spotLight.linear", 0.0014);
-    shader.SetUniformFloat("spotLight.quadratic", 0.000007);
-    shader.SetUniformFloat("spotLight.innerCutoff", glm::cos(glm::radians(9.5f)));
-    shader.SetUniformFloat("spotLight.outerCutoff", glm::cos(glm::radians(25.0f)));
+
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+    {
+        ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+    }
 
     vao.Bind();
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -301,27 +332,20 @@ void Renderer::DrawInstances(int amount, Texture& texture, glm::vec3 scale, glm:
     shader.SetUniformMatrix4fv("view", view);
 
 
-    shader.SetUniform3fv("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
-    shader.SetUniform3fv("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
-    shader.SetUniform3fv("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
-    shader.SetUniform3fv("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-    shader.SetUniform3fv("dirLight.color", glm::vec3(0.01f, 0.01f, 0.01f));
+    for (int i = 0; i < 1; i++)
+    {
+        ContentManager::DirectionalLights[std::to_string(i)]->SetDirectionalLightUniforms(shader);
+    }
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
         ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
     }
 
-    shader.SetUniform3fv("spotLight.position", ContentManager::Cameras["main"]->CameraPos);
-    shader.SetUniform3fv("spotLight.direction", ContentManager::Cameras["main"]->CameraFront);
-    shader.SetUniform3fv("spotLight.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
-    shader.SetUniform3fv("spotLight.diffuse", glm::vec3(0.0f, 0.0f, 0.0f));
-    shader.SetUniform3fv("spotLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-    shader.SetUniformFloat("spotLight.constant", 1.0f);
-    shader.SetUniformFloat("spotLight.linear", 0.0014);
-    shader.SetUniformFloat("spotLight.quadratic", 0.000007);
-    shader.SetUniformFloat("spotLight.innerCutoff", glm::cos(glm::radians(9.5f)));
-    shader.SetUniformFloat("spotLight.outerCutoff", glm::cos(glm::radians(25.0f)));
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+    {
+        ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+    }
 
     vao.Bind();
     glDrawArraysInstanced(GL_TRIANGLES, 0, 36, amount);

@@ -20,6 +20,8 @@ private:
 	VAO aimDotVao;
 	VAO bulletVao;
 	void CreatePointLights();
+	void CreateSpotLights();
+	void CreateDirectionalLights();
 
 public:
 	int MAX_POINT_LIGHTS = 10;

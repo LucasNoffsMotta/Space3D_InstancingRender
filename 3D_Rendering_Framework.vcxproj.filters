@@ -93,6 +93,9 @@
     <ClCompile Include="src\Renderer\SpotLight.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer\DirectionalLight.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Helper\ContentManager.h">
@@ -141,6 +144,9 @@
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\SpotLight.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\DirectionalLight.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
   </ItemGroup>

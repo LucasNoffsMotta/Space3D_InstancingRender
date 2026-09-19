@@ -6,6 +6,8 @@
 #include "../Renderer/Camera.h"
 #include "../Renderer/Texture.h"
 #include "../Renderer/PointLight.h"
+#include "../Renderer/SpotLight.h"
+#include "../Renderer/DirectionalLight.h"
 
 
 static class ContentManager
@@ -16,6 +18,8 @@ public:
 	static std::map<std::string, Camera*> Cameras;
 	static std::map<std::string, Texture*> Textures;
 	static std::map<std::string, std::unique_ptr<PointLight>> PointLights;
+	static std::map<std::string, std::unique_ptr<SpotLight>> SpotLights;
+	static std::map<std::string, std::unique_ptr<DirectionalLight>> DirectionalLights;
 
 	static Shader LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName);
 	static Texture* LoadTexture(const char* texturePath, std::string name);
@@ -26,6 +30,8 @@ public:
 	static void InitColors();
 	static void AddCamera(Camera* cam, std::string name);
 	static void AddPointLight(int index);
+	static void AddSpotLight(int index);
+	static void AddDirectionalLight(int index);
 };
 
 

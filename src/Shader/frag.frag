@@ -49,8 +49,8 @@ struct PointLight
 #define MAX_POINTLIGHTS  10
 
 uniform PointLight pointLight[MAX_POINTLIGHTS];
-uniform SpotLight spotLight;
-uniform DirLight dirLight;
+uniform SpotLight spotLight[MAX_POINTLIGHTS];
+uniform DirLight dirLight[MAX_POINTLIGHTS];
 uniform vec3 viewPos;
 
 in vec3 FragPos;
@@ -131,12 +131,14 @@ void main()
 {
 	vec3 normal = normalize(Normal);
 	vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 result = GetDirLight(dirLight, normal, viewDir);
-	result += GetSpotLight(spotLight, normal, FragPos, viewDir);
+    vec3 result = vec3(0);
+
 
 	for (int i = 0; i < MAX_POINTLIGHTS; i++)
 	{
+			result += GetDirLight(dirLight[i], normal, viewDir);
 			result += GetPointLight(pointLight[i], normal, FragPos, viewDir);
+			result += GetSpotLight(spotLight[i], normal, FragPos, viewDir);
 	}
 
 	FragColor = vec4(result, 1);
