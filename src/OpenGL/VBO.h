@@ -4,12 +4,14 @@
 #include<GLFW/glfw3.h>
 #include<GLAD/glad.h>
 
+class Mesh;
+
 class VBO
 {
 public:
 	GLuint Id;
 	VBO();
-	VBO(GLfloat* vertices, GLsizeiptr size);
+	VBO(const void* vertices, GLsizeiptr size);
 	void Bind();
 	void Unbind();
 	void Delete();

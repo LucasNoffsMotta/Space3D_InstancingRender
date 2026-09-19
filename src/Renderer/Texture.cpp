@@ -14,17 +14,14 @@ Texture::Texture()
 	//
 }
 
-
 void Texture::ActiveTextureUnit(int unit)
 {
-	if (unit == 0) {
-		glActiveTexture(GL_TEXTURE0);
-	}
+     glActiveTexture(GL_TEXTURE0 + unit);
+}
 
-	else if (unit == 1) {
-		glActiveTexture(GL_TEXTURE1);
-	}
-
+void Texture::SetTextureType(eTextureType type)
+{
+	this->type = type;
 }
 
 void Texture::BindTexture()

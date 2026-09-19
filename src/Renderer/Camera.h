@@ -6,7 +6,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "../OpenGL/Window.h"
-#include "../../eProjectionType.h"
+#include "../Helper/eProjectionType.h"
+
 
 
 class Camera
@@ -16,7 +17,7 @@ private:
 	float Pitch = 0.0f;
 	float LastX = 650;
 	float LastY = 600;
-	float MoveSpeed = 100;
+	float MoveSpeed = 400;
 	bool FirstMouseMovement = true;
 	eProjectionType projection = eProjectionType::Perspective;
 

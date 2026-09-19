@@ -6,6 +6,7 @@
 #include <glm/fwd.hpp>
 #include "VBO.h"
 #include <glm/ext/matrix_float4x4.hpp>
+#include "EBO.h"
 
 class VAO
 {
@@ -15,6 +16,7 @@ public:
 	void Bind();
 	void Unbind();
 	void LinkAttrib(VBO& vbo, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
+	void LinkAttrib(EBO& ebo, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
 	void LinkInstancedMat4(glm::mat4* modelMatrices, int amount);
 };
 

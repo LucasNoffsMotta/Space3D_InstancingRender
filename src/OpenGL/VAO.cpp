@@ -21,9 +21,17 @@ void VAO::Unbind()
 void VAO::LinkAttrib(VBO& vbo, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset)
 {
 	vbo.Bind();
+    glEnableVertexAttribArray(layout);
 	glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
-	glEnableVertexAttribArray(layout);
 	vbo.Unbind();
+}
+
+void VAO::LinkAttrib(EBO& ebo, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset)
+{
+    ebo.Bind();
+    glEnableVertexAttribArray(layout);
+    glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
+    ebo.Unbind();
 }
 
 void VAO::LinkInstancedMat4(glm::mat4* modelMatrices, int amount)

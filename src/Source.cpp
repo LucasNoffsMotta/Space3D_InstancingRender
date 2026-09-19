@@ -82,6 +82,11 @@ int main()
     ContentManager::LoadTexture("D:/Projetos/c++/OpenGL/Assets/woodenFloor.jpg", "woodenFloor");
     ContentManager::LoadTexture("D:/Projetos/c++/OpenGL/Assets/container2.png", "conteiner");
     ContentManager::LoadTexture("D:/Projetos/c++/OpenGL/Assets/container2_specular.png", "conteiner_specular");
+
+    ContentManager::Textures["woodenFloor"]->SetTextureType(eTextureType::Diffuse);
+    ContentManager::Textures["conteiner"]->SetTextureType(eTextureType::Diffuse);
+    ContentManager::Textures["conteiner_specular"]->SetTextureType(eTextureType::Specular);
+
     ContentManager::InitColors();
     Renderer renderer = Renderer();
 

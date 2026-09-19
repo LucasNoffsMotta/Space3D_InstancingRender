@@ -270,8 +270,8 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
     shader.SetUniformMatrix4fv("projection", projection);
     shader.SetUniformMatrix4fv("view", view);
 
-    shader.SetUniformInt("material.diffuse", 0);
-    shader.SetUniformInt("material.specular", 1);
+    shader.SetUniformInt("material.texture_diffuse1", 0);
+    shader.SetUniformInt("material.texture_specular1", 1);
     shader.SetUniformFloat("material.shininess", 100.0f);
 
     for (int i = 0; i < 1; i++)
@@ -329,8 +329,8 @@ void Renderer::DrawInstances(int amount, Texture& texture, Texture& diffuseMap, 
     diffuseMap.BindTexture();
 
     shader.SetUniformFloat("material.shininess", 0.6);
-    shader.SetUniformInt("material.diffuse", 0);
-    shader.SetUniformInt("material.specular",1);
+    shader.SetUniformInt("material.texture_diffuse1", 0);
+    shader.SetUniformInt("material.texture_specular1", 1);
 
     shader.SetUniform3fv("color", color);
     shader.SetUniformFloat("time", glfwGetTime() / 2);

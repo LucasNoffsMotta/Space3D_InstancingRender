@@ -30,6 +30,8 @@
     <ClCompile Include="src\Renderer\BaseLight.cpp" />
     <ClCompile Include="src\Renderer\Camera.cpp" />
     <ClCompile Include="src\Renderer\DirectionalLight.cpp" />
+    <ClCompile Include="src\Renderer\Mesh.cpp" />
+    <ClCompile Include="src\Renderer\Model.cpp" />
     <ClCompile Include="src\Renderer\PointLight.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\Shader.cpp" />
@@ -39,8 +41,9 @@
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="eProjectionType.h" />
     <ClInclude Include="src\Helper\ContentManager.h" />
+    <ClInclude Include="src\Helper\eProjectionType.h" />
+    <ClInclude Include="src\Helper\eTextureType.h" />
     <ClInclude Include="src\Helper\TimeHelper.h" />
     <ClInclude Include="src\Misc\Projectile.h" />
     <ClInclude Include="src\OpenGL\EBO.h" />
@@ -50,6 +53,8 @@
     <ClInclude Include="src\Renderer\BaseLight.h" />
     <ClInclude Include="src\Renderer\Camera.h" />
     <ClInclude Include="src\Renderer\DirectionalLight.h" />
+    <ClInclude Include="src\Renderer\Mesh.h" />
+    <ClInclude Include="src\Renderer\Model.h" />
     <ClInclude Include="src\Renderer\PointLight.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
     <ClInclude Include="src\Renderer\Shader.h" />

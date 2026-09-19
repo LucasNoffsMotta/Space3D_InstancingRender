@@ -96,6 +96,12 @@
     <ClCompile Include="src\Renderer\DirectionalLight.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer\Mesh.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Model.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Helper\ContentManager.h">
@@ -137,9 +143,6 @@
     <ClInclude Include="src\OpenGL\Window.h">
       <Filter>Header Files\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="eProjectionType.h">
-      <Filter>Header Files\Helper</Filter>
-    </ClInclude>
     <ClInclude Include="src\Renderer\BaseLight.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
@@ -147,6 +150,18 @@
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\DirectionalLight.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Mesh.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helper\eProjectionType.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helper\eTextureType.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Model.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
