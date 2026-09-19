@@ -2,7 +2,7 @@
 
 DirectionalLight::DirectionalLight(int index)
 {
-	color = glm::vec3(0.5f, 0.01f, 0.01f);
+	color = glm::vec3(0.1f, 0.1f, 0.87f);
 	this->lightIndex = index;
 }
 
@@ -33,6 +33,6 @@ void DirectionalLight::DrawDirectionalLight(Shader& shader, Texture& texture, Re
 
 void DirectionalLight::SetDirectionalLightUniforms(Shader& shader)
 {
-	std::string prefix = BaseLight::SetUniforms(shader, "spotLight");
+	std::string prefix = BaseLight::SetUniforms(shader, "dirLight");
 	shader.SetUniform3fv((prefix + "direction").c_str(), this->direction);
 }

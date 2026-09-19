@@ -14,20 +14,17 @@ Texture::Texture()
 	//
 }
 
-void Texture::ConfigureTextureBuffers()
-{
-
-	//if (repeat)
-	//{
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	//}
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
 
 void Texture::ActiveTextureUnit(int unit)
 {
-	glActiveTexture(GL_TEXTURE0 + unit);
+	if (unit == 0) {
+		glActiveTexture(GL_TEXTURE0);
+	}
+
+	else if (unit == 1) {
+		glActiveTexture(GL_TEXTURE1);
+	}
+
 }
 
 void Texture::BindTexture()

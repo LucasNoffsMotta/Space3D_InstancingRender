@@ -80,6 +80,8 @@ int main()
 
     //Texture woodenFloor = Texture("D:/Projetos/c++/OpenGL/Assets/woodenFloor.jpg");
     ContentManager::LoadTexture("D:/Projetos/c++/OpenGL/Assets/woodenFloor.jpg", "woodenFloor");
+    ContentManager::LoadTexture("D:/Projetos/c++/OpenGL/Assets/container2.png", "conteiner");
+    ContentManager::LoadTexture("D:/Projetos/c++/OpenGL/Assets/container2_specular.png", "conteiner_specular");
     ContentManager::InitColors();
     Renderer renderer = Renderer();
 
@@ -123,7 +125,7 @@ int main()
 
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
-        renderer.DrawInstances(instances, *ContentManager::Textures["woodenFloor"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
+        renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
         renderer.Draw(glm::vec3(-500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(1000, 1, 400), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
 
 

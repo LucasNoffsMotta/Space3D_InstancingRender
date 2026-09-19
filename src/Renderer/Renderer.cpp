@@ -254,6 +254,7 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
 {
     //Keep on draw:
     shader.Activate();
+    texture.ActiveTextureUnit(0);
     texture.BindTexture();
 
     shader.SetUniform3fv("color", glm::vec3(1));
@@ -316,14 +317,20 @@ void Renderer::DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rota
     bulletVao.Unbind();
 }
 
-void Renderer::DrawInstances(int amount, Texture& texture, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
+void Renderer::DrawInstances(int amount, Texture& texture, Texture& diffuseMap, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
 {
     //Keep on draw:
     shader.Activate();
+
+    texture.ActiveTextureUnit(0);
     texture.BindTexture();
-    shader.SetUniformFloat("material.shininess", 40.0f);
+
+    diffuseMap.ActiveTextureUnit(1);
+    diffuseMap.BindTexture();
+
+    shader.SetUniformFloat("material.shininess", 0.6);
     shader.SetUniformInt("material.diffuse", 0);
-    shader.SetUniformInt("material.specular", 1);
+    shader.SetUniformInt("material.specular",1);
 
     shader.SetUniform3fv("color", color);
     shader.SetUniformFloat("time", glfwGetTime() / 2);
