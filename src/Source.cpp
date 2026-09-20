@@ -14,7 +14,7 @@
 
 /*
 * T
-*  TODO: point lights, Multiple lights
+*  TODO: Add more properties to Model class (translation, rotation, origin, etc!);
 */
 
 
@@ -95,6 +95,7 @@ int main()
 
     ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/3D/backpack.obj", "backpack");
     ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Cilinder/Cilinder.obj", "cilinder");
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/City/uploads_files_2720101_BusGameMap.obj", "city");
 
     ContentManager::InitColors();
     Renderer renderer = Renderer();
@@ -111,7 +112,8 @@ int main()
     glm::vec3 camPos = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 camFront = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 modelPos = glm::vec3(0.0f, 100.0f, 100.0f);
+    glm::vec3 modelPosOne = glm::vec3(0.0f, 100.0f, 100.0f);
+    glm::vec3 modelPosTwo = glm::vec3(0.0f, 200.0f, 100.0f);
     Camera cam = Camera(camPos, camFront, camUp);
     ContentManager::AddCamera(&cam, "main");
 
@@ -142,7 +144,10 @@ int main()
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
         renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
         renderer.Draw(glm::vec3(-500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(1000, 1, 400), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
-        renderer.DrawModel(*ContentManager::Models["cilinder"], modelPos, glm::vec3(10), assimpShader);
+        renderer.DrawModel(*ContentManager::Models["cilinder"], modelPosOne, glm::vec3(10), assimpShader);
+        renderer.DrawModel(*ContentManager::Models["backpack"], modelPosTwo, glm::vec3(10), assimpShader);
+        renderer.DrawModel(*ContentManager::Models["city"], modelPosTwo, glm::vec3(0.5), assimpShader);
+
 
          for (const auto& [key, value] : ContentManager::PointLights) {
             value->DrawPointLight(obj3DShader, *ContentManager::Textures["woodenFloor"], renderer);
