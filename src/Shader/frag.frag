@@ -57,7 +57,6 @@ uniform DirLight dirLight[MAX_POINTLIGHTS];
 uniform vec3 viewPos;
 
 in vec3 FragPos;
-in vec3 fColor;
 in vec3 position;
 in vec3 Normal;
 in vec2 texCoord;
@@ -145,4 +144,5 @@ void main()
 	}
 
 	FragColor = vec4(result, 1);
+	//FragColor = vec4(texCoord, 0.0, 1.0);
 }

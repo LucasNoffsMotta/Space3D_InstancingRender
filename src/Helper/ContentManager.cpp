@@ -2,13 +2,14 @@
 #include "../Renderer/Shader.h"
 
 
-std::map<std::string, Shader>               ContentManager::Shaders;
-std::map<std::string, glm::vec3>            ContentManager::Colors;
-std::map<std::string, Camera*>              ContentManager::Cameras;
-std::map<std::string, Texture*>             ContentManager::Textures;
+std::map<std::string, Shader>                                     ContentManager::Shaders;
+std::map<std::string, glm::vec3>                                  ContentManager::Colors;
+std::map<std::string, Camera*>                                    ContentManager::Cameras;
+std::map<std::string, Texture*>                                   ContentManager::Textures;
 std::map<std::string, std::unique_ptr<PointLight>>                ContentManager::PointLights;
 std::map<std::string, std::unique_ptr<SpotLight>>                 ContentManager::SpotLights;
 std::map<std::string, std::unique_ptr<DirectionalLight>>          ContentManager::DirectionalLights;
+std::map<std::string, Model*>                                     ContentManager::Models;
 
 
 Shader ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)
@@ -21,6 +22,12 @@ Texture* ContentManager::LoadTexture(const char* texturePath, std::string name)
 {
     Textures[name] = new Texture(texturePath);
     return Textures[name];
+}
+
+Model* ContentManager::LoadModel(const char* modelPath, std::string name)
+{
+    Models[name] = new Model(modelPath);
+    return Models[name];
 }
 
 glm::vec3 ContentManager::GetColor(std::string color)

@@ -22,6 +22,7 @@ private:
     EBO ebo;
     VBO vbo;
     void setupMesh();
+    unsigned int VAO, VBO, EBO;
 
 public:
     std::vector<Vertex>       vertices;

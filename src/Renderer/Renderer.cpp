@@ -317,23 +317,55 @@ void Renderer::DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rota
     bulletVao.Unbind();
 }
 
+void Renderer::DrawModel(glm::vec3& translation, glm::vec3 scale, Shader& shader)
+{
+    shader.Activate();
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::scale(model, scale);
+    shader.SetUniformMatrix4fv("model", model);
+    shader.SetUniformMatrix4fv("projection", projection);
+    shader.SetUniformMatrix4fv("view", view);
+    shader.SetUniformFloat("material.shininess", 100.0f);
+
+    for (int i = 0; i < 1; i++)
+    {
+        ContentManager::DirectionalLights[std::to_string(i)]->SetDirectionalLightUniforms(shader);
+    }
+
+    for (int i = 0; i < 10; i++)
+    {
+        ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
+    }
+
+
+    for (int i = 0; i < 10; i++)
+    {
+        ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+    }
+
+
+    for (const auto& [key, value] : ContentManager::Models)
+    {
+        value->Draw(shader);
+    }
+}
+
 void Renderer::DrawInstances(int amount, Texture& texture, Texture& diffuseMap, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
 {
     //Keep on draw:
     shader.Activate();
 
-    texture.ActiveTextureUnit(0);
-    texture.BindTexture();
-
-    diffuseMap.ActiveTextureUnit(1);
+    diffuseMap.ActiveTextureUnit(0);
     diffuseMap.BindTexture();
+
+    texture.ActiveTextureUnit(1);
+    texture.BindTexture();
 
     shader.SetUniformFloat("material.shininess", 0.6);
     shader.SetUniformInt("material.texture_diffuse1", 0);
     shader.SetUniformInt("material.texture_specular1", 1);
 
     shader.SetUniform3fv("color", color);
-    shader.SetUniformFloat("time", glfwGetTime() / 2);
     shader.SetUniform3fv("viewPos", ContentManager::Cameras["main"]->CameraPos);
     shader.SetUniformMatrix4fv("projection", projection);
     shader.SetUniformMatrix4fv("view", view);

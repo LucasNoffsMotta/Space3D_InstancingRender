@@ -187,5 +187,8 @@
     <None Include="src\Shader\SimpleColorFragmentShader.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="src\Shader\model.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

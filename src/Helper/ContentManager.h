@@ -8,6 +8,7 @@
 #include "../Renderer/PointLight.h"
 #include "../Renderer/SpotLight.h"
 #include "../Renderer/DirectionalLight.h"
+#include "../Renderer/Model.h"
 
 
 static class ContentManager
@@ -20,9 +21,11 @@ public:
 	static std::map<std::string, std::unique_ptr<PointLight>> PointLights;
 	static std::map<std::string, std::unique_ptr<SpotLight>> SpotLights;
 	static std::map<std::string, std::unique_ptr<DirectionalLight>> DirectionalLights;
+	static std::map<std::string, Model*> Models;
 
 	static Shader LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName);
 	static Texture* LoadTexture(const char* texturePath, std::string name);
+	static Model* LoadModel(const char* modelPath, std::string name);
 
 	static glm::vec3 GetColor(std::string color);
 	static void InsertColor(std::string name, glm::vec3 rgb);

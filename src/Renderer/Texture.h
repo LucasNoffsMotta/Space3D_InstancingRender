@@ -12,11 +12,12 @@
 class Texture
 {
 private:
-	unsigned char* data;
+
 
 	void LoadImageData(const char* filename);
 
 public:
+	unsigned char* data;
 	GLuint texture;
 	void ActiveTextureUnit(int unit);
 	void SetTextureType(eTextureType type);

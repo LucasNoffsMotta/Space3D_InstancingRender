@@ -78,6 +78,12 @@ int main()
         "object3DShader"
     );
 
+    Shader assimpShader = ContentManager::LoadShader(
+        "src/Shader/model.vert",
+        "src/Shader/frag.frag",
+        "assimpShader"
+    );
+
     //Texture woodenFloor = Texture("D:/Projetos/c++/OpenGL/Assets/woodenFloor.jpg");
     ContentManager::LoadTexture("D:/Projetos/c++/OpenGL/Assets/woodenFloor.jpg", "woodenFloor");
     ContentManager::LoadTexture("D:/Projetos/c++/OpenGL/Assets/container2.png", "conteiner");
@@ -86,6 +92,8 @@ int main()
     ContentManager::Textures["woodenFloor"]->SetTextureType(eTextureType::Diffuse);
     ContentManager::Textures["conteiner"]->SetTextureType(eTextureType::Diffuse);
     ContentManager::Textures["conteiner_specular"]->SetTextureType(eTextureType::Specular);
+
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/3D/backpack.obj", "backpack");
 
     ContentManager::InitColors();
     Renderer renderer = Renderer();
@@ -132,7 +140,7 @@ int main()
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
         renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
         renderer.Draw(glm::vec3(-500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(1000, 1, 400), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
-
+        renderer.DrawModel(camPos, glm::vec3(100), assimpShader);
 
          for (const auto& [key, value] : ContentManager::PointLights) {
             value->DrawPointLight(obj3DShader, *ContentManager::Textures["woodenFloor"], renderer);

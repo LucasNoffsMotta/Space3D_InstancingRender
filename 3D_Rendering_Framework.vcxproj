@@ -68,6 +68,7 @@
     <None Include="src\Shader\frag.frag" />
     <None Include="src\Shader\instancedLayoutVertex.vert" />
     <None Include="src\Shader\instancedUniformVertex.vert" />
+    <None Include="src\Shader\model.vert" />
     <None Include="src\Shader\object3DFragment.vert" />
     <None Include="src\Shader\SimpleColorFragmentShader.frag" />
   </ItemGroup>

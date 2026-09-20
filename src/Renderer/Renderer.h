@@ -30,6 +30,8 @@ public:
 	void DrawAimDot(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height);
 	void DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rotation, float rotationAngle, glm::vec3 color, Shader& shader);
 
+	void DrawModel(glm::vec3& translation, glm::vec3 scale, Shader& shader);
+
 
 	void SetInstancedTranslations(int amount);
 	Renderer();

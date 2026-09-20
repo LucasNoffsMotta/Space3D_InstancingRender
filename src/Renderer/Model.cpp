@@ -11,7 +11,7 @@ void Model::Draw(Shader& shader)
 void Model::loadModel(std::string path)
 {
     Assimp::Importer import;
-    const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
@@ -31,6 +31,7 @@ void Model::processNode(aiNode* node, const aiScene* scene)
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(processMesh(mesh, scene));
     }
+
     // then do the same for each of its children
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
@@ -53,9 +54,14 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
         vertex.Position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
         vertex.Normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
         
-        if (mesh->mTextureCoords[i]->Length() > 0)
+        if (mesh->mTextureCoords[0])
         {
-            vertex.TexCoords = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+            glm::vec2 vec;
+            // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
+            // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
+            vec.x = mesh->mTextureCoords[0][i].x;
+            vec.y = mesh->mTextureCoords[0][i].y;
+            vertex.TexCoords = vec;
         }
 
         else
@@ -92,7 +98,6 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     return Mesh(vertices, indices, textures);
 }
 
-//TODO: Maybe shouldn`t store all textures on the heap memory?
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, eTextureType eType)
 {
     std::vector<Texture> textures;
@@ -100,12 +105,29 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
     {
         aiString str;
         mat->GetTexture(type, i, &str);
+
+        bool skip = false;
         auto file = str.C_Str();
-        std::string path = directory + '/' + std::string(file);
-        Texture* texture = ContentManager::LoadTexture(path.c_str(), file);
-        texture->type = eType;
-        texture->path = str.C_Str();
-        textures.push_back(*texture);
+
+        for (unsigned int j = 0; j < textures_loaded.size(); j++)
+        {
+            if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
+            {
+                textures.push_back(textures_loaded[j]);
+                skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
+                break;
+            }
+        }
+
+        if (!skip)
+        {
+            std::string path = directory + '/' + std::string(file);
+            Texture text = Texture(path.c_str(), false);
+            text.SetTextureType(eType);
+            text.path = str.C_Str();
+            textures.push_back(text);
+            textures_loaded.push_back(text);
+        }
     }
     return textures;
 }
