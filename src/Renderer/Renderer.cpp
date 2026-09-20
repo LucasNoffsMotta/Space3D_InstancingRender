@@ -317,12 +317,13 @@ void Renderer::DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rota
     bulletVao.Unbind();
 }
 
-void Renderer::DrawModel(glm::vec3& translation, glm::vec3 scale, Shader& shader)
+void Renderer::DrawModel(Model& model, glm::vec3& translation, glm::vec3 scale, Shader& shader)
 {
     shader.Activate();
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::scale(model, scale);
-    shader.SetUniformMatrix4fv("model", model);
+    glm::mat4 model_matrix = glm::mat4(1.0f);
+    model_matrix = glm::translate(model_matrix, translation);
+    model_matrix = glm::scale(model_matrix, scale);
+    shader.SetUniformMatrix4fv("model", model_matrix);
     shader.SetUniformMatrix4fv("projection", projection);
     shader.SetUniformMatrix4fv("view", view);
     shader.SetUniformFloat("material.shininess", 100.0f);
@@ -343,11 +344,12 @@ void Renderer::DrawModel(glm::vec3& translation, glm::vec3 scale, Shader& shader
         ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
     }
 
+    model.Draw(shader);
 
-    for (const auto& [key, value] : ContentManager::Models)
-    {
-        value->Draw(shader);
-    }
+    //for (const auto& [key, value] : ContentManager::Models)
+    //{
+    //    value->Draw(shader);
+    //}
 }
 
 void Renderer::DrawInstances(int amount, Texture& texture, Texture& diffuseMap, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
