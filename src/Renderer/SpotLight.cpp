@@ -1,6 +1,9 @@
 #include "SpotLight.h"
-#include "PointLight.h"
 
+
+SpotLight::SpotLight()
+{
+}
 
 SpotLight::SpotLight(int index)
 {

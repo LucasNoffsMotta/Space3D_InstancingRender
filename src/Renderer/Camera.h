@@ -1,5 +1,6 @@
 #ifndef CAMERA_CLASS_H
 #define CAMERA_CLASS_H
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -8,6 +9,8 @@
 #include "../OpenGL/Window.h"
 #include "../Helper/eProjectionType.h"
 
+
+class SpotLight;
 
 
 class Camera
@@ -21,8 +24,9 @@ private:
 	bool FirstMouseMovement = true;
 	eProjectionType projection = eProjectionType::Perspective;
 
-
 public:
+	float cameraLight = 1;
+	void SetSpotLight();
 	Camera(glm::vec3& camPos, glm::vec3& camFront, glm::vec3& camUp);
 	void SetPos(glm::vec3& pos);
 	void SetFront(glm::vec3& front);

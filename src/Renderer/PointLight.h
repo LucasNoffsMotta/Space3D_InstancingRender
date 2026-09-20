@@ -1,8 +1,8 @@
 #pragma once
-#include <glm/glm.hpp>
-#include "Shader.h"
-#include "Renderer.h"
+
 #include "BaseLight.h"
+#include <glm/glm.hpp>
+
 
 class PointLight : public BaseLight
 {

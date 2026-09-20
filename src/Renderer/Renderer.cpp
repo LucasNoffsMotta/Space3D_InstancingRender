@@ -202,7 +202,7 @@ glm::vec3 Renderer::GetTranslationPos(int index)
 
 void Renderer::CreatePointLights()
 {
-    glm::vec3 pos = glm::vec3(10, 50, 0);
+    glm::vec3 pos = glm::vec3(10, -100, 0);
     glm::vec3 color = glm::vec3(1);
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
@@ -217,7 +217,7 @@ void Renderer::CreatePointLights()
 
 void Renderer::CreateSpotLights()
 {
-    glm::vec3 pos = glm::vec3(10, 200, 0);
+    glm::vec3 pos = glm::vec3(10, -100, 0);
     glm::vec3 direction = glm::vec3(0, -1, 0);
     glm::vec3 color = glm::vec3(1);
 
@@ -333,23 +333,36 @@ void Renderer::DrawModel(Model& model, glm::vec3& translation, glm::vec3 scale, 
         ContentManager::DirectionalLights[std::to_string(i)]->SetDirectionalLightUniforms(shader);
     }
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
         ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
     }
 
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
+        if (i == 0)
+        {
+            if (ContentManager::Cameras["main"]->cameraLight == 1)
+            {
+                ContentManager::SpotLights[std::to_string(i)]->SetPosition(ContentManager::Cameras["main"]->CameraPos);
+                ContentManager::SpotLights[std::to_string(i)]->SetDirection(ContentManager::Cameras["main"]->CameraFront);
+                ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+                continue;
+            }
+
+            else
+            {
+                glm::vec3 zeroVec = glm::vec3(0);
+                ContentManager::SpotLights[std::to_string(i)]->SetAmbient(zeroVec);
+                continue;
+            }
+        }
+
         ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
     }
 
     model.Draw(shader);
-
-    //for (const auto& [key, value] : ContentManager::Models)
-    //{
-    //    value->Draw(shader);
-    //}
 }
 
 void Renderer::DrawInstances(int amount, Texture& texture, Texture& diffuseMap, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)

@@ -1,11 +1,16 @@
 #include "Camera.h"
 #include "../Helper/TimeHelper.h"
 
+void Camera::SetSpotLight()
+{
+}
+
 Camera::Camera(glm::vec3& camPos, glm::vec3& camFront, glm::vec3& camUp)
 {
 	CameraPos = camPos;
 	CameraFront = camFront;
 	CameraUp = camUp;
+	SetSpotLight();
 }
 
 void Camera::SetPos(glm::vec3& pos)
@@ -98,6 +103,16 @@ void Camera::HandleKeybordInput(GLFWwindow* window)
 			CameraPos.x += MoveSpeed * TimeHelper::GetDeltaTime();
 		}
 	}
+
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		if (cameraLight = 1) 		cameraLight = 0;
+		else
+		{
+			cameraLight = 1;
+		}
+
+	}
 }
 
 glm::mat4 Camera::CalculateView()
@@ -118,6 +133,8 @@ glm::mat4 Camera::Update(Window& window)
 	glfwGetCursorPos(window.window, &mouseX, &mouseY);
 	HandleMouseInput(mouseX, mouseY);
 	HandleKeybordInput(window.window);
+	//cameraLight.SetPosition(CameraPos);
+	//cameraLight.SetDirection(CameraFront);
 	std::cout << "Cam x: " << CameraPos.x << " // Cam y:" << CameraPos.y << " // Cam Z:" << CameraPos.z << std::endl;
 	return CalculateView();
 }
