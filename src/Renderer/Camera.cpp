@@ -28,10 +28,6 @@ void Camera::SetUp(glm::vec3& up)
 	CameraUp = up;
 }
 
-void Camera::SetProjectionType(eProjectionType type)
-{
-	projection = type;
-}
 
 void Camera::CalculateDirection(float xoffset, float yoffset)
 {
@@ -50,6 +46,7 @@ void Camera::CalculateDirection(float xoffset, float yoffset)
 	direction.y = sin(glm::radians(Pitch));
 	direction.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
 	CameraFront = glm::normalize(direction);
+	std::cout << "Dir X: " << direction.x << "/ Dir Y: " << direction.y << "/ Dir Z: " << direction.z << std::endl;
 }
 
 void Camera::SetMoveSpeed(float newSpeed)
@@ -61,69 +58,45 @@ void Camera::HandleKeybordInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		if (projection == eProjectionType::Perspective) {
-			CameraPos += (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
-		}
-
-		else {
-			CameraPos.y += MoveSpeed * TimeHelper::GetDeltaTime();
-		}
+		if (mode == eCameraMode::Free) CameraPos += (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
+		else if (mode == eCameraMode::TopDown) CameraPos.z -= (MoveSpeed * TimeHelper::GetDeltaTime());
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		if (projection == eProjectionType::Perspective) {
-			CameraPos -= (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
-
-		}
-
-		else {
-			CameraPos.y -= MoveSpeed * TimeHelper::GetDeltaTime();
-		}
+		if (mode == eCameraMode::Free) CameraPos -= (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
+		else if (mode == eCameraMode::TopDown) CameraPos.z += (MoveSpeed * TimeHelper::GetDeltaTime());
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		if (projection == eProjectionType::Perspective) {
-			CameraPos -= (glm::normalize(glm::cross(CameraFront, CameraUp)) * MoveSpeed) * TimeHelper::GetDeltaTime();
-		}
-
-		else {
-			CameraPos.x -= MoveSpeed * TimeHelper::GetDeltaTime();
-		}
+		CameraPos -= (glm::normalize(glm::cross(CameraFront, CameraUp)) * MoveSpeed) * TimeHelper::GetDeltaTime();
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		if (projection == eProjectionType::Perspective) {
-			CameraPos += (glm::normalize(glm::cross(CameraFront, CameraUp)) * MoveSpeed) * TimeHelper::GetDeltaTime();
-		}
 
-		else {
-			CameraPos.x += MoveSpeed * TimeHelper::GetDeltaTime();
-		}
+		CameraPos += (glm::normalize(glm::cross(CameraFront, CameraUp)) * MoveSpeed) * TimeHelper::GetDeltaTime();
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		if (cameraLight = 1) 		cameraLight = 0;
-		else
-		{
-			cameraLight = 1;
+		if (mode == eCameraMode::Free) {
+			CameraPos = topDownPosition;
+			CameraFront = topDownDirection;
+			mode = eCameraMode::TopDown;
 		}
 
+		else
+		{
+			mode = eCameraMode::Free;
+		}
 	}
 }
 
 glm::mat4 Camera::CalculateView()
 {
-	if (projection == eProjectionType::Perspective) {
-		return glm::lookAt(CameraPos, CameraPos + CameraFront, CameraUp);
-	}
-	
-	glm::mat4 view = glm::mat4(1);
-	//glm::vec3 translation = glm::vec3(CameraPos.x - (1920 / 2), CameraPos.y - (1200 / 2), -10);
-	return glm::translate(view, CameraPos);
+	return glm::lookAt(CameraPos, CameraPos + CameraFront, CameraUp);
 }
 
 glm::mat4 Camera::Update(Window& window)
@@ -131,10 +104,12 @@ glm::mat4 Camera::Update(Window& window)
 	double mouseX = 1;
 	double mouseY = 1;
 	glfwGetCursorPos(window.window, &mouseX, &mouseY);
-	HandleMouseInput(mouseX, mouseY);
+
+	if (mode == eCameraMode::Free)
+	{
+		HandleMouseInput(mouseX, mouseY);
+	}
 	HandleKeybordInput(window.window);
-	//cameraLight.SetPosition(CameraPos);
-	//cameraLight.SetDirection(CameraFront);
 	std::cout << "Cam x: " << CameraPos.x << " // Cam y:" << CameraPos.y << " // Cam Z:" << CameraPos.z << std::endl;
 	return CalculateView();
 }

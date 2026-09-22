@@ -136,24 +136,6 @@ void Renderer::InitBulletRenderData()
     bulletVao.LinkAttrib(vbo, 1, 3, GL_FLOAT, sizeof(float) * 6, (void*)(3 * sizeof(float)));
 }
 
-void Renderer::ChangeProjection(bool ortho)
-{
-    projection = glm::mat4(1.0f);
-
-    if (ortho)
-    {
-        projection = glm::ortho(0.0f, 1980.0f, 0.0f, 1200.0f, 0.1f, 100.0f);
-        ContentManager::Cameras["main"]->SetProjectionType(eProjectionType::Ortho);
-        ContentManager::Cameras["main"]->SetMoveSpeed(10);
-    }
-
-    else
-    {
-        projection = glm::perspective(glm::radians(45.0f), (float)1920 / 1200, 0.1f, 10000000.f);
-    }
-
-}
-
 Renderer::Renderer()
 {
     InitRenderData();

@@ -155,14 +155,14 @@
     <ClInclude Include="src\Renderer\Mesh.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helper\eProjectionType.h">
-      <Filter>Header Files\Helper</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helper\eTextureType.h">
       <Filter>Header Files\Helper</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Model.h">
       <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="eCameraMode.h">
+      <Filter>Header Files\Helper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

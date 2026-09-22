@@ -41,8 +41,8 @@
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="eCameraMode.h" />
     <ClInclude Include="src\Helper\ContentManager.h" />
-    <ClInclude Include="src\Helper\eProjectionType.h" />
     <ClInclude Include="src\Helper\eTextureType.h" />
     <ClInclude Include="src\Helper\TimeHelper.h" />
     <ClInclude Include="src\Misc\Projectile.h" />

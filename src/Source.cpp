@@ -13,8 +13,9 @@
 
 
 /*
-* T
+* 
 *  TODO: Add more properties to Model class (translation, rotation, origin, etc!);
+*  Make a system to get more soft inputs (threshold) 
 */
 
 
@@ -95,6 +96,7 @@ int main()
 
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/3D/backpack.obj", "backpack");
     ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Village/house2.obj", "village");
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "floor");
 
 
     ContentManager::InitColors();
@@ -114,6 +116,7 @@ int main()
     glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 modelPosOne = glm::vec3(0.0f, 100.0f, 100.0f);
     glm::vec3 modelPosTwo = glm::vec3(0.0f, -400.0f, 100.0f);
+    glm::vec3 floorPos = glm::vec3(0.0f, -380.0f, 100.0f);
     Camera cam = Camera(camPos, camFront, camUp);
     ContentManager::AddCamera(&cam, "main");
 
@@ -143,30 +146,16 @@ int main()
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
         renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
-        renderer.Draw(glm::vec3(500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(5000, 1, 5000), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
+        //renderer.Draw(glm::vec3(500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(5000, 1, 5000), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
         renderer.DrawModel(*ContentManager::Models["village"], modelPosTwo, glm::vec3(100), assimpShader);
+        renderer.DrawModel(*ContentManager::Models["floor"], floorPos, glm::vec3(100, 1, 100), assimpShader);
 
-      /*   for (const auto& [key, value] : ContentManager::PointLights) {
+         for (const auto& [key, value] : ContentManager::PointLights) {
             value->DrawPointLight(obj3DShader, *ContentManager::Textures["woodenFloor"], renderer);
-        }*/
+        }
 
 
-         //dumb test
-
-         if (glfwGetKey(window.window, GLFW_KEY_J) == GLFW_PRESS)
-         {
-             renderer.ChangeProjection(true);
-         }
-
-         //dumb test
-
-         if (glfwGetKey(window.window, GLFW_KEY_K) == GLFW_PRESS)
-         {
-             renderer.ChangeProjection(false);
-         }
-
-
-        window.Update();
+       window.Update();
     }
 
     glfwTerminate();     
