@@ -10,6 +10,7 @@ std::map<std::string, std::unique_ptr<PointLight>>                ContentManager
 std::map<std::string, std::unique_ptr<SpotLight>>                 ContentManager::SpotLights;
 std::map<std::string, std::unique_ptr<DirectionalLight>>          ContentManager::DirectionalLights;
 std::map<std::string, Model*>                                     ContentManager::Models;
+std::map<std::string, InputManager*>                              ContentManager::Controllers;
 
 
 Shader ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)
@@ -79,5 +80,10 @@ void ContentManager::AddSpotLight(int index)
 void ContentManager::AddDirectionalLight(int index)
 {
     ContentManager::DirectionalLights[std::to_string(index)] = std::make_unique<DirectionalLight>(index);
+}
+
+void ContentManager::AddController(std::string name)
+{
+    ContentManager::Controllers[name] = new InputManager();
 }
 

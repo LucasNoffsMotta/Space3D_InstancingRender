@@ -12,6 +12,7 @@ public:
 	static float GetDeltaTime();
 	static void Update();
 	static void ShowFps();
+	static void CountFrames(bool shouldCount, int& num);
 };
 
 

@@ -1,6 +1,7 @@
 #include "Camera.h"
 #include "../Helper/TimeHelper.h"
 
+
 void Camera::SetSpotLight()
 {
 }
@@ -54,32 +55,32 @@ void Camera::SetMoveSpeed(float newSpeed)
 	MoveSpeed = newSpeed;
 }
 
-void Camera::HandleKeybordInput(GLFWwindow* window)
+void Camera::HandleKeybordInput(InputManager* controller)
 {
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	if (controller->currentInput == eInput::Arrow_Up)
 	{
 		if (mode == eCameraMode::Free) CameraPos += (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
 		else if (mode == eCameraMode::TopDown) CameraPos.z -= (MoveSpeed * TimeHelper::GetDeltaTime());
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	if (controller->currentInput == eInput::Arrow_Down)
 	{
 		if (mode == eCameraMode::Free) CameraPos -= (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
 		else if (mode == eCameraMode::TopDown) CameraPos.z += (MoveSpeed * TimeHelper::GetDeltaTime());
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	if (controller->currentInput == eInput::Arrow_Left)
 	{
 		CameraPos -= (glm::normalize(glm::cross(CameraFront, CameraUp)) * MoveSpeed) * TimeHelper::GetDeltaTime();
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	if (controller->currentInput == eInput::Arrow_Right)
 	{
 
 		CameraPos += (glm::normalize(glm::cross(CameraFront, CameraUp)) * MoveSpeed) * TimeHelper::GetDeltaTime();
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	if (controller->currentInput == eInput::Space_Bar)
 	{
 		if (mode == eCameraMode::Free) {
 			CameraPos = topDownPosition;
@@ -99,7 +100,7 @@ glm::mat4 Camera::CalculateView()
 	return glm::lookAt(CameraPos, CameraPos + CameraFront, CameraUp);
 }
 
-glm::mat4 Camera::Update(Window& window)
+glm::mat4 Camera::Update(Window& window, InputManager* controller)
 {
 	double mouseX = 1;
 	double mouseY = 1;
@@ -109,7 +110,7 @@ glm::mat4 Camera::Update(Window& window)
 	{
 		HandleMouseInput(mouseX, mouseY);
 	}
-	HandleKeybordInput(window.window);
+	HandleKeybordInput(controller);
 	std::cout << "Cam x: " << CameraPos.x << " // Cam y:" << CameraPos.y << " // Cam Z:" << CameraPos.z << std::endl;
 	return CalculateView();
 }

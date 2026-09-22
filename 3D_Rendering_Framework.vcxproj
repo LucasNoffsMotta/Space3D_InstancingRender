@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\GraphicsProgramming\glad.c" />
     <ClCompile Include="src\Helper\ContentManager.cpp" />
+    <ClCompile Include="src\Helper\InputManager.cpp" />
     <ClCompile Include="src\Helper\TimeHelper.cpp" />
     <ClCompile Include="src\Misc\Projectile.cpp" />
     <ClCompile Include="src\OpenGL\EBO.cpp" />
@@ -41,9 +42,12 @@
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="eCameraMode.h" />
+    <ClInclude Include="eInput.h" />
     <ClInclude Include="src\Helper\ContentManager.h" />
+    <ClInclude Include="src\Helper\eCameraMode.h" />
+    <ClInclude Include="src\Helper\eInput.h" />
     <ClInclude Include="src\Helper\eTextureType.h" />
+    <ClInclude Include="src\Helper\InputManager.h" />
     <ClInclude Include="src\Helper\TimeHelper.h" />
     <ClInclude Include="src\Misc\Projectile.h" />
     <ClInclude Include="src\OpenGL\EBO.h" />

@@ -102,6 +102,9 @@
     <ClCompile Include="src\Renderer\Model.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Helper\InputManager.cpp">
+      <Filter>Source Files\Helper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Helper\ContentManager.h">
@@ -161,7 +164,16 @@
     <ClInclude Include="src\Renderer\Model.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="eCameraMode.h">
+    <ClInclude Include="eInput.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helper\eCameraMode.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helper\InputManager.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helper\eInput.h">
       <Filter>Header Files\Helper</Filter>
     </ClInclude>
   </ItemGroup>

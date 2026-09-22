@@ -9,6 +9,7 @@
 #include "../Renderer/SpotLight.h"
 #include "../Renderer/DirectionalLight.h"
 #include "../Renderer/Model.h"
+#include "InputManager.h"
 
 
 static class ContentManager
@@ -22,6 +23,7 @@ public:
 	static std::map<std::string, std::unique_ptr<SpotLight>> SpotLights;
 	static std::map<std::string, std::unique_ptr<DirectionalLight>> DirectionalLights;
 	static std::map<std::string, Model*> Models;
+	static std::map<std::string, InputManager*> Controllers;
 
 	static Shader LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName);
 	static Texture* LoadTexture(const char* texturePath, std::string name);
@@ -35,6 +37,7 @@ public:
 	static void AddPointLight(int index);
 	static void AddSpotLight(int index);
 	static void AddDirectionalLight(int index);
+	static void AddController(std::string name);
 };
 
 

@@ -15,7 +15,7 @@
 /*
 * 
 *  TODO: Add more properties to Model class (translation, rotation, origin, etc!);
-*  Make a system to get more soft inputs (threshold) 
+*  Make a system to get more soft inputs (trheshold) 
 */
 
 
@@ -98,6 +98,8 @@ int main()
     ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Village/house2.obj", "village");
     ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "floor");
 
+    ContentManager::AddController("main");
+
 
     ContentManager::InitColors();
     Renderer renderer = Renderer();
@@ -136,12 +138,13 @@ int main()
 
     while (!glfwWindowShouldClose(window.window))
     {
+        ContentManager::Controllers["main"]->GetInput(window.window);
         TimeHelper::Update();
         TimeHelper::ShowFps();
         float currentFrame = glfwGetTime();
         dt = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        renderer.view = cam.Update(window);
+        renderer.view = cam.Update(window, ContentManager::Controllers["main"]);
 
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
@@ -153,7 +156,6 @@ int main()
          for (const auto& [key, value] : ContentManager::PointLights) {
             value->DrawPointLight(obj3DShader, *ContentManager::Textures["woodenFloor"], renderer);
         }
-
 
        window.Update();
     }

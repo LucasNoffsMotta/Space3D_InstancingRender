@@ -25,3 +25,8 @@ void TimeHelper::ShowFps()
 	std::cout << "FPS: " << fps << std::endl;
 }
 
+void TimeHelper::CountFrames(bool shouldCount, int& num)
+{
+	if (shouldCount) num++;
+}
+

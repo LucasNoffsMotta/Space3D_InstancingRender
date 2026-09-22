@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "../OpenGL/Window.h"
+#include "../Helper/InputManager.h"
 #include "../Helper/eCameraMode.h"
 
 
@@ -41,8 +42,8 @@ public:
 	void HandleMouseInput(double xpos, double ypos);
 	void CalculateDirection(float xoffset, float yoffset);
 	void SetMoveSpeed(float newSpeed);
-	void HandleKeybordInput(GLFWwindow* window);
-	glm::mat4 Update(Window& window);
+	void HandleKeybordInput(InputManager* controller);
+	glm::mat4 Update(Window& window, InputManager* controller);
 };
 
 
