@@ -62,7 +62,14 @@ in vec3 Normal;
 in vec2 texCoord;
 out vec4 FragColor;
 
+float near = 0.1;
+float far = 6000;
 
+float LinearizeDepth(float depth)
+{
+	 float z = depth * 2.0 - 1.0; // back to NDC 
+	 return (2.0 * near * far) / (far + near - z * (far - near));
+}
 
 vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir)
 {
@@ -143,6 +150,12 @@ void main()
 			result += GetSpotLight(spotLight[i], normal, FragPos, viewDir);
 	}
 
-	FragColor = vec4(result, 1);
+
+
+
+	//For depth test:
+	float depth = LinearizeDepth(gl_FragCoord.z) / far; // divide by far for demonstration
+    //FragColor = vec4(vec3(depth), 1.0);
+	FragColor = vec4(result, depth);
 	//FragColor = vec4(texCoord, 0.0, 1.0);
 }

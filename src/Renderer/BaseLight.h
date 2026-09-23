@@ -16,7 +16,7 @@ protected:
 
     int lightIndex;
     glm::mat4 model = glm::mat4(1);
-    glm::vec3 scale = glm::vec3(10);
+    glm::vec3 scale = glm::vec3(1);
     
 
 public:

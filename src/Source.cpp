@@ -18,7 +18,7 @@
 *  Make a system to get more soft inputs (trheshold) 
 */
 
-
+//1 unit = 1 meter!
 
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1200;
@@ -104,7 +104,7 @@ int main()
     ContentManager::InitColors();
     Renderer renderer = Renderer();
 
-    glm::vec3 scale = glm::vec3(10000.f);
+    glm::vec3 scale = glm::vec3(10.f);
     glm::vec3 bulletScale = glm::vec3(0.5f);
     glm::vec3 rotation = glm::vec3(1.0f);
     glm::vec3 rotationAxis = glm::vec3(1.f);
@@ -116,9 +116,9 @@ int main()
     glm::vec3 camPos = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 camFront = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 modelPosOne = glm::vec3(0.0f, 100.0f, 100.0f);
-    glm::vec3 modelPosTwo = glm::vec3(0.0f, -400.0f, 100.0f);
-    glm::vec3 floorPos = glm::vec3(0.0f, -380.0f, 100.0f);
+    //glm::vec3 modelPosOne = glm::vec3(0.0f, 100.0f, 100.0f);
+    glm::vec3 modelPosTwo = glm::vec3(0.0f, 1.0f, 0);
+    glm::vec3 floorPos = glm::vec3(0.0f, 0.f, 0);
     Camera cam = Camera(camPos, camFront, camUp);
     ContentManager::AddCamera(&cam, "main");
 
@@ -150,12 +150,12 @@ int main()
         renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
         renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
         //renderer.Draw(glm::vec3(500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(5000, 1, 5000), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
-        renderer.DrawModel(*ContentManager::Models["village"], modelPosTwo, glm::vec3(100), assimpShader);
-        renderer.DrawModel(*ContentManager::Models["floor"], floorPos, glm::vec3(100, 1, 100), assimpShader);
+        renderer.DrawModel(*ContentManager::Models["village"], modelPosTwo, glm::vec3(1), assimpShader);
+        renderer.DrawModel(*ContentManager::Models["floor"], floorPos, glm::vec3(1, 1, 1), assimpShader);
 
-         for (const auto& [key, value] : ContentManager::PointLights) {
+     /*    for (const auto& [key, value] : ContentManager::PointLights) {
             value->DrawPointLight(obj3DShader, *ContentManager::Textures["woodenFloor"], renderer);
-        }
+        }*/
 
        window.Update();
     }

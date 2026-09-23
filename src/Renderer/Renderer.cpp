@@ -54,7 +54,7 @@ void Renderer::InitRenderData()
 
     view = glm::mat4(1.0f);
     projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)1920 / 1200, 0.1f, 10000000.f);
+    projection = glm::perspective(glm::radians(45.0f), (float)1920 / 1200, 0.1f, 6000.f);
 
     vao = VAO();
     VBO vbo = VBO(square, sizeof(square));
@@ -184,8 +184,8 @@ glm::vec3 Renderer::GetTranslationPos(int index)
 
 void Renderer::CreatePointLights()
 {
-    glm::vec3 pos = glm::vec3(10, -100, 0);
-    glm::vec3 color = glm::vec3(1);
+    glm::vec3 pos = glm::vec3(9, 3, 3);
+    glm::vec3 color = glm::vec3(0.01);
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
@@ -199,7 +199,7 @@ void Renderer::CreatePointLights()
 
 void Renderer::CreateSpotLights()
 {
-    glm::vec3 pos = glm::vec3(10, -100, 0);
+    glm::vec3 pos = glm::vec3(10, -1000, 0);
     glm::vec3 direction = glm::vec3(0, -1, 0);
     glm::vec3 color = glm::vec3(1);
 

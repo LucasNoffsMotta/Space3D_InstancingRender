@@ -21,7 +21,7 @@ private:
 	float Pitch = 0.0f;
 	float LastX = 650;
 	float LastY = 600;
-	float MoveSpeed = 400;
+	float MoveSpeed = 10;
 	bool FirstMouseMovement = true;
 	eCameraMode mode = eCameraMode::Free;
 	glm::vec3 topDownDirection = glm::vec3(-0.00205945, -0.765213 ,-0.643773);
