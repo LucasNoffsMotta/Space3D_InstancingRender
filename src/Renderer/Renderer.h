@@ -30,7 +30,7 @@ public:
 	void DrawInstances(int amount, Texture& texture, Texture& diffuseMap, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
 	void DrawAimDot(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height);
 	void DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rotation, float rotationAngle, glm::vec3 color, Shader& shader);
-	void DrawScene(Shader& shader);
+	void DrawScene(Shader& shader, Shader& stencilShader);
 
 	void DrawModel(Model& model, glm::vec3& translation, glm::vec3 scale, Shader& shader);
 

@@ -299,12 +299,15 @@ void Renderer::DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rota
     bulletVao.Unbind();
 }
 
-void Renderer::DrawScene(Shader& shader)
+void Renderer::DrawScene(Shader& shader, Shader& stencilShader)
 {
+    //glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    //glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
+    //glStencilMask(0xFF); // enable writing to the stencil buffer
+
     shader.Activate();
     shader.SetUniformMatrix4fv("projection", projection);
     shader.SetUniformMatrix4fv("view", view);
-
     //Set scene lights uniforms:
     for (int i = 0; i < 1; i++)
     {
@@ -352,6 +355,29 @@ void Renderer::DrawScene(Shader& shader)
             model_matrix = glm::scale(model_matrix, value->GetScale());
             shader.SetUniformMatrix4fv("model", model_matrix);
             value->Draw(shader);
+
+            //glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+            //glStencilMask(0x00); // disable writing to the stencil buffer
+            //glDisable(GL_DEPTH_TEST);
+
+           /* stencilShader.Activate();
+            stencilShader.SetUniformMatrix4fv("projection", projection);
+            stencilShader.SetUniformMatrix4fv("view", view);*/
+
+            //model_matrix = glm::mat4(1.0f);
+            //model_matrix = glm::translate(model_matrix, value->GetWorldPosition());
+
+            //if (value->rotationAngle > 0) {
+            //    model_matrix = glm::rotate(model_matrix, glm::radians(value->rotationAngle), value->rotationAxis);
+            //}
+
+            //model_matrix = glm::scale(model_matrix, glm::vec3(1.1));
+            //stencilShader.SetUniformMatrix4fv("model", model_matrix);
+            //value->Draw(stencilShader);
+
+            //glStencilMask(0xFF);
+            //glStencilFunc(GL_ALWAYS, 1, 0xFF);
+            //glEnable(GL_DEPTH_TEST);
    }
 
    /*    for (const auto& [key, value] : ContentManager::PointLights) {

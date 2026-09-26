@@ -68,6 +68,7 @@
     <ClInclude Include="src\Renderer\Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="outline.frag" />
     <None Include="src\Shader\2dVertex.vert" />
     <None Include="src\Shader\basicVertex.vert" />
     <None Include="src\Shader\frag.frag" />

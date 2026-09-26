@@ -196,5 +196,8 @@ void main()
 	//FragColor = vec4(material.color, 1);
 
 	//Full lightning render
-	FragColor = vec4(result, 1);
+	//FragColor = vec4(result, 1);
+
+
+	FragColor = vec4(0.04, 0.28, 0.26, 1.0);
 }
