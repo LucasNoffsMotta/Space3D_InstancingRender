@@ -7,10 +7,10 @@ class SpotLight : public BaseLight
 private:
 
 	float constant = 1;
-	float linear = 0.07;
-	float quadratic = 0.017;
-	float innerCutOff = glm::cos(glm::radians(9.5f));
-	float outerCutoff = glm::cos(glm::radians(25.0f));
+	float linear = 0.007;
+	float quadratic = 0.0002;
+	float innerCutOff = glm::cos(glm::radians(15.5f));
+	float outerCutoff = glm::cos(glm::radians(35.0f));
 	glm::vec3 direction = glm::vec3(1);
 
 public:

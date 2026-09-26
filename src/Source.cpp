@@ -11,15 +11,20 @@
 #include "Misc/Projectile.h"
 #include <vector>
 
-
-/*
+//TODOS
+/* Stencil testing
+*  Get Mouse Click on floor + rotate toards direction + move (Click and move)
+*  Shadows / Gamma Correction
 *  Create a scene class (scene objects, scene origin, etc)
-*  Add simple gravity that will act on the models
-*  Should be able to render using the same sahder but without receiving light uniforms
+*  Smoother mouse input
+*  Add simple gravity that will act on the models!
+*  Should be able to render using the same shader but without receiving light uniforms
 *  Should be easy to switch between shaders
 *  Should be easy to light on / light of
 *  Change between different camera types
 *  Async model loading
+*  UI for level edit
+*  Test case: make a object that can be moved using mouse clicks with top-down view (including rotation)
 */
 
 //1 unit = 1 meter!
@@ -98,11 +103,11 @@ int main()
     ContentManager::Textures["conteiner"]->SetTextureType(eTextureType::Diffuse);
     ContentManager::Textures["conteiner_specular"]->SetTextureType(eTextureType::Specular);
 
-    //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/3D/backpack.obj", "backpack");
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "car");
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "pinkCube");
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Village/house2.obj", "village");
-    //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "floor");
-    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/SoccerStadium/SoccerArena.obj", "room");
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "floor");
+    //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/SoccerStadium/SoccerArena.obj", "room");
 
 
     ContentManager::AddController("main");
@@ -123,7 +128,7 @@ int main()
     glm::vec3 camPos = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 camFront = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 modelPosTwo = glm::vec3(0.0f, 1.0f, 0);
+    glm::vec3 modelPosTwo = glm::vec3(0.0f, 3.0f, 0);
     glm::vec3 sceneOrigin = glm::vec3(0.0f, 0.f, 0);
     Camera cam = Camera(camPos, camFront, camUp);
     ContentManager::AddCamera(&cam, "main");
@@ -132,11 +137,15 @@ int main()
     glm::vec3 largeScale = glm::vec3(10);
 
     //Model setup:
-     ContentManager::Models["room"]->SetWorldPosition(modelPosTwo);
-     ContentManager::Models["room"]->SetScale(baseScale);
+    // ContentManager::Models["room"]->SetWorldPosition(modelPosTwo);
+    // ContentManager::Models["room"]->SetScale(baseScale);
 
-    //ContentManager::Models["floor"]->SetWorldPosition(sceneOrigin);
-    //ContentManager::Models["floor"]->SetScale(baseScale);
+    ContentManager::Models["floor"]->SetWorldPosition(sceneOrigin);
+    ContentManager::Models["floor"]->SetScale(baseScale);
+
+    ContentManager::Models["car"]->SetWorldPosition(modelPosTwo);
+    ContentManager::Models["car"]->SetScale(baseScale);
+    ContentManager::Models["car"]->SetRotationAngle(270);
 
   /*  ContentManager::Models["pinkCube"]->SetWorldPosition(floorPos);
     ContentManager::Models["pinkCube"]->SetScale(largeScale);*/
@@ -155,6 +164,8 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
+    ContentManager::Models["car"]->AttatchCamera(ContentManager::Cameras["main"], 16);
+
     while (!glfwWindowShouldClose(window.window))
     {
         ContentManager::Controllers["main"]->GetInput(window.window);
@@ -172,7 +183,7 @@ int main()
         renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
         //renderer.Draw(glm::vec3(500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(5000, 1, 5000), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
         renderer.DrawScene(assimpShader);
-
+       ContentManager::Models["car"]->Update(ContentManager::Controllers["main"]);
        window.Update();
     }
 

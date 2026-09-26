@@ -28,6 +28,52 @@ glm::vec3 Model::GetScale()
     return this->scale;
 }
 
+void Model::Update(InputManager* controller)
+{
+    if (controller->Inputs[eInput::None])
+    {
+        return;
+    }
+
+    if (controller->Inputs[eInput::Arrow_Up])
+    {
+        worldPosition.z -= 10 * TimeHelper::GetDeltaTime();
+        attachedCamera->CameraPos.z -= 10 * TimeHelper::GetDeltaTime();
+    }
+
+    if (controller->Inputs[eInput::Arrow_Down])
+    {
+        worldPosition.z += 10 * TimeHelper::GetDeltaTime();
+        attachedCamera->CameraPos.z += 10 * TimeHelper::GetDeltaTime();
+    }
+
+    if (controller->Inputs[eInput::Arrow_Left])
+    {
+        worldPosition.x -= 10 * TimeHelper::GetDeltaTime();
+        attachedCamera->CameraPos.x -= 10 * TimeHelper::GetDeltaTime();
+    }
+
+    if (controller->Inputs[eInput::Arrow_Right])
+    {
+        worldPosition.x += 10 * TimeHelper::GetDeltaTime();
+        attachedCamera->CameraPos.x += 10 * TimeHelper::GetDeltaTime();
+    }
+}
+
+void Model::SetRotationAngle(float angle)
+{
+    rotationAngle = angle;
+}
+
+void Model::AttatchCamera(Camera* cam, float distance)
+{
+    attachedCamera = cam;
+    cam->CameraPos = GetWorldPosition() + glm::vec3(0, distance, 10);
+    glm::vec3 direction = GetWorldPosition() - cam->CameraPos;
+    cam->CameraFront = glm::normalize(direction);
+    cam->mode = eCameraMode::Attached;
+}
+
 void Model::loadModel(std::string path)
 {
     Assimp::Importer import;

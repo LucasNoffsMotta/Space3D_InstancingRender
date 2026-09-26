@@ -57,7 +57,7 @@ void Camera::SetMoveSpeed(float newSpeed)
 
 void Camera::HandleKeybordInput(InputManager* controller)
 {
-	if (controller->Inputs[eInput::None] == true)
+	if (controller->Inputs[eInput::None] == true || mode == eCameraMode::Attached)
 	{
 		return;
 	}
@@ -112,6 +112,7 @@ glm::mat4 Camera::Update(Window& window, InputManager* controller)
 	glfwGetCursorPos(window.window, &mouseX, &mouseY);
 
 	if (mode == eCameraMode::Free)
+	//if (true)
 	{
 		HandleMouseInput(mouseX, mouseY);
 	}

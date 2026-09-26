@@ -201,7 +201,7 @@ void Renderer::CreateSpotLights()
 {
     glm::vec3 pos = glm::vec3(10, -1000, 0);
     glm::vec3 direction = glm::vec3(0, -1, 0);
-    glm::vec3 color = glm::vec3(1);
+    glm::vec3 color = glm::vec3(1, 0.61568, 0);
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
@@ -344,6 +344,11 @@ void Renderer::DrawScene(Shader& shader)
    for (const auto& [key, value] : ContentManager::Models) {
             glm::mat4 model_matrix = glm::mat4(1.0f);
             model_matrix = glm::translate(model_matrix, value->GetWorldPosition());
+
+            if (value->rotationAngle > 0) {
+                model_matrix = glm::rotate(model_matrix, glm::radians(value->rotationAngle), value->rotationAxis);
+            }
+
             model_matrix = glm::scale(model_matrix, value->GetScale());
             shader.SetUniformMatrix4fv("model", model_matrix);
             value->Draw(shader);
