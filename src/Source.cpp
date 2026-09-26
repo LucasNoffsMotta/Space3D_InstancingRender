@@ -14,6 +14,7 @@
 
 /*
 *  Create a scene class (scene objects, scene origin, etc)
+*  Add simple gravity that will act on the models
 *  Should be able to render using the same sahder but without receiving light uniforms
 *  Should be easy to switch between shaders
 *  Should be easy to light on / light of
