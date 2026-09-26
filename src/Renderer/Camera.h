@@ -25,7 +25,7 @@ private:
 	bool FirstMouseMovement = true;
 	eCameraMode mode = eCameraMode::Free;
 	glm::vec3 topDownDirection = glm::vec3(-0.00205945, -0.765213 ,-0.643773);
-	glm::vec3 topDownPosition = glm::vec3(663.234, 1020.36, 804.61);
+	glm::vec3 topDownPosition = glm::vec3(0, 10, 0);
 
 
 public:

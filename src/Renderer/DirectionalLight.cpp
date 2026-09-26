@@ -2,7 +2,7 @@
 
 DirectionalLight::DirectionalLight(int index)
 {
-	color = glm::vec3(0.01f, 0.01f, 0.2f);
+	color = glm::vec3(0.988235, 0.61568f, 0.011764);
 	this->lightIndex = index;
 }
 

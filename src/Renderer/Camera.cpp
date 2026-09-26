@@ -57,30 +57,35 @@ void Camera::SetMoveSpeed(float newSpeed)
 
 void Camera::HandleKeybordInput(InputManager* controller)
 {
-	if (controller->currentInput == eInput::Arrow_Up)
+	if (controller->Inputs[eInput::None] == true)
+	{
+		return;
+	}
+
+	if (controller->Inputs[eInput::Arrow_Up])
 	{
 		if (mode == eCameraMode::Free) CameraPos += (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
 		else if (mode == eCameraMode::TopDown) CameraPos.z -= (MoveSpeed * TimeHelper::GetDeltaTime());
 	}
 
-	if (controller->currentInput == eInput::Arrow_Down)
+	if (controller->Inputs[eInput::Arrow_Down])
 	{
 		if (mode == eCameraMode::Free) CameraPos -= (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
 		else if (mode == eCameraMode::TopDown) CameraPos.z += (MoveSpeed * TimeHelper::GetDeltaTime());
 	}
 
-	if (controller->currentInput == eInput::Arrow_Left)
+	if (controller->Inputs[eInput::Arrow_Left])
 	{
 		CameraPos -= (glm::normalize(glm::cross(CameraFront, CameraUp)) * MoveSpeed) * TimeHelper::GetDeltaTime();
 	}
 
-	if (controller->currentInput == eInput::Arrow_Right)
+	if (controller->Inputs[eInput::Arrow_Right])
 	{
 
 		CameraPos += (glm::normalize(glm::cross(CameraFront, CameraUp)) * MoveSpeed) * TimeHelper::GetDeltaTime();
 	}
 
-	if (controller->currentInput == eInput::Space_Bar)
+	if (controller->Inputs[eInput::Space_Bar])
 	{
 		if (mode == eCameraMode::Free) {
 			CameraPos = topDownPosition;

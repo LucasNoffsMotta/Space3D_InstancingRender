@@ -184,7 +184,7 @@ glm::vec3 Renderer::GetTranslationPos(int index)
 
 void Renderer::CreatePointLights()
 {
-    glm::vec3 pos = glm::vec3(9, 3, 3);
+    glm::vec3 pos = glm::vec3(9, 30, 3);
     glm::vec3 color = glm::vec3(0.01);
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
@@ -299,6 +299,61 @@ void Renderer::DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rota
     bulletVao.Unbind();
 }
 
+void Renderer::DrawScene(Shader& shader)
+{
+    shader.Activate();
+    shader.SetUniformMatrix4fv("projection", projection);
+    shader.SetUniformMatrix4fv("view", view);
+
+    //Set scene lights uniforms:
+    for (int i = 0; i < 1; i++)
+    {
+        ContentManager::DirectionalLights[std::to_string(i)]->SetDirectionalLightUniforms(shader);
+    }
+
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+    {
+        ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
+    }
+
+    //Ugly!
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+    {
+        if (i == 0)
+        {
+            if (ContentManager::Cameras["main"]->cameraLight == 1)
+            {
+                ContentManager::SpotLights[std::to_string(i)]->SetPosition(ContentManager::Cameras["main"]->CameraPos);
+                ContentManager::SpotLights[std::to_string(i)]->SetDirection(ContentManager::Cameras["main"]->CameraFront);
+                ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+                continue;
+            }
+
+            else
+            {
+                glm::vec3 zeroVec = glm::vec3(0);
+                ContentManager::SpotLights[std::to_string(i)]->SetAmbient(zeroVec);
+                continue;
+            }
+        }
+
+        ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+    }
+
+   //Finally, drawing the models!
+   for (const auto& [key, value] : ContentManager::Models) {
+            glm::mat4 model_matrix = glm::mat4(1.0f);
+            model_matrix = glm::translate(model_matrix, value->GetWorldPosition());
+            model_matrix = glm::scale(model_matrix, value->GetScale());
+            shader.SetUniformMatrix4fv("model", model_matrix);
+            value->Draw(shader);
+   }
+
+   /*    for (const auto& [key, value] : ContentManager::PointLights) {
+       value->DrawPointLight(obj3DShader, *ContentManager::Textures["woodenFloor"], renderer);
+   }*/
+}
+
 void Renderer::DrawModel(Model& model, glm::vec3& translation, glm::vec3 scale, Shader& shader)
 {
     shader.Activate();
@@ -361,8 +416,9 @@ void Renderer::DrawInstances(int amount, Texture& texture, Texture& diffuseMap, 
     shader.SetUniformFloat("material.shininess", 0.6);
     shader.SetUniformInt("material.texture_diffuse1", 0);
     shader.SetUniformInt("material.texture_specular1", 1);
+    shader.SetUniformInt("hasTexture", 1);
 
-    shader.SetUniform3fv("color", color);
+    shader.SetUniform3fv("material.color", color);
     shader.SetUniform3fv("viewPos", ContentManager::Cameras["main"]->CameraPos);
     shader.SetUniformMatrix4fv("projection", projection);
     shader.SetUniformMatrix4fv("view", view);

@@ -60,6 +60,7 @@ void ContentManager::InitColors()
     InsertColor("green", green);
     InsertColor("yellow", yellow);
     InsertColor("brown", brown);
+    InsertColor("white", white);
 }
 
 void ContentManager::AddCamera(Camera* cam, std::string name)

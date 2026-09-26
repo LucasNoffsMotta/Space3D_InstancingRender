@@ -8,6 +8,26 @@ void Model::Draw(Shader& shader)
 		meshes[i].Draw(shader);
 }
 
+void Model::SetWorldPosition(glm::vec3& newPos)
+{
+    this->worldPosition = newPos;
+}
+
+void Model::SetScale(glm::vec3& newScale)
+{
+    this->scale = newScale;
+}
+
+glm::vec3 Model::GetWorldPosition()
+{
+    return this->worldPosition;
+}
+
+glm::vec3 Model::GetScale()
+{
+    return this->scale;
+}
+
 void Model::loadModel(std::string path)
 {
     Assimp::Importer import;
@@ -30,6 +50,7 @@ void Model::processNode(aiNode* node, const aiScene* scene)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(processMesh(mesh, scene));
+
     }
 
     // then do the same for each of its children
@@ -45,6 +66,8 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
+    glm::vec3 meshColor = glm::vec3(0);
+    float shininess;
 
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
@@ -68,7 +91,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
         {
             vertex.TexCoords = glm::vec2(0.0f, 0.0f);
         }
-
+        //std::cout << "Processing mesh" << std::endl;
         vertices.push_back(vertex);
     }
     // process indices
@@ -84,8 +107,21 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     // process material
     if (mesh->mMaterialIndex >= 0)
     {
+        aiColor3D color(0.f, 0.f, 0.f);
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
+        if (AI_SUCCESS != aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &shininess))
+        {
+            shininess = 20.f;
+        }
+
+        if (AI_SUCCESS == material->Get(AI_MATKEY_COLOR_DIFFUSE, color))
+        {
+            meshColor.x = color.r;
+            meshColor.y = color.g;
+            meshColor.z = color.b;
+        }
+        
         std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, eTextureType::Diffuse);
 
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
@@ -95,7 +131,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
 
-    return Mesh(vertices, indices, textures);
+    return Mesh(vertices, indices, textures, meshColor, shininess);
 }
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, eTextureType eType)

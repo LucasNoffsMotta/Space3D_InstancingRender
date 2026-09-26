@@ -2,81 +2,85 @@
 
 InputManager::InputManager()
 {
-	Inputs = std::make_unique<std::vector<eInput>>();
+	Inputs[eInput::None] = true;
 }
 
 void InputManager::GetInput(GLFWwindow* window)
 {
-	if (Inputs->size() >= maxInputs) {
-		Inputs->clear();
-	}
-
 	canChangeInput = framesSinceLastInput >= framesThreshold;
 
 	if (canChangeInput)
 	{
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			Inputs->push_back(eInput::Arrow_Up);
+			Inputs[eInput::Arrow_Up] = true;
+			Inputs[eInput::None] = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		{
-			Inputs->push_back(eInput::Arrow_Right);
+			Inputs[eInput::Arrow_Right] = true;
+			Inputs[eInput::None] = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		{
-			Inputs->push_back(eInput::Arrow_Left);
+			Inputs[eInput::Arrow_Left] = true;
+			Inputs[eInput::None] = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		{
-			Inputs->push_back(eInput::Arrow_Down);
+			Inputs[eInput::Arrow_Down] = true;
+			Inputs[eInput::None] = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		{
-			Inputs->push_back(eInput::Arrow_Up);
+			Inputs[eInput::Arrow_Up] = true;
+			Inputs[eInput::None] = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		{
-			Inputs->push_back(eInput::Arrow_Down);
+			Inputs[eInput::Arrow_Down] = true;
+			Inputs[eInput::None] = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		{
-			Inputs->push_back(eInput::Arrow_Left);
+			Inputs[eInput::Arrow_Left] = true;
+			Inputs[eInput::None] = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		{
-			Inputs->push_back(eInput::Arrow_Right);
+			Inputs[eInput::Arrow_Right] = true;
+			Inputs[eInput::None] = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		{
-			Inputs->push_back(eInput::Space_Bar);
+			Inputs[eInput::Space_Bar] = true;
+			Inputs[eInput::None] = false;
 		}
 	}
 
 	TimeHelper::CountFrames(!canChangeInput, framesSinceLastInput);	
 
-	if (Inputs->size() != 0)
-	{
-		ReleasedKey(GLFW_KEY_SPACE, window);
-		ReleasedKey(GLFW_KEY_RIGHT, window);
-		ReleasedKey(GLFW_KEY_LEFT, window);
-		ReleasedKey(GLFW_KEY_DOWN, window);
-		ReleasedKey(GLFW_KEY_UP, window);
-		ReleasedKey(GLFW_KEY_S, window);
-		ReleasedKey(GLFW_KEY_A, window);
-		ReleasedKey(GLFW_KEY_D, window);
-		ReleasedKey(GLFW_KEY_W, window);
-		currentInput = Inputs->back();
-	}
+
+	ReleasedKey(GLFW_KEY_SPACE, window);
+	ReleasedKey(GLFW_KEY_RIGHT, window);
+	ReleasedKey(GLFW_KEY_LEFT, window);
+	ReleasedKey(GLFW_KEY_DOWN, window);
+	ReleasedKey(GLFW_KEY_UP, window);
+	ReleasedKey(GLFW_KEY_S, window);
+	ReleasedKey(GLFW_KEY_A, window);
+	ReleasedKey(GLFW_KEY_D, window);
+	ReleasedKey(GLFW_KEY_W, window);
+
 }
 
 void InputManager::ReleasedKey(int key, GLFWwindow* window)
 {
-	if (glfwGetKey(window, key) == GLFW_RELEASE && InputEnumToGlfwKey(Inputs->back()) == key)
+	if (glfwGetKey(window, key) == GLFW_RELEASE && Inputs[InputGlfwKeyToEnum(key)] == true)
 	{
 		canChangeInput = true;
 		framesSinceLastInput = framesThreshold;
-		Inputs->push_back(eInput::None);
+		Inputs[eInput::None] = true;
+		Inputs[InputGlfwKeyToEnum(key)] = false;
 	}
 }
 
@@ -101,4 +105,27 @@ int InputManager::InputEnumToGlfwKey(eInput input)
 		break;
 	}
 	return 0;
+}
+
+eInput InputManager::InputGlfwKeyToEnum(int key)
+{
+	switch (key)
+	{
+	case GLFW_KEY_W:
+		return eInput::Arrow_Up;
+		break;
+	case GLFW_KEY_S:
+		return eInput::Arrow_Down;
+		break;
+	case GLFW_KEY_A:
+		return eInput::Arrow_Left;
+		break;
+	case GLFW_KEY_D:
+		return eInput::Arrow_Right;
+		break;
+	case GLFW_KEY_SPACE:
+		return eInput::Space_Bar;
+		break;
+	}
+	return eInput::None;
 }

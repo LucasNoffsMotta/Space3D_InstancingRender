@@ -14,13 +14,19 @@ public:
     }
 
     void Draw(Shader& shader);
-
+    void SetWorldPosition(glm::vec3& newPos);
+    void SetScale(glm::vec3& newScale);
+    glm::vec3 GetWorldPosition();
+    glm::vec3 GetScale();
 
 private:
     // model data
     std::vector<Mesh> meshes;
     std::string directory;
     std::vector<Texture> textures_loaded;
+    glm::vec3 worldPosition;
+    glm::vec3 scale;
+
 
     void loadModel(std::string path);
     void processNode(aiNode* node, const aiScene* scene);
