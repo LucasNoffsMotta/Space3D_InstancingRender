@@ -300,14 +300,11 @@ void Renderer::DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rota
 }
 
 void Renderer::DrawScene(Shader& shader, Shader& stencilShader)
-{
-    //glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-    //glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
-    //glStencilMask(0xFF); // enable writing to the stencil buffer
-
+{    
     shader.Activate();
     shader.SetUniformMatrix4fv("projection", projection);
     shader.SetUniformMatrix4fv("view", view);
+
     //Set scene lights uniforms:
     for (int i = 0; i < 1; i++)
     {
@@ -344,94 +341,166 @@ void Renderer::DrawScene(Shader& shader, Shader& stencilShader)
     }
 
    //Finally, drawing the models!
+
+   //Something weird happen here:
+   //If the first object being rendered is an object that is outlined FALSE and the second one is TRUE, it renders correctly
+   //If the first object is outlined, some visual bugs ocurr
    for (const auto& [key, value] : ContentManager::Models) {
-            glm::mat4 model_matrix = glm::mat4(1.0f);
-            model_matrix = glm::translate(model_matrix, value->GetWorldPosition());
 
-            if (value->rotationAngle > 0) {
-                model_matrix = glm::rotate(model_matrix, glm::radians(value->rotationAngle), value->rotationAxis);
-            }
+       if (!value->outline)
+       {
+           glDisable(GL_STENCIL_TEST);
+           glStencilFunc(GL_ALWAYS, 0, 0xFF);
+           glStencilMask(0x00);
 
-            model_matrix = glm::scale(model_matrix, value->GetScale());
-            shader.SetUniformMatrix4fv("model", model_matrix);
-            value->Draw(shader);
+       }
+       else
+       {
+           glEnable(GL_STENCIL_TEST);
+           //That means basically: it will write 1 on all drawn fragment shaders. 
+            //What if I clean up the stencil buffer after one loop?
+           glStencilFunc(GL_ALWAYS, 1, 0xFF);
+           glStencilMask(0xFF);
+       }
 
-            //glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-            //glStencilMask(0x00); // disable writing to the stencil buffer
-            //glDisable(GL_DEPTH_TEST);
 
-           /* stencilShader.Activate();
-            stencilShader.SetUniformMatrix4fv("projection", projection);
-            stencilShader.SetUniformMatrix4fv("view", view);*/
+        glm::mat4 model_matrix = glm::mat4(1.0f);
+        model_matrix = glm::translate(model_matrix, value->GetWorldPosition());
 
-            //model_matrix = glm::mat4(1.0f);
-            //model_matrix = glm::translate(model_matrix, value->GetWorldPosition());
+        if (value->rotationAngle > 0) {
+            model_matrix = glm::rotate(model_matrix, glm::radians(value->rotationAngle), value->rotationAxis);
+        }
 
-            //if (value->rotationAngle > 0) {
-            //    model_matrix = glm::rotate(model_matrix, glm::radians(value->rotationAngle), value->rotationAxis);
-            //}
+        model_matrix = glm::scale(model_matrix, value->GetScale());
+        shader.SetUniformMatrix4fv("model", model_matrix);
 
-            //model_matrix = glm::scale(model_matrix, glm::vec3(1.1));
-            //stencilShader.SetUniformMatrix4fv("model", model_matrix);
-            //value->Draw(stencilShader);
+        value->Draw(shader);
 
-            //glStencilMask(0xFF);
-            //glStencilFunc(GL_ALWAYS, 1, 0xFF);
-            //glEnable(GL_DEPTH_TEST);
+        if (!value->outline)
+        {
+            continue;
+        }
+
+        ////Second Render pass, only if the object should have a stencil test:          
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+        glStencilMask(0x00);
+        //glDisable(GL_DEPTH_TEST);
+        stencilShader.Activate();
+        stencilShader.SetUniformMatrix4fv("projection", projection);
+        stencilShader.SetUniformMatrix4fv("view", view);
+
+        glm::mat4 scaled_matrix = glm::mat4(1.f);
+
+        scaled_matrix = glm::translate(scaled_matrix, value->GetWorldPosition());
+
+        if (value->rotationAngle > 0) {
+            scaled_matrix = glm::rotate(scaled_matrix, glm::radians(value->rotationAngle), value->rotationAxis);
+        }
+
+        scaled_matrix = glm::scale(scaled_matrix, glm::vec3(1.01));
+        stencilShader.SetUniformMatrix4fv("model", scaled_matrix);
+        value->Draw(stencilShader);
+
+        glStencilMask(0xFF);
+        glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        //glEnable(GL_DEPTH_TEST);            
    }
 
    /*    for (const auto& [key, value] : ContentManager::PointLights) {
        value->DrawPointLight(obj3DShader, *ContentManager::Textures["woodenFloor"], renderer);
    }*/
 }
-
-void Renderer::DrawModel(Model& model, glm::vec3& translation, glm::vec3 scale, Shader& shader)
+void Renderer::DrawOutlinedModel(Model& model, Shader& shader, Shader& outlineShader)
 {
-    shader.Activate();
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glStencilMask(0xFF);
+
     glm::mat4 model_matrix = glm::mat4(1.0f);
-    model_matrix = glm::translate(model_matrix, translation);
-    model_matrix = glm::scale(model_matrix, scale);
+    model_matrix = glm::translate(model_matrix, model.GetWorldPosition());
+
+    if (model.rotationAngle > 0) {
+        model_matrix = glm::rotate(model_matrix, glm::radians(model.rotationAngle), model.rotationAxis);
+    }
+
+    model_matrix = glm::scale(model_matrix, model.GetScale());
     shader.SetUniformMatrix4fv("model", model_matrix);
-    shader.SetUniformMatrix4fv("projection", projection);
-    shader.SetUniformMatrix4fv("view", view);
-    shader.SetUniformFloat("material.shininess", 100.0f);
-
-    for (int i = 0; i < 1; i++)
-    {
-        ContentManager::DirectionalLights[std::to_string(i)]->SetDirectionalLightUniforms(shader);
-    }
-
-    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
-    {
-        ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
-    }
-
-
-    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
-    {
-        if (i == 0)
-        {
-            if (ContentManager::Cameras["main"]->cameraLight == 1)
-            {
-                ContentManager::SpotLights[std::to_string(i)]->SetPosition(ContentManager::Cameras["main"]->CameraPos);
-                ContentManager::SpotLights[std::to_string(i)]->SetDirection(ContentManager::Cameras["main"]->CameraFront);
-                ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
-                continue;
-            }
-
-            else
-            {
-                glm::vec3 zeroVec = glm::vec3(0);
-                ContentManager::SpotLights[std::to_string(i)]->SetAmbient(zeroVec);
-                continue;
-            }
-        }
-
-        ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
-    }
-
     model.Draw(shader);
+
+    ////Second Render pass    
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilMask(0x00);
+    glEnable(GL_DEPTH_TEST);
+
+    outlineShader.Activate();
+    outlineShader.SetUniformMatrix4fv("projection", projection);
+    outlineShader.SetUniformMatrix4fv("view", view);
+
+    glm::mat4 scaled_matrix = glm::mat4(1.f);
+
+    scaled_matrix = glm::translate(scaled_matrix, model.GetWorldPosition());
+
+    if (model.rotationAngle > 0) {
+        scaled_matrix = glm::rotate(scaled_matrix, glm::radians(model.rotationAngle), model.rotationAxis);
+    }
+
+    scaled_matrix = glm::scale(scaled_matrix, glm::vec3(1.01));
+    outlineShader.SetUniformMatrix4fv("model", scaled_matrix);
+    model.Draw(outlineShader);
+
+    glStencilMask(0xFF);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glDisable(GL_DEPTH_TEST);
 }
+
+//
+//void Renderer::DrawModel(Model& model, glm::vec3& translation, glm::vec3 scale, Shader& shader)
+//{
+//    shader.Activate();
+//    glm::mat4 model_matrix = glm::mat4(1.0f);
+//    model_matrix = glm::translate(model_matrix, translation);
+//    model_matrix = glm::scale(model_matrix, scale);
+//    shader.SetUniformMatrix4fv("model", model_matrix);
+//    shader.SetUniformMatrix4fv("projection", projection);
+//    shader.SetUniformMatrix4fv("view", view);
+//    shader.SetUniformFloat("material.shininess", 100.0f);
+//
+//    for (int i = 0; i < 1; i++)
+//    {
+//        ContentManager::DirectionalLights[std::to_string(i)]->SetDirectionalLightUniforms(shader);
+//    }
+//
+//    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+//    {
+//        ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
+//    }
+//
+//
+//    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+//    {
+//        if (i == 0)
+//        {
+//            if (ContentManager::Cameras["main"]->cameraLight == 1)
+//            {
+//                ContentManager::SpotLights[std::to_string(i)]->SetPosition(ContentManager::Cameras["main"]->CameraPos);
+//                ContentManager::SpotLights[std::to_string(i)]->SetDirection(ContentManager::Cameras["main"]->CameraFront);
+//                ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+//                continue;
+//            }
+//
+//            else
+//            {
+//                glm::vec3 zeroVec = glm::vec3(0);
+//                ContentManager::SpotLights[std::to_string(i)]->SetAmbient(zeroVec);
+//                continue;
+//            }
+//        }
+//
+//        ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+//    }
+//
+//
+//    model.Draw(shader);
+//}
 
 void Renderer::DrawInstances(int amount, Texture& texture, Texture& diffuseMap, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)
 {

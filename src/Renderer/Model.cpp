@@ -30,7 +30,7 @@ glm::vec3 Model::GetScale()
 
 void Model::Update(InputManager* controller)
 {
-    if (controller->Inputs[eInput::None])
+    if (controller->Inputs[eInput::None] || attachedCamera == nullptr)
     {
         return;
     }

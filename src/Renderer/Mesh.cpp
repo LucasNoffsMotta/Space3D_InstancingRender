@@ -47,6 +47,7 @@ void Mesh::Draw(Shader& shader)
 	//1 = has texture
 	//0 = none
 	int hasTexture = material.textures.size() > 0 ? 1 : 0;
+	shader.Activate();
 	shader.SetUniformInt("hasTexture", hasTexture);
 
 	for (unsigned int i = 0; i < material.textures.size(); i++)
@@ -74,6 +75,9 @@ void Mesh::Draw(Shader& shader)
 
 	shader.SetUniform3fv("material.color", material.color);
 	shader.SetUniformFloat("material.shininess", material.shininess);
+
+
+
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

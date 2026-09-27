@@ -32,7 +32,10 @@ public:
 	void DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rotation, float rotationAngle, glm::vec3 color, Shader& shader);
 	void DrawScene(Shader& shader, Shader& stencilShader);
 
-	void DrawModel(Model& model, glm::vec3& translation, glm::vec3 scale, Shader& shader);
+
+	//void DrawModel(Model& model, glm::vec3& translation, glm::vec3 scale, Shader& shader);
+	void DrawOutlinedModel(Model& model, Shader& shader, Shader& outlineShader);
+
 
 
 	void SetInstancedTranslations(int amount);

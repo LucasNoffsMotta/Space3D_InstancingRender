@@ -25,6 +25,8 @@ public:
     void AttatchCamera(Camera* cam, float distance);
     void Update(InputManager* controller);
     void SetRotationAngle(float angle);
+    bool outline = false;
+
 
 private:
     // model data

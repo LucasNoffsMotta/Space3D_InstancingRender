@@ -74,7 +74,7 @@ int main()
 
     Shader basicShader = ContentManager::LoadShader(
         "src/Shader/basicVertex.vert",
-        "src/Shader/frag.frag",
+        "src/Shader/outline.frag",
         "basicShader");
 
     Shader aimDotShader = ContentManager::LoadShader(
@@ -97,7 +97,7 @@ int main()
     Shader outlineShader = ContentManager::LoadShader(
         "src/Shader/model.vert",
         "src/Shader/outline.frag",
-        "assimpShader"
+        "outlineShader"
     );
 
 
@@ -110,10 +110,20 @@ int main()
     ContentManager::Textures["conteiner"]->SetTextureType(eTextureType::Diffuse);
     ContentManager::Textures["conteiner_specular"]->SetTextureType(eTextureType::Specular);
 
+
+
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "aloor");
     ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "car");
+
+
+
+
+
+
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "pinkCube");
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Village/house2.obj", "village");
-    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "floor");
+    //
+
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/SoccerStadium/SoccerArena.obj", "room");
 
 
@@ -131,28 +141,30 @@ int main()
     glm::vec3 asteroidColor = ContentManager::GetColor("green");
     glm::vec3 aimDotColor = ContentManager::GetColor("red");
 
-
     glm::vec3 camPos = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 camFront = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 modelPosTwo = glm::vec3(0.0f, 3.0f, 0);
+    glm::vec3 modelPosTwo = glm::vec3(0.0f, 2.5f, 0);
     glm::vec3 sceneOrigin = glm::vec3(0.0f, 0.f, 0);
     Camera cam = Camera(camPos, camFront, camUp);
     ContentManager::AddCamera(&cam, "main");
 
     glm::vec3 baseScale = glm::vec3(1);
+    glm::vec3 floorScale = glm::vec3(1);
     glm::vec3 largeScale = glm::vec3(10);
 
     //Model setup:
     // ContentManager::Models["room"]->SetWorldPosition(modelPosTwo);
     // ContentManager::Models["room"]->SetScale(baseScale);
 
-    ContentManager::Models["floor"]->SetWorldPosition(sceneOrigin);
-    ContentManager::Models["floor"]->SetScale(baseScale);
+     ContentManager::Models["aloor"]->SetWorldPosition(sceneOrigin);
+    ContentManager::Models["aloor"]->SetScale(floorScale);
+    ContentManager::Models["aloor"]->outline = true;
 
     ContentManager::Models["car"]->SetWorldPosition(modelPosTwo);
     ContentManager::Models["car"]->SetScale(baseScale);
     ContentManager::Models["car"]->SetRotationAngle(270);
+    ContentManager::Models["car"]->outline = false;
 
   /*  ContentManager::Models["pinkCube"]->SetWorldPosition(floorPos);
     ContentManager::Models["pinkCube"]->SetScale(largeScale);*/
@@ -169,12 +181,19 @@ int main()
     renderer.bulletShoot = false;
     std::vector<Projectile> projectiles;
 
-    glEnable(GL_DEPTH_TEST);
 
-    ContentManager::Models["car"]->AttatchCamera(ContentManager::Cameras["main"], 16);
+    //ContentManager::Models["car"]->AttatchCamera(ContentManager::Cameras["main"], 16);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilOpSeparate(GL_FRONT_AND_BACK, GL_KEEP, GL_KEEP, GL_REPLACE);
+    //glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     while (!glfwWindowShouldClose(window.window))
     {
+        window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f);
         ContentManager::Controllers["main"]->GetInput(window.window);
         TimeHelper::Update();
         TimeHelper::ShowFps();
@@ -184,14 +203,13 @@ int main()
         lastFrame = currentFrame;
 
         renderer.view = cam.Update(window, ContentManager::Controllers["main"]);
-
-        window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f); 
-        renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
-       renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
-        //renderer.Draw(glm::vec3(500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(5000, 1, 5000), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
+        //renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
+       //renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
+       //renderer.Draw(glm::vec3(500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(5000, 1, 5000), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
        renderer.DrawScene(assimpShader, outlineShader);
-       ContentManager::Models["car"]->Update(ContentManager::Controllers["main"]);
-       renderer.DrawModel(*ContentManager::Models["car"], modelPosTwo, glm::vec3(2), outlineShader);
+       // renderer.DrawModel(*ContentManager::Models["car"], modelPosTwo, glm::vec3(1), outlineShader);
+       //ContentManager::Models["car"]->Update(ContentManager::Controllers["main"]);
+       //renderer.DrawModel(*ContentManager::Models["car"], modelPosTwo, glm::vec3(2), outlineShader);
        window.Update();
     }
 

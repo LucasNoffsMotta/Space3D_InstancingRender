@@ -205,7 +205,10 @@
     <None Include="src\Shader\model.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="outline.frag">
+    <None Include="testDebug.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="src\Shader\outline.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>
