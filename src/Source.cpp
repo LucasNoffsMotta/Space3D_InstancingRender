@@ -112,8 +112,9 @@ int main()
 
 
 
-    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "aloor");
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "bloor");
     ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "car");
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "aar2");
 
 
 
@@ -145,6 +146,7 @@ int main()
     glm::vec3 camFront = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 modelPosTwo = glm::vec3(0.0f, 2.5f, 0);
+    glm::vec3 modelPos3 = glm::vec3(0, 2.5f, 6);
     glm::vec3 sceneOrigin = glm::vec3(0.0f, 0.f, 0);
     Camera cam = Camera(camPos, camFront, camUp);
     ContentManager::AddCamera(&cam, "main");
@@ -157,14 +159,19 @@ int main()
     // ContentManager::Models["room"]->SetWorldPosition(modelPosTwo);
     // ContentManager::Models["room"]->SetScale(baseScale);
 
-     ContentManager::Models["aloor"]->SetWorldPosition(sceneOrigin);
-    ContentManager::Models["aloor"]->SetScale(floorScale);
-    ContentManager::Models["aloor"]->outline = true;
+     ContentManager::Models["bloor"]->SetWorldPosition(sceneOrigin);
+    ContentManager::Models["bloor"]->SetScale(floorScale);
+    ContentManager::Models["bloor"]->outline = false;
 
     ContentManager::Models["car"]->SetWorldPosition(modelPosTwo);
     ContentManager::Models["car"]->SetScale(baseScale);
     ContentManager::Models["car"]->SetRotationAngle(270);
-    ContentManager::Models["car"]->outline = false;
+    ContentManager::Models["car"]->outline = true;
+
+    ContentManager::Models["aar2"]->SetWorldPosition(modelPos3);
+    ContentManager::Models["aar2"]->SetScale(baseScale);
+    ContentManager::Models["aar2"]->SetRotationAngle(270);
+    ContentManager::Models["aar2"]->outline = true;
 
   /*  ContentManager::Models["pinkCube"]->SetWorldPosition(floorPos);
     ContentManager::Models["pinkCube"]->SetScale(largeScale);*/
@@ -188,8 +195,8 @@ int main()
     glDepthFunc(GL_LESS);
     glEnable(GL_STENCIL_TEST);
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilOpSeparate(GL_FRONT_AND_BACK, GL_KEEP, GL_KEEP, GL_REPLACE);
-    //glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    //glStencilOpSeparate(GL_FRONT_AND_BACK, GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     while (!glfwWindowShouldClose(window.window))
     {

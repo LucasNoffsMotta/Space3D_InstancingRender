@@ -346,24 +346,14 @@ void Renderer::DrawScene(Shader& shader, Shader& stencilShader)
    //If the first object being rendered is an object that is outlined FALSE and the second one is TRUE, it renders correctly
    //If the first object is outlined, some visual bugs ocurr
    for (const auto& [key, value] : ContentManager::Models) {
-
-       if (!value->outline)
-       {
-           glDisable(GL_STENCIL_TEST);
-           glStencilFunc(GL_ALWAYS, 0, 0xFF);
-           glStencilMask(0x00);
-
-       }
-       else
-       {
-           glEnable(GL_STENCIL_TEST);
-           //That means basically: it will write 1 on all drawn fragment shaders. 
-            //What if I clean up the stencil buffer after one loop?
-           glStencilFunc(GL_ALWAYS, 1, 0xFF);
-           glStencilMask(0xFF);
+        
+       glClear(GL_STENCIL_BUFFER_BIT);
+       if (value->outline) {
+           DrawOutlinedModel(*value, shader, stencilShader);
+           continue;
        }
 
-
+        glStencilMask(0x00);
         glm::mat4 model_matrix = glm::mat4(1.0f);
         model_matrix = glm::translate(model_matrix, value->GetWorldPosition());
 
@@ -373,37 +363,7 @@ void Renderer::DrawScene(Shader& shader, Shader& stencilShader)
 
         model_matrix = glm::scale(model_matrix, value->GetScale());
         shader.SetUniformMatrix4fv("model", model_matrix);
-
-        value->Draw(shader);
-
-        if (!value->outline)
-        {
-            continue;
-        }
-
-        ////Second Render pass, only if the object should have a stencil test:          
-        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-        glStencilMask(0x00);
-        //glDisable(GL_DEPTH_TEST);
-        stencilShader.Activate();
-        stencilShader.SetUniformMatrix4fv("projection", projection);
-        stencilShader.SetUniformMatrix4fv("view", view);
-
-        glm::mat4 scaled_matrix = glm::mat4(1.f);
-
-        scaled_matrix = glm::translate(scaled_matrix, value->GetWorldPosition());
-
-        if (value->rotationAngle > 0) {
-            scaled_matrix = glm::rotate(scaled_matrix, glm::radians(value->rotationAngle), value->rotationAxis);
-        }
-
-        scaled_matrix = glm::scale(scaled_matrix, glm::vec3(1.01));
-        stencilShader.SetUniformMatrix4fv("model", scaled_matrix);
-        value->Draw(stencilShader);
-
-        glStencilMask(0xFF);
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        //glEnable(GL_DEPTH_TEST);            
+        value->Draw(shader);       
    }
 
    /*    for (const auto& [key, value] : ContentManager::PointLights) {
@@ -429,7 +389,7 @@ void Renderer::DrawOutlinedModel(Model& model, Shader& shader, Shader& outlineSh
     ////Second Render pass    
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
     glStencilMask(0x00);
-    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
 
     outlineShader.Activate();
     outlineShader.SetUniformMatrix4fv("projection", projection);
@@ -449,7 +409,8 @@ void Renderer::DrawOutlinedModel(Model& model, Shader& shader, Shader& outlineSh
 
     glStencilMask(0xFF);
     glStencilFunc(GL_ALWAYS, 1, 0xFF);
-    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_STENCIL_BUFFER_BIT);
 }
 
 //
