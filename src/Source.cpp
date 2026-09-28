@@ -12,7 +12,9 @@
 #include <vector>
 
 //TODOS
-/* Stencil testing
+/* 
+* REFACTOR THE RENDERER!!!
+    Stencil testing
 *  Get Mouse Click on floor + rotate toards direction + move (Click and move)
 *  Shadows / Gamma Correction
 *  Create a scene class (scene objects, scene origin, etc)
@@ -159,7 +161,7 @@ int main()
     // ContentManager::Models["room"]->SetWorldPosition(modelPosTwo);
     // ContentManager::Models["room"]->SetScale(baseScale);
 
-     ContentManager::Models["bloor"]->SetWorldPosition(sceneOrigin);
+    ContentManager::Models["bloor"]->SetWorldPosition(sceneOrigin);
     ContentManager::Models["bloor"]->SetScale(floorScale);
     ContentManager::Models["bloor"]->outline = false;
 
@@ -213,7 +215,8 @@ int main()
         //renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
        //renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
        //renderer.Draw(glm::vec3(500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(5000, 1, 5000), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
-       renderer.DrawScene(assimpShader, outlineShader);
+       //renderer.DrawScene(assimpShader, outlineShader);
+        renderer.DrawStencilModelsTest(assimpShader, outlineShader);
        // renderer.DrawModel(*ContentManager::Models["car"], modelPosTwo, glm::vec3(1), outlineShader);
        //ContentManager::Models["car"]->Update(ContentManager::Controllers["main"]);
        //renderer.DrawModel(*ContentManager::Models["car"], modelPosTwo, glm::vec3(2), outlineShader);

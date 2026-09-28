@@ -36,6 +36,7 @@ public:
 	//void DrawModel(Model& model, glm::vec3& translation, glm::vec3 scale, Shader& shader);
 	void DrawOutlinedModel(Model& model, Shader& shader, Shader& outlineShader);
 
+	void DrawStencilModelsTest(Shader& shader, Shader& stencilShader);
 
 
 	void SetInstancedTranslations(int amount);
