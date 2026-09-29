@@ -23,5 +23,5 @@ void Projectile::Update()
 
 void Projectile::Draw(Renderer& renderer, Shader& shader)
 {
-	renderer.DrawBullet(position, scale, rotation, 0.f, color, shader);
+	//renderer.DrawBullet(position, scale, rotation, 0.f, color, shader);
 }

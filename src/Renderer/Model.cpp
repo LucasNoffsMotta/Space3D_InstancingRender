@@ -65,6 +65,16 @@ void Model::SetRotationAngle(float angle)
     rotationAngle = angle;
 }
 
+int Model::GetID()
+{
+    return ID;
+}
+
+void Model::SetID(int lastID)
+{
+    ID = lastID++;
+}
+
 void Model::AttatchCamera(Camera* cam, float distance)
 {
     attachedCamera = cam;
@@ -72,6 +82,7 @@ void Model::AttatchCamera(Camera* cam, float distance)
     glm::vec3 direction = GetWorldPosition() - cam->CameraPos;
     cam->CameraFront = glm::normalize(direction);
     cam->mode = eCameraMode::Attached;
+    outline = true;
 }
 
 void Model::loadModel(std::string path)

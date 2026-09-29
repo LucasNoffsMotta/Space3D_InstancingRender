@@ -26,10 +26,13 @@ public:
     void Update(InputManager* controller);
     void SetRotationAngle(float angle);
     bool outline = false;
+    int GetID();
+    void SetID(int lastID);
 
 
 private:
     // model data
+    int ID;
     std::vector<Mesh> meshes;
     std::string directory;
     std::vector<Texture> textures_loaded;

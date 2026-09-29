@@ -9,7 +9,7 @@ std::map<std::string, Texture*>                                   ContentManager
 std::map<std::string, std::unique_ptr<PointLight>>                ContentManager::PointLights;
 std::map<std::string, std::unique_ptr<SpotLight>>                 ContentManager::SpotLights;
 std::map<std::string, std::unique_ptr<DirectionalLight>>          ContentManager::DirectionalLights;
-std::map<std::string, Model*>                                     ContentManager::Models;
+std::map<std::string, std::vector<Model*>>                        ContentManager::Models;
 std::map<std::string, InputManager*>                              ContentManager::Controllers;
 
 
@@ -25,10 +25,10 @@ Texture* ContentManager::LoadTexture(const char* texturePath, std::string name)
     return Textures[name];
 }
 
-Model* ContentManager::LoadModel(const char* modelPath, std::string name)
+Model* ContentManager::LoadModel(const char* modelPath, std::string objType)
 {
-    Models[name] = new Model(modelPath);
-    return Models[name];
+    Models[objType].push_back(new Model(modelPath));
+    return Models[objType].back();
 }
 
 glm::vec3 ContentManager::GetColor(std::string color)

@@ -15,48 +15,32 @@
 class Renderer
 {
 private:
-	void InitRenderData();
+	void InitCubeRenderData();
 	Shader shader;
 	VAO vao;
 	VAO aimDotVao;
-	VAO bulletVao;
 	void CreatePointLights();
 	void CreateSpotLights();
 	void CreateDirectionalLights();
+	void SetSceneLightUniforms(Shader& shader);
 
 public:
 	int MAX_POINT_LIGHTS = 10;
 	void Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
 	void DrawInstances(int amount, Texture& texture, Texture& diffuseMap, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
-	void DrawAimDot(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height);
-	void DrawBullet(glm::vec3 translation, glm::vec3 scale, glm::vec3 rotation, float rotationAngle, glm::vec3 color, Shader& shader);
+	void DrawQuad2D(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height);
 	void DrawScene(Shader& shader, Shader& stencilShader);
-
-
-	//void DrawModel(Model& model, glm::vec3& translation, glm::vec3 scale, Shader& shader);
-	void DrawOutlinedModel(Model& model, Shader& shader, Shader& outlineShader);
-
-	void DrawStencilModelsTest(Shader& shader, Shader& stencilShader);
-
-
 	void SetInstancedTranslations(int amount);
 	Renderer();
 
-	void SetActiveShader(Shader& shader);
 	void SetModelMatrices(glm::vec3* translations, int ammount);
 	void SetInstancesBuffers(int amount);
+	void InitQuad2DRenderData();
 
-	glm::vec3 GetTranslationPos(int index);
-	void InitAimDotRenderData();
-	void InitBulletRenderData();
-
-	bool bulletShoot = false;
 	glm::mat4 projection;
 	glm::mat4 view;
 	glm::mat4* modelMatrices;  //Large object array 
 	glm::vec3* instancesTranslationPtr;   //Large object array 
-	glm::vec3 bulletDirection;
-	glm::vec3 bulletPosition;
 };
 
 

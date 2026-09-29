@@ -15,6 +15,8 @@
 /* 
 * REFACTOR THE RENDERER!!!
     Stencil testing
+    Outline object when moving (later on will outline when selected!)
+    Maybe change between attatched object when click and outline the attached object?
 *  Get Mouse Click on floor + rotate toards direction + move (Click and move)
 *  Shadows / Gamma Correction
 *  Create a scene class (scene objects, scene origin, etc)
@@ -114,19 +116,13 @@ int main()
 
 
 
-    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "bloor");
-    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "car");
-    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "aar2");
-
-
-
-
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "terrain");
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "object");
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "object");
 
 
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "pinkCube");
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Village/house2.obj", "village");
-    //
-
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/SoccerStadium/SoccerArena.obj", "room");
 
 
@@ -157,26 +153,21 @@ int main()
     glm::vec3 floorScale = glm::vec3(1);
     glm::vec3 largeScale = glm::vec3(10);
 
-    //Model setup:
-    // ContentManager::Models["room"]->SetWorldPosition(modelPosTwo);
-    // ContentManager::Models["room"]->SetScale(baseScale);
+    Model* terrain = ContentManager::Models["terrain"].back();
+    Model* firstCar = ContentManager::Models["object"].back();
+    Model* secondCar = ContentManager::Models["object"].front();
 
-    ContentManager::Models["bloor"]->SetWorldPosition(sceneOrigin);
-    ContentManager::Models["bloor"]->SetScale(floorScale);
-    ContentManager::Models["bloor"]->outline = false;
+    terrain->SetWorldPosition(sceneOrigin);
+    terrain->SetScale(floorScale);
+    terrain->outline = false;
 
-    ContentManager::Models["car"]->SetWorldPosition(modelPosTwo);
-    ContentManager::Models["car"]->SetScale(baseScale);
-    ContentManager::Models["car"]->SetRotationAngle(270);
-    ContentManager::Models["car"]->outline = true;
+    firstCar->SetWorldPosition(modelPosTwo);
+    firstCar->SetScale(baseScale);
+    firstCar->SetRotationAngle(270);
 
-    ContentManager::Models["aar2"]->SetWorldPosition(modelPos3);
-    ContentManager::Models["aar2"]->SetScale(baseScale);
-    ContentManager::Models["aar2"]->SetRotationAngle(270);
-    ContentManager::Models["aar2"]->outline = true;
-
-  /*  ContentManager::Models["pinkCube"]->SetWorldPosition(floorPos);
-    ContentManager::Models["pinkCube"]->SetScale(largeScale);*/
+    secondCar->SetWorldPosition(modelPos3);
+    secondCar->SetScale(baseScale);
+    secondCar->SetRotationAngle(270);
 
     float dt = 0.f;
     float lastFrame = 0.f;
@@ -185,19 +176,16 @@ int main()
     int instances = 100;
     renderer.SetInstancedTranslations(instances);
     renderer.SetInstancesBuffers(instances);
-    renderer.InitAimDotRenderData();
-    renderer.InitBulletRenderData();
-    renderer.bulletShoot = false;
+    renderer.InitQuad2DRenderData();
     std::vector<Projectile> projectiles;
 
-
-    //ContentManager::Models["car"]->AttatchCamera(ContentManager::Cameras["main"], 16);
+    Model* attachedObj = ContentManager::Models["object"].back();
+    attachedObj->AttatchCamera(ContentManager::Cameras["main"], 16);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glEnable(GL_STENCIL_TEST);
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    //glStencilOpSeparate(GL_FRONT_AND_BACK, GL_KEEP, GL_KEEP, GL_REPLACE);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     while (!glfwWindowShouldClose(window.window))
@@ -211,15 +199,13 @@ int main()
         dt = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        renderer.view = cam.Update(window, ContentManager::Controllers["main"]);
-        //renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
+       renderer.view = cam.Update(window, ContentManager::Controllers["main"]);
+       //renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
        //renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
        //renderer.Draw(glm::vec3(500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(5000, 1, 5000), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
        //renderer.DrawScene(assimpShader, outlineShader);
-        renderer.DrawStencilModelsTest(assimpShader, outlineShader);
-       // renderer.DrawModel(*ContentManager::Models["car"], modelPosTwo, glm::vec3(1), outlineShader);
-       //ContentManager::Models["car"]->Update(ContentManager::Controllers["main"]);
-       //renderer.DrawModel(*ContentManager::Models["car"], modelPosTwo, glm::vec3(2), outlineShader);
+       renderer.DrawScene(assimpShader, outlineShader);
+       attachedObj->Update(ContentManager::Controllers["main"]);
        window.Update();
     }
 
