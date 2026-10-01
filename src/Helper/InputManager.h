@@ -10,7 +10,7 @@
 class InputManager
 {
 private:
-	int framesThreshold = 30;
+	int framesThreshold = 4000;
 	int framesSinceLastInput = 30;
 	int maxInputs = 10;
 	bool canChangeInput = true;

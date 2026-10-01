@@ -13,8 +13,9 @@
 
 //TODOS
 /* 
-* REFACTOR THE RENDERER!!!
-    Stencil testing
+* Fix the input manager to work with a timer to make it count less inputs per second
+* REFACTOR THE RENDERER!!! -> DONE
+    Stencil testing -> DONE
     Outline object when moving (later on will outline when selected!)
     Maybe change between attatched object when click and outline the attached object?
 *  Get Mouse Click on floor + rotate toards direction + move (Click and move)
