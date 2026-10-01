@@ -115,10 +115,10 @@ int main()
     ContentManager::Textures["conteiner_specular"]->SetTextureType(eTextureType::Specular);
 
 
-
-    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "terrain");
-    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "object");
-    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "object");
+    int objID = 0;
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "terrain", objID);
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "object", objID++);
+    ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "object", objID++);
 
 
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "pinkCube");
@@ -204,6 +204,18 @@ int main()
        //renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
        //renderer.Draw(glm::vec3(500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(5000, 1, 5000), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
        //renderer.DrawScene(assimpShader, outlineShader);
+
+       //Test!
+       if (ContentManager::Controllers["main"]->Inputs[eInput::Space_Bar])
+       {
+           int nextOrPrev = 1;
+           int max = ContentManager::Models["object"].size();
+           if (attachedObj->Index + 1 >= max) nextOrPrev = -1;
+           attachedObj->outline = false;
+           attachedObj = ContentManager::Models["object"].at(attachedObj->Index+=nextOrPrev);
+           attachedObj->AttatchCamera(ContentManager::Cameras["main"], 16);
+       }
+
        renderer.DrawScene(assimpShader, outlineShader);
        attachedObj->Update(ContentManager::Controllers["main"]);
        window.Update();

@@ -25,9 +25,10 @@ Texture* ContentManager::LoadTexture(const char* texturePath, std::string name)
     return Textures[name];
 }
 
-Model* ContentManager::LoadModel(const char* modelPath, std::string objType)
+Model* ContentManager::LoadModel(const char* modelPath, std::string objType, int ID)
 {
-    Models[objType].push_back(new Model(modelPath));
+    int current = Models[objType].size();
+    Models[objType].push_back(new Model(modelPath, ID, current++));
     return Models[objType].back();
 }
 

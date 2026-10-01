@@ -10,8 +10,10 @@
 class Model
 {
 public:
-    Model(const char* path)
+    Model(const char* path, int ID, int Index)
     {
+        this->Index = Index;
+        this->ID = ID;
         loadModel(path);
     }
 
@@ -28,6 +30,7 @@ public:
     bool outline = false;
     int GetID();
     void SetID(int lastID);
+    int Index;
 
 
 private:
