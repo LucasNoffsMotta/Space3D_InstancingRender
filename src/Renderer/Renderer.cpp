@@ -117,7 +117,7 @@ void Renderer::SetInstancesBuffers(int amount)
 
 void Renderer::CreatePointLights()
 {
-    glm::vec3 pos = glm::vec3(9, 30, 3);
+    glm::vec3 pos = glm::vec3(9, 0, 3);
     glm::vec3 color = glm::vec3(0.01);
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
@@ -134,7 +134,7 @@ void Renderer::CreateSpotLights()
 {
     glm::vec3 pos = glm::vec3(10, -1000, 0);
     glm::vec3 direction = glm::vec3(0, -1, 0);
-    glm::vec3 color = glm::vec3(1, 0.61568, 0);
+    glm::vec3 color = glm::vec3(0.3, 0, 0.3);
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
