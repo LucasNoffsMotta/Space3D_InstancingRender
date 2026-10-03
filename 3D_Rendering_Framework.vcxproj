@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\GraphicsProgramming\glad.c" />
-    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="src\Helper\ContentManager.cpp" />
     <ClCompile Include="src\Helper\InputManager.cpp" />
     <ClCompile Include="src\Helper\TimeHelper.cpp" />
@@ -36,6 +35,8 @@
     <ClCompile Include="src\Renderer\Model.cpp" />
     <ClCompile Include="src\Renderer\PointLight.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Renderer\SceneManager.cpp" />
+    <ClCompile Include="src\Renderer\SceneNode.cpp" />
     <ClCompile Include="src\Renderer\Shader.cpp" />
     <ClCompile Include="src\Renderer\SpotLight.cpp" />
     <ClCompile Include="src\Renderer\stb_image.cpp" />
@@ -64,6 +65,8 @@
     <ClInclude Include="src\Renderer\Model.h" />
     <ClInclude Include="src\Renderer\PointLight.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
+    <ClInclude Include="src\Renderer\SceneManager.h" />
+    <ClInclude Include="src\Renderer\SceneNode.h" />
     <ClInclude Include="src\Renderer\Shader.h" />
     <ClInclude Include="src\Renderer\SpotLight.h" />
     <ClInclude Include="src\Renderer\stb_image.h" />

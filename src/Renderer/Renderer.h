@@ -44,6 +44,8 @@ public:
 
 	glm::mat4 projection;
 	glm::mat4 view;
+
+	//Instancing:
 	glm::mat4* modelMatrices;  //Large object array 
 	glm::vec3* instancesTranslationPtr;   //Large object array 
 };

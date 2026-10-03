@@ -18,7 +18,6 @@ protected:
     glm::mat4 model = glm::mat4(1);
     glm::vec3 scale = glm::vec3(1);
     
-
 public:
     BaseLight();
     BaseLight(int index);
@@ -27,4 +26,7 @@ public:
     void SetAmbient(glm::vec3& ambient);
     std::string SetUniforms(Shader& shader, std::string shaderStruct);
     void Draw(Shader& shader, Texture& texture, Renderer& renderer);
+    void SetDirectionalLightUniforms(Shader& shader);
+    void SetPointLightUniforms(Shader& shader);
+    void SetSpotLightLightUniforms(Shader& shader);
 };

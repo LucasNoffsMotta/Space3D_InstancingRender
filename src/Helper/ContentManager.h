@@ -16,7 +16,7 @@
 static class ContentManager
 {
 public:
-	static std::map<std::string, Shader>  Shaders;
+	static std::map<std::string, Shader*>  Shaders;
 	static std::map<std::string, glm::vec3> Colors;
 	static std::map<std::string, Camera*> Cameras;
 	static std::map<std::string, Texture*> Textures;
@@ -28,7 +28,7 @@ public:
 	static const int SCR_WIDTH = 1920;
 	static const int SCR_HEIGHT = 1920;
 
-	static Shader LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName);
+	static Shader* LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName);
 	static Texture* LoadTexture(const char* texturePath, std::string name);
 	static Model* LoadModel(const char* modelPath, std::string objType, int ID);
 

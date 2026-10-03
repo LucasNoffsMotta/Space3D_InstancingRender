@@ -44,45 +44,45 @@ int main()
     glfwSetFramebufferSizeCallback(window.window, framebuffer_size_callback);
     window.SetViewPort(window.SCREEN_WIDTH, window.SCREEN_HEIGHT);
 
-    Shader instancedUniformShader = ContentManager::LoadShader(
+    Shader* instancedUniformShader = ContentManager::LoadShader(
         "src/Shader/instancedUniformVertex.vert",
         "src/Shader/frag.frag",
         "instancedUniform");
 
-    Shader instancedLayoutShader = ContentManager::LoadShader(
+    Shader* instancedLayoutShader = ContentManager::LoadShader(
         "src/Shader/instancedLayoutVertex.vert",
         "src/Shader/frag.frag",
         "instancedLayout");
 
-    Shader basicShader = ContentManager::LoadShader(
+    Shader* basicShader = ContentManager::LoadShader(
         "src/Shader/basicVertex.vert",
         "src/Shader/outline.frag",
         "basicShader");
 
-    Shader aimDotShader = ContentManager::LoadShader(
+    Shader* aimDotShader = ContentManager::LoadShader(
         "src/Shader/2dVertex.vert",
         "src/Shader/SimpleColorFragmentShader.frag",
         "aimDotShader");
 
-    Shader obj3DShader = ContentManager::LoadShader(
+    Shader* obj3DShader = ContentManager::LoadShader(
         "src/Shader/object3DFragment.vert",
         "src/Shader/frag.frag",
         "object3DShader"
     );
 
-    Shader assimpShader = ContentManager::LoadShader(
+    Shader* assimpShader = ContentManager::LoadShader(
         "src/Shader/model.vert",
         "src/Shader/frag.frag",
         "assimpShader"
     );
 
-    Shader outlineShader = ContentManager::LoadShader(
+    Shader* outlineShader = ContentManager::LoadShader(
         "src/Shader/model.vert",
         "src/Shader/outline.frag",
         "outlineShader"
     );
 
-    Shader boundBoxShader = ContentManager::LoadShader(
+    Shader* boundBoxShader = ContentManager::LoadShader(
         "src/Shader/BoundBox.vert",
         "src/Shader/BoundBox.frag",
         "boundBoxShader"
@@ -201,7 +201,7 @@ int main()
            attachedObj->AttatchCamera(ContentManager::Cameras["main"], 16);
        }
 
-       renderer.DrawScene(assimpShader, outlineShader, boundBoxShader);
+       renderer.DrawScene(*assimpShader, *outlineShader, *boundBoxShader);
        attachedObj->Update(ContentManager::Controllers["main"]);
 
        glm::vec3 mouseRayCast = ContentManager::Controllers["main"]->GetMouseRayCastDirection(

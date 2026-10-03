@@ -32,7 +32,7 @@ public:
     void SetID(int lastID);
     void CheckRayCollision(glm::vec3& mouseRayCast);
     int Index;
-
+    bool doStencilTest = false;
 
 
 private:
@@ -44,6 +44,7 @@ private:
     glm::vec3 worldPosition;
     glm::vec3 scale;
     glm::vec3 rotation;
+    
 
 
     //Spring Arm: Distance from the object, relative position from the object

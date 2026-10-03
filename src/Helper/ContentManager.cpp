@@ -2,7 +2,7 @@
 #include "../Renderer/Shader.h"
 
 
-std::map<std::string, Shader>                                     ContentManager::Shaders;
+std::map<std::string, Shader*>                                    ContentManager::Shaders;
 std::map<std::string, glm::vec3>                                  ContentManager::Colors;
 std::map<std::string, Camera*>                                    ContentManager::Cameras;
 std::map<std::string, Texture*>                                   ContentManager::Textures;
@@ -13,9 +13,9 @@ std::map<std::string, std::vector<Model*>>                        ContentManager
 std::map<std::string, InputManager*>                              ContentManager::Controllers;
 
 
-Shader ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)
+Shader* ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)
 {
-    Shaders[shaderName] = Shader(vertexSource, fragmentSource);
+    Shaders[shaderName] = new Shader(vertexSource, fragmentSource);
     return Shaders[shaderName];
 }
 

@@ -105,15 +105,15 @@
     <ClCompile Include="src\Helper\InputManager.cpp">
       <Filter>Source Files\Helper</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
+    <ClCompile Include="src\Renderer\SceneManager.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\SceneNode.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Helper\ContentManager.h">
-      <Filter>Header Files\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helper\TimeHelper.h">
       <Filter>Header Files\Helper</Filter>
     </ClInclude>
     <ClInclude Include="src\Misc\Projectile.h">
@@ -183,6 +183,15 @@
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\SceneManager.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helper\TimeHelper.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\SceneNode.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
   </ItemGroup>

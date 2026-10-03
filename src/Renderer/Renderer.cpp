@@ -375,7 +375,7 @@ void Renderer::DrawScene(Shader& shader, Shader& stencilShader, Shader& boundBox
                 scaled = glm::rotate(scaled, glm::radians(obj->rotationAngle), obj->rotationAxis);
             }
 
-            scaled = glm::scale(scaled, glm::vec3(1.01));
+            scaled = glm::scale(scaled, obj->GetScale() * glm::vec3(1.01));
             stencilShader.SetUniformMatrix4fv("model", scaled);
             obj->Draw(stencilShader);
         }
