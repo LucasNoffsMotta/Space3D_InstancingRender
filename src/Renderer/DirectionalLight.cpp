@@ -31,8 +31,8 @@ void DirectionalLight::DrawDirectionalLight(Shader& shader, Texture& texture, Re
 	BaseLight::Draw(shader, texture, renderer);
 }
 
-void DirectionalLight::SetDirectionalLightUniforms(Shader& shader)
+void DirectionalLight::SetUniforms(Shader& shader)
 {
-	std::string prefix = BaseLight::SetUniforms(shader, "dirLight");
+	std::string prefix = BaseLight::SetUniforms(shader);
 	shader.SetUniform3fv((prefix + "direction").c_str(), this->direction);
 }

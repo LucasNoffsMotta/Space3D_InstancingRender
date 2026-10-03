@@ -10,9 +10,9 @@ SpotLight::SpotLight(int index)
 	this->lightIndex = index;
 }
 
-void SpotLight::SetSpotLightLightUniforms(Shader& shader)
+void SpotLight::SetUniforms(Shader& shader)
 {
-	std::string prefix = BaseLight::SetUniforms(shader, "spotLight");
+	std::string prefix = BaseLight::SetUniforms(shader);
 	shader.SetUniform3fv((prefix + "position").c_str(), this->position);
 	shader.SetUniform3fv((prefix + "direction").c_str(), this->direction);
 	shader.SetUniformFloat((prefix + "constant").c_str(), this->constant);

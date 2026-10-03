@@ -7,9 +7,9 @@ PointLight::PointLight(int index)
 	this->lightIndex = index;
 }
 
-void PointLight::SetPointLightUniforms(Shader& shader)
+void PointLight::SetUniforms(Shader& shader)
 {
-	std::string prefix = BaseLight::SetUniforms(shader, "pointLight");
+	std::string prefix = BaseLight::SetUniforms(shader);
 	shader.SetUniform3fv((prefix + "position").c_str(), this->position);
 	shader.SetUniformFloat((prefix + "constant").c_str(), this->constant);
 	shader.SetUniformFloat((prefix + "linear").c_str(), this->linear);

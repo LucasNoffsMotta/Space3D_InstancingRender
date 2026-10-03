@@ -32,6 +32,10 @@ void SceneManager::LoadModelsAndSetPositions()
 
 void SceneManager::LoadGlobalLigths()
 {
+    glm::vec3 pos = glm::vec3(9, 0, 3);
+    glm::vec3 color = glm::vec3(0.01);
+
+    //
 }
 
 void SceneManager::LoadSceneTree()

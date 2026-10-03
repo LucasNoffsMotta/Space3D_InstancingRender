@@ -224,12 +224,12 @@ void Renderer::SetSceneLightUniforms(Shader& shader)
     //Set scene lights uniforms:
     for (int i = 0; i < 1; i++)
     {
-        ContentManager::DirectionalLights[std::to_string(i)]->SetDirectionalLightUniforms(shader);
+        ContentManager::DirectionalLights[std::to_string(i)]->SetUniforms(shader);
     }
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
+        ContentManager::PointLights[std::to_string(i)]->SetUniforms(shader);
     }
 
     //Ugly!
@@ -241,7 +241,7 @@ void Renderer::SetSceneLightUniforms(Shader& shader)
             {
                 ContentManager::SpotLights[std::to_string(i)]->SetPosition(ContentManager::Cameras["main"]->CameraPos);
                 ContentManager::SpotLights[std::to_string(i)]->SetDirection(ContentManager::Cameras["main"]->CameraFront);
-                ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+                ContentManager::SpotLights[std::to_string(i)]->SetUniforms(shader);
                 continue;
             }
 
@@ -253,7 +253,7 @@ void Renderer::SetSceneLightUniforms(Shader& shader)
             }
         }
 
-        ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+        ContentManager::SpotLights[std::to_string(i)]->SetUniforms(shader);
     }
 }
 
@@ -283,19 +283,19 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
 
     for (int i = 0; i < 1; i++)
     {
-        ContentManager::DirectionalLights[std::to_string(i)]->SetDirectionalLightUniforms(shader);
+        ContentManager::DirectionalLights[std::to_string(i)]->SetUniforms(shader);
     }
 
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
+        ContentManager::PointLights[std::to_string(i)]->SetUniforms(shader);
     }
 
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+        ContentManager::SpotLights[std::to_string(i)]->SetUniforms(shader);
     }
 
     vao.Bind();
@@ -443,17 +443,17 @@ void Renderer::DrawInstances(int amount, Texture& texture, Texture& diffuseMap, 
 
     for (int i = 0; i < 1; i++)
     {
-        ContentManager::DirectionalLights[std::to_string(i)]->SetDirectionalLightUniforms(shader);
+        ContentManager::DirectionalLights[std::to_string(i)]->SetUniforms(shader);
     }
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        ContentManager::PointLights[std::to_string(i)]->SetPointLightUniforms(shader);
+        ContentManager::PointLights[std::to_string(i)]->SetUniforms(shader);
     }
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        ContentManager::SpotLights[std::to_string(i)]->SetSpotLightLightUniforms(shader);
+        ContentManager::SpotLights[std::to_string(i)]->SetUniforms(shader);
     }
 
     vao.Bind();

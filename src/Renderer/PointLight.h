@@ -13,6 +13,6 @@ private:
 
 public:
 	PointLight(int index);
-	void SetPointLightUniforms(Shader& shader);
+	void SetUniforms(Shader& shader);
 	void DrawPointLight(Shader& shader, Texture& texture, Renderer& renderer);
 };

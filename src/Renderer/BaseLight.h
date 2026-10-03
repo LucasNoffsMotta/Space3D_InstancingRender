@@ -4,6 +4,12 @@
 #include "Texture.h"
 #include "Renderer.h"
 
+enum eLightType :uint8_t
+{
+    Directional,
+    SpotLight,
+    PointLight
+};
 
 class BaseLight
 {
@@ -17,16 +23,15 @@ protected:
     int lightIndex;
     glm::mat4 model = glm::mat4(1);
     glm::vec3 scale = glm::vec3(1);
+    eLightType type;
     
 public:
     BaseLight();
-    BaseLight(int index);
+    BaseLight(int index, eLightType type);
     void SetPosition(glm::vec3& pos);
     void SetColor(glm::vec3& color);
     void SetAmbient(glm::vec3& ambient);
-    std::string SetUniforms(Shader& shader, std::string shaderStruct);
+    std::string SetUniforms(Shader& shader);
     void Draw(Shader& shader, Texture& texture, Renderer& renderer);
-    void SetDirectionalLightUniforms(Shader& shader);
-    void SetPointLightUniforms(Shader& shader);
-    void SetSpotLightLightUniforms(Shader& shader);
+    std::string GetLightStrucUniformName();
 };

@@ -43,7 +43,7 @@ void ContentManager::InsertColor(std::string name, glm::vec3 rgb)
     Colors[name] = normalizedColor;
 }
 
-Shader ContentManager::GetShader(std::string shader)
+Shader* ContentManager::GetShader(std::string shader)
 {
     return Shaders[shader];
 }

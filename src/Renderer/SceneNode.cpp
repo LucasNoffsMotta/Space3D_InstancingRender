@@ -12,9 +12,8 @@ void SceneNode::SetUpNodeLights(Shader* shader)
 	for (int i = 0; i < Lights.size(); i++)
 	{
 		BaseLight* light = Lights[i];
-		//light->SetUniforms()  Might need to create a abstract class
+		light->SetUniforms(*shader);
 	}
-
 }
 
 Shader* SceneNode::QueryShader(eRenderMode mode)

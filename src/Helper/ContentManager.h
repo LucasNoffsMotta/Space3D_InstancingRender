@@ -34,7 +34,7 @@ public:
 
 	static glm::vec3 GetColor(std::string color);
 	static void InsertColor(std::string name, glm::vec3 rgb);
-	static Shader GetShader(std::string shader);
+	static Shader* GetShader(std::string shader);
 	static void InitColors();
 	static void AddCamera(Camera* cam, std::string name);
 	static void AddPointLight(int index);
