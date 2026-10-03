@@ -19,13 +19,13 @@ private:
 	std::vector<BaseLight*> Lights;
 	std::vector<Model*> Models;
 	std::vector<Camera*> Cameras;
-	std::vector<SceneNode*> children;
 	std::map<eRenderMode, Shader*> shaderMap;
 	int nodeLevel;
 	Shader* currentShader;
 	
 
 public:
+	std::vector<SceneNode*> children;
 	void SetShaderMap(std::map<eRenderMode, Shader*> parentMap);
 	void SetUpNodeLights(Shader* shader);
 	Shader* QueryShader(eRenderMode mode);
@@ -34,7 +34,7 @@ public:
 	void AttatchLight(BaseLight* light);
 	void AttatchModel(Model* model);
 	void AttatchChildNode(SceneNode* child);
-	void Render(eRenderMode mode, Shader* shader);
+	void Render();
 	void RenderStencilTestOn(Shader* shader);
 	void RenderOutlineMask(Shader* shader);
 	void RenderRegularObjectsNoStencilTest(Shader* shader);

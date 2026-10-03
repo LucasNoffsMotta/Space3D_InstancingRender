@@ -71,17 +71,17 @@ void ContentManager::AddCamera(Camera* cam, std::string name)
 
 void ContentManager::AddPointLight(int index)
 {
-    ContentManager::PointLights[std::to_string(index)] = std::make_unique<PointLight>(index);
+    ContentManager::PointLights[std::to_string(index)] = std::make_unique<PointLight>(index, eLightType::Point);
 }
 
 void ContentManager::AddSpotLight(int index)
 {
-    ContentManager::SpotLights[std::to_string(index)] = std::make_unique<SpotLight>(index);
+    ContentManager::SpotLights[std::to_string(index)] = std::make_unique<SpotLight>(index, eLightType::Spot);
 }
 
 void ContentManager::AddDirectionalLight(int index)
 {
-    ContentManager::DirectionalLights[std::to_string(index)] = std::make_unique<DirectionalLight>(index);
+    ContentManager::DirectionalLights[std::to_string(index)] = std::make_unique<DirectionalLight>(index, eLightType::Directional);
 }
 
 void ContentManager::AddController(std::string name)

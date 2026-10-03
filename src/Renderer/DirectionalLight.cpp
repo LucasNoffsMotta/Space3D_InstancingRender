@@ -1,9 +1,10 @@
 #include "DirectionalLight.h"
 
-DirectionalLight::DirectionalLight(int index)
+DirectionalLight::DirectionalLight(int index, eLightType type)
 {
 	color = glm::vec3(0.01, 0.01, 0.1);
 	this->lightIndex = index;
+	this->type = type;
 }
 
 void DirectionalLight::SetDirection(glm::vec3& dir)

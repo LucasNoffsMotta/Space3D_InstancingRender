@@ -18,5 +18,5 @@ public:
 	void LoadSceneTree();
 	void SetUpSceneNode(SceneNode* node);
 	void SetUpSceneProjection(glm::mat4& projection);
-
+	void RenderScene();
 };

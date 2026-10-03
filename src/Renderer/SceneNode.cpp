@@ -46,7 +46,7 @@ void SceneNode::AttatchChildNode(SceneNode* child)
 	children.push_back(child);
 }
 
-void SceneNode::Render(eRenderMode mode, Shader* shader)
+void SceneNode::Render()
 {
 	//First: Query the necessary shaders
 	Shader* mainShader = shaderMap[eRenderMode::Regular];
@@ -64,6 +64,13 @@ void SceneNode::Render(eRenderMode mode, Shader* shader)
 
 	//Third: Render Outline Mask
 	RenderOutlineMask(stencilMaskShader);
+
+	if (children.size() > 0) {
+		for (int i = 0; i < children.size(); i++)
+		{
+			children[i]->Render();
+		}
+	}
 }
 
 void SceneNode::RenderStencilTestOn(Shader* shader)

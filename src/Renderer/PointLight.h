@@ -12,7 +12,7 @@ private:
 	float quadratic = 0.0007;
 
 public:
-	PointLight(int index);
+	PointLight(int index, eLightType type);
 	void SetUniforms(Shader& shader);
 	void DrawPointLight(Shader& shader, Texture& texture, Renderer& renderer);
 };

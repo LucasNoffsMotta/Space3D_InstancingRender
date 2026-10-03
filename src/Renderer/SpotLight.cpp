@@ -5,9 +5,10 @@ SpotLight::SpotLight()
 {
 }
 
-SpotLight::SpotLight(int index)
+SpotLight::SpotLight(int index, eLightType type)
 {
 	this->lightIndex = index;
+	this->type = type;
 }
 
 void SpotLight::SetUniforms(Shader& shader)

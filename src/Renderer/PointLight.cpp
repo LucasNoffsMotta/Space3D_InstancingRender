@@ -2,9 +2,10 @@
 
 
 
-PointLight::PointLight(int index)
+PointLight::PointLight(int index, eLightType type)
 {
 	this->lightIndex = index;
+	this->type = type;
 }
 
 void PointLight::SetUniforms(Shader& shader)

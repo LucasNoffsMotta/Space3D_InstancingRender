@@ -7,8 +7,8 @@
 enum eLightType :uint8_t
 {
     Directional,
-    SpotLight,
-    PointLight
+    Spot,
+    Point
 };
 
 class BaseLight

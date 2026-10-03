@@ -15,7 +15,7 @@ private:
 
 public:
 	SpotLight();
-	SpotLight(int index);
+	SpotLight(int index, eLightType type);
 	void SetUniforms(Shader& shader);
 	void SetDirection(glm::vec3& dir);
 	void DrawSpotLight(Shader& shader, Texture& texture, Renderer& renderer);

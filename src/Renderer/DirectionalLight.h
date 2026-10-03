@@ -10,7 +10,7 @@ private:
 
 
 public:
-	DirectionalLight(int index);
+	DirectionalLight(int index, eLightType type);
 	void SetDirection(glm::vec3& dir);
 	void DrawDirectionalLight(Shader& shader, Texture& texture, Renderer& renderer);
 	void SetUniforms(Shader& shader);

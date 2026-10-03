@@ -5,11 +5,12 @@
 #include <map>
 #include "../Renderer/Camera.h"
 #include "../Renderer/Texture.h"
+#include "../Renderer/Model.h"
+#include "InputManager.h"
+#include "../Renderer/BaseLight.h"
 #include "../Renderer/PointLight.h"
 #include "../Renderer/SpotLight.h"
 #include "../Renderer/DirectionalLight.h"
-#include "../Renderer/Model.h"
-#include "InputManager.h"
 #include "glm/glm.hpp"
 
 
@@ -20,13 +21,14 @@ public:
 	static std::map<std::string, glm::vec3> Colors;
 	static std::map<std::string, Camera*> Cameras;
 	static std::map<std::string, Texture*> Textures;
+	static std::map<std::string, std::unique_ptr<DirectionalLight>> DirectionalLights;
 	static std::map<std::string, std::unique_ptr<PointLight>> PointLights;
 	static std::map<std::string, std::unique_ptr<SpotLight>> SpotLights;
-	static std::map<std::string, std::unique_ptr<DirectionalLight>> DirectionalLights;
 	static std::map<std::string, std::vector<Model*>> Models;
 	static std::map<std::string, InputManager*> Controllers;
 	static const int SCR_WIDTH = 1920;
 	static const int SCR_HEIGHT = 1920;
+	static const int MAX_POINT_LIGHTS = 10;
 
 	static Shader* LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName);
 	static Texture* LoadTexture(const char* texturePath, std::string name);

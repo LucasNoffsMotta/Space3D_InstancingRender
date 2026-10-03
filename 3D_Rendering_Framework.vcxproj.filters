@@ -182,9 +182,6 @@
     <ClInclude Include="src\Renderer\Material.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Renderer\SceneManager.h">
       <Filter>Header Files\Helper</Filter>
     </ClInclude>

@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="eInput.h" />
-    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="src\Helper\ContentManager.h" />
     <ClInclude Include="src\Helper\eCameraMode.h" />
     <ClInclude Include="src\Helper\eInput.h" />

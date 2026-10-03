@@ -44,9 +44,9 @@ std::string BaseLight::GetLightStrucUniformName()
 	switch (type) {
 	case eLightType::Directional:
 		return "dirLight";
-	case eLightType::PointLight:
+	case eLightType::Point:
 		return "pointLight";
-	case eLightType::SpotLight:
+	case eLightType::Spot:
 		return "spotLight";
 	default:
 		return "";
