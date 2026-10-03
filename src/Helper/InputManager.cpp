@@ -129,3 +129,21 @@ eInput InputManager::InputGlfwKeyToEnum(int key)
 	}
 	return eInput::None;
 }
+
+//TEST
+void InputManager::GetMouseScreenPos(GLFWwindow* window)
+{
+	glfwGetCursorPos(window, &mouseX, &mouseY);
+}
+
+glm::vec3 InputManager::GetMouseRayCastDirection(glm::mat4& projectionMatrix, glm::mat4& viewMatrix, int screen_Height, int screen_Width, double mouseX, double mouseY)
+{
+	float x = (2.0 * mouseX) / screen_Width - 1.0f;
+	float y = 1.0f - (2.0f * mouseY) / screen_Height;
+	float z = -1.0f;
+	glm::vec4 ray_clip = glm::vec4(x, y, z, 1.0f);
+	glm::vec4 ray_eye = glm::inverse(projectionMatrix) * ray_clip;
+	ray_eye = glm::vec4(ray_eye.x, ray_eye.y, -1.0, 0.0);
+	glm::vec3 ray_wor = (glm::inverse(viewMatrix) * ray_eye);
+	return glm::normalize(ray_wor);
+}

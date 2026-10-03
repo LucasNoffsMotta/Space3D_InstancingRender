@@ -4,7 +4,7 @@
 
 
 
-void Renderer::InitCubeRenderData()
+void Renderer::InitCubeWithNormalsAndTextureRenderData()
 {
     float square[] = { 
         //Position          //Color        // Normal            //Text
@@ -51,11 +51,6 @@ void Renderer::InitCubeRenderData()
         -0.5f,  0.5f, -0.5f, 1.0, 1.0, 1.0,  0.0f,  1.0f,   0.0f, 0.0f,  1.0f
     };
 
-
-    view = glm::mat4(1.0f);
-    projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)1920 / 1200, 0.1f, 6000.f);
-
     vao = VAO();
     VBO vbo = VBO(square, sizeof(square));
     vao.Bind();
@@ -63,6 +58,13 @@ void Renderer::InitCubeRenderData()
     vao.LinkAttrib(vbo, 2, 3, GL_FLOAT, sizeof(float) * 11, (void*)(3 * sizeof(float)));
     vao.LinkAttrib(vbo, 3, 3, GL_FLOAT, sizeof(float) * 11, (void*)(6 * sizeof(float)));
     vao.LinkAttrib(vbo, 4, 2, GL_FLOAT, sizeof(float) * 11, (void*)(9 * sizeof(float)));
+}
+
+void Renderer::InitViewAndProjectionMatrices()
+{
+    view = glm::mat4(1.0f);
+    projection = glm::mat4(1.0f);
+    projection = glm::perspective(glm::radians(45.0f), (float)1920 / 1200, 0.1f, 6000.f);
 }
 
 void Renderer::InitQuad2DRenderData()
@@ -83,9 +85,62 @@ void Renderer::InitQuad2DRenderData()
     aimDotVao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(float) * 3, (void*)0);
 }
 
+void Renderer::InitQuad3DRenderData()
+{
+    float square[] = {
+        //Position          //Color       
+        -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f, 
+         0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+
+        -0.5f, -0.5f,  0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f, 
+         0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f, -0.5f,  0.5f, 
+
+        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+
+         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f, 
+
+        -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f,  0.5f, 
+         0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+
+        -0.5f,  0.5f, -0.5f, 
+         0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f,  0.5f, 
+         0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f, -0.5f, 
+    };
+
+    vao = VAO();
+    VBO vbo = VBO(square, sizeof(square));
+    vao.Bind();
+    vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(float) * 3, (void*)0);
+}
+
 Renderer::Renderer()
 {
-    InitCubeRenderData();
+    InitViewAndProjectionMatrices();
     CreatePointLights();
     CreateSpotLights();
     CreateDirectionalLights();
@@ -214,7 +269,7 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
 
     glm::mat4 model = glm::mat4(1);
     model = glm::translate(model, translation);
-    std::cout << "Floor pos x:" << translation.x << "// Floor pos y: " << translation.y << "/Floor pos z: " << translation.z << std::endl;
+    //std::cout << "Floor pos x:" << translation.x << "// Floor pos y: " << translation.y << "/Floor pos z: " << translation.z << std::endl;
     model = glm::scale(model, scale);
 
     shader.SetUniform3fv("viewPos", ContentManager::Cameras["main"]->CameraPos);
@@ -248,7 +303,7 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
     vao.Unbind();
 }
 
-void Renderer::DrawScene(Shader& shader, Shader& stencilShader)
+void Renderer::DrawScene(Shader& shader, Shader& stencilShader, Shader& boundBoxShader)
 {
     shader.Activate();
     shader.SetUniformMatrix4fv("projection", projection);
@@ -258,8 +313,7 @@ void Renderer::DrawScene(Shader& shader, Shader& stencilShader)
     //here i am rendering first an object that cannot be outlined.
     // What if ALL objects can be outlined? 
     //The gorund rule for this to work is: the ground / terrain cannot be outlined! Only objects above it.
-
-   
+  
     //Draw Terrain - No Stencil Test
     glStencilMask(0x00);
 
@@ -330,6 +384,39 @@ void Renderer::DrawScene(Shader& shader, Shader& stencilShader)
     glStencilMask(0xFF);
     glStencilFunc(GL_ALWAYS, 1, 0xFF);
     glEnable(GL_DEPTH_TEST);
+
+    //Third pass: Render bound box!
+    for (int i = 0; i < ContentManager::Models["object"].size(); i++)
+    {
+        Model* obj = ContentManager::Models["object"].at(i);
+        DrawBoundBox(boundBoxShader, *obj);
+    }
+}
+
+void Renderer::DrawBoundBox(Shader& shader, Model& boundModel)
+{
+    shader.Activate();
+    shader.SetUniformMatrix4fv("projection", projection);
+    shader.SetUniformMatrix4fv("view", view);
+
+    glm::mat4 model = glm::mat4(1);
+    model = glm::translate(model, boundModel.GetWorldPosition());
+
+    if (boundModel.rotationAngle > 0)
+    {
+        model = glm::rotate(model, glm::radians(boundModel.rotationAngle), boundModel.rotationAxis);
+    }
+
+    model = glm::scale(model, glm::vec3(4, 0.1, 3));
+
+    shader.SetUniformMatrix4fv("model", model);
+
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    vao.Bind();
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    vao.Unbind();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Renderer::DrawInstances(int amount, Texture& texture, Texture& diffuseMap, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader)

@@ -191,6 +191,16 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     return Mesh(vertices, indices, textures, meshColor, shininess);
 }
 
+void Model::CheckRayCollision(glm::vec3& mouseRayCast)
+{
+    //Need to check if the model bound box position is trasversed by the mouse ray cast
+    //For this I would might need a 
+
+    //Distance (t) = model position - camera position
+    //point t1 = camera position  +  direction * position
+    std::cout << "mouse cast x = " << mouseRayCast.x << " // mouse cast y = " << mouseRayCast.y << " // mouse cast z = " << mouseRayCast.z << std::endl;
+}
+
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, eTextureType eType)
 {
     std::vector<Texture> textures;

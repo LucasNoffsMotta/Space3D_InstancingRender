@@ -30,7 +30,9 @@ public:
     bool outline = false;
     int GetID();
     void SetID(int lastID);
+    void CheckRayCollision(glm::vec3& mouseRayCast);
     int Index;
+
 
 
 private:
@@ -43,6 +45,7 @@ private:
     glm::vec3 scale;
     glm::vec3 rotation;
 
+
     //Spring Arm: Distance from the object, relative position from the object
     Camera* attachedCamera;
     float cameraDistance;
@@ -52,5 +55,6 @@ private:
     void loadModel(std::string path);
     void processNode(aiNode* node, const aiScene* scene);
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+
     std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, eTextureType eType);
 };

@@ -35,7 +35,7 @@ void Camera::CalculateDirection(float xoffset, float yoffset)
 	Yaw += xoffset * TimeHelper::dt;
 	Pitch += yoffset * TimeHelper::dt;
 
-	std::cout << Yaw << std::endl;
+	//std::cout << Yaw << std::endl;
 
 	if (Pitch > 89.0f)
 		Pitch = 89.0f;
@@ -47,7 +47,7 @@ void Camera::CalculateDirection(float xoffset, float yoffset)
 	direction.y = sin(glm::radians(Pitch));
 	direction.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
 	CameraFront = glm::normalize(direction);
-	std::cout << "Dir X: " << direction.x << "/ Dir Y: " << direction.y << "/ Dir Z: " << direction.z << std::endl;
+	//std::cout << "Dir X: " << direction.x << "/ Dir Y: " << direction.y << "/ Dir Z: " << direction.z << std::endl;
 }
 
 void Camera::SetMoveSpeed(float newSpeed)
@@ -117,7 +117,7 @@ glm::mat4 Camera::Update(Window& window, InputManager* controller)
 		HandleMouseInput(mouseX, mouseY);
 	}
 	HandleKeybordInput(controller);
-	std::cout << "Cam x: " << CameraPos.x << " // Cam y:" << CameraPos.y << " // Cam Z:" << CameraPos.z << std::endl;
+	//std::cout << "Cam x: " << CameraPos.x << " // Cam y:" << CameraPos.y << " // Cam Z:" << CameraPos.z << std::endl;
 	return CalculateView();
 }
 

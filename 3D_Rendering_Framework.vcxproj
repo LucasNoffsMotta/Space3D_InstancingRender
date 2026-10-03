@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\GraphicsProgramming\glad.c" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="src\Helper\ContentManager.cpp" />
     <ClCompile Include="src\Helper\InputManager.cpp" />
     <ClCompile Include="src\Helper\TimeHelper.cpp" />
@@ -43,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="eInput.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="src\Helper\ContentManager.h" />
     <ClInclude Include="src\Helper\eCameraMode.h" />
     <ClInclude Include="src\Helper\eInput.h" />
@@ -70,6 +72,8 @@
   <ItemGroup>
     <None Include="src\Shader\2dVertex.vert" />
     <None Include="src\Shader\basicVertex.vert" />
+    <None Include="src\Shader\BoundBox.frag" />
+    <None Include="src\Shader\BoundBox.vert" />
     <None Include="src\Shader\frag.frag" />
     <None Include="src\Shader\instancedLayoutVertex.vert" />
     <None Include="src\Shader\instancedUniformVertex.vert" />

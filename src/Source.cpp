@@ -11,35 +11,12 @@
 #include "Misc/Projectile.h"
 #include <vector>
 
-//TODOS
-/* 
-* Fix the input manager to work with a timer to make it count less inputs per second
-* REFACTOR THE RENDERER!!! -> DONE
-    Stencil testing -> DONE
-    Outline object when moving (later on will outline when selected!)
-    Maybe change between attatched object when click and outline the attached object?
-*  Get Mouse Click on floor + rotate toards direction + move (Click and move)
-*  Shadows / Gamma Correction
-*  Create a scene class (scene objects, scene origin, etc)
-*  Smoother mouse input
-*  Add simple gravity that will act on the models!
-*  Should be able to render using the same shader but without receiving light uniforms
-*  Should be easy to switch between shaders
-*  Should be easy to light on / light of
-*  Change between different camera types
-*  Async model loading
-*  UI for level edit
-*  Test case: make a object that can be moved using mouse clicks with top-down view (including rotation)
-*/
-
-//1 unit = 1 meter!
 
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1200;
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
@@ -105,6 +82,12 @@ int main()
         "outlineShader"
     );
 
+    Shader boundBoxShader = ContentManager::LoadShader(
+        "src/Shader/BoundBox.vert",
+        "src/Shader/BoundBox.frag",
+        "boundBoxShader"
+    );
+
 
     //Texture woodenFloor = Texture("D:/Projetos/c++/OpenGL/Assets/woodenFloor.jpg");
     ContentManager::LoadTexture("D:/Projetos/c++/OpenGL/Assets/woodenFloor.jpg", "woodenFloor");
@@ -126,10 +109,7 @@ int main()
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Village/house2.obj", "village");
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/SoccerStadium/SoccerArena.obj", "room");
 
-
     ContentManager::AddController("main");
-
-
     ContentManager::InitColors();
     Renderer renderer = Renderer();
 
@@ -175,8 +155,8 @@ int main()
     float camSpeed = 10.f;
 
     int instances = 100;
-    renderer.SetInstancedTranslations(instances);
-    renderer.SetInstancesBuffers(instances);
+    //renderer.SetInstancedTranslations(instances);
+    //renderer.SetInstancesBuffers(instances);
     renderer.InitQuad2DRenderData();
     std::vector<Projectile> projectiles;
 
@@ -189,17 +169,21 @@ int main()
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
+    InputManager* manager = ContentManager::Controllers["main"];
+    renderer.InitQuad3DRenderData();
+
     while (!glfwWindowShouldClose(window.window))
     {
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f);
-        ContentManager::Controllers["main"]->GetInput(window.window);
+        manager->GetInput(window.window);
         TimeHelper::Update();
         TimeHelper::ShowFps();
 
         float currentFrame = glfwGetTime();
         dt = currentFrame - lastFrame;
         lastFrame = currentFrame;
-
+        manager->GetMouseScreenPos(window.window);
+      
        renderer.view = cam.Update(window, ContentManager::Controllers["main"]);
        //renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
        //renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
@@ -217,8 +201,18 @@ int main()
            attachedObj->AttatchCamera(ContentManager::Cameras["main"], 16);
        }
 
-       renderer.DrawScene(assimpShader, outlineShader);
+       renderer.DrawScene(assimpShader, outlineShader, boundBoxShader);
        attachedObj->Update(ContentManager::Controllers["main"]);
+
+       glm::vec3 mouseRayCast = ContentManager::Controllers["main"]->GetMouseRayCastDirection(
+
+           renderer.projection,
+           renderer.view,
+           ContentManager::SCR_HEIGHT,
+           ContentManager::SCR_WIDTH,
+           manager->mouseX,
+           manager->mouseY);
+
        window.Update();
     }
 
