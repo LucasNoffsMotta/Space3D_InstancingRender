@@ -3,7 +3,7 @@
 #include "BaseLight.h"
 
 
-class DirectionalLight : BaseLight
+class DirectionalLight : public BaseLight
 {
 private:
 	glm::vec3 direction = glm::vec3(1);

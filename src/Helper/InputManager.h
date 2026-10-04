@@ -20,13 +20,14 @@ private:
 public:
 	 InputManager();
 	 double mouseX;
+	 GLFWwindow* windowReference;
 	 double mouseY;
 	 std::map<eInput, bool> Inputs;
 	 eInput currentInput = eInput::None;
-	 void GetInput(GLFWwindow* window);
-	 void ReleasedKey(int key, GLFWwindow* window);
+	 void GetInput();
+	 void ReleasedKey(int key);
 	 int InputEnumToGlfwKey(eInput input);
 	 eInput InputGlfwKeyToEnum(int key);
-	 void GetMouseScreenPos(GLFWwindow* window);
+	 void GetMouseScreenPos();
 	 glm::vec3 GetMouseRayCastDirection(glm::mat4& projectionMatrix, glm::mat4& viewMatrix, int screen_Height, int screen_Width, double mouseX, double mouseY);
 };

@@ -105,16 +105,12 @@ glm::mat4 Camera::CalculateView()
 	return glm::lookAt(CameraPos, CameraPos + CameraFront, CameraUp);
 }
 
-glm::mat4 Camera::Update(Window& window, InputManager* controller)
+glm::mat4 Camera::Update(InputManager* controller)
 {
-	double mouseX = 1;
-	double mouseY = 1;
-	glfwGetCursorPos(window.window, &mouseX, &mouseY);
-
 	if (mode == eCameraMode::Free)
 	//if (true)
 	{
-		HandleMouseInput(mouseX, mouseY);
+		HandleMouseInput(controller->mouseX, controller->mouseY);
 	}
 	HandleKeybordInput(controller);
 	//std::cout << "Cam x: " << CameraPos.x << " // Cam y:" << CameraPos.y << " // Cam Z:" << CameraPos.z << std::endl;

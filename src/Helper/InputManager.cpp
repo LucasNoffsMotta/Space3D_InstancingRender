@@ -5,53 +5,53 @@ InputManager::InputManager()
 	Inputs[eInput::None] = true;
 }
 
-void InputManager::GetInput(GLFWwindow* window)
+void InputManager::GetInput()
 {
 	canChangeInput = framesSinceLastInput >= framesThreshold;
 
 	if (canChangeInput)
 	{
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		if (glfwGetKey(windowReference, GLFW_KEY_W) == GLFW_PRESS)
 		{
 			Inputs[eInput::Arrow_Up] = true;
 			Inputs[eInput::None] = false;
 		}
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		if (glfwGetKey(windowReference, GLFW_KEY_D) == GLFW_PRESS)
 		{
 			Inputs[eInput::Arrow_Right] = true;
 			Inputs[eInput::None] = false;
 		}
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		if (glfwGetKey(windowReference, GLFW_KEY_A) == GLFW_PRESS)
 		{
 			Inputs[eInput::Arrow_Left] = true;
 			Inputs[eInput::None] = false;
 		}
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		if (glfwGetKey(windowReference, GLFW_KEY_S) == GLFW_PRESS)
 		{
 			Inputs[eInput::Arrow_Down] = true;
 			Inputs[eInput::None] = false;
 		}
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		if (glfwGetKey(windowReference, GLFW_KEY_UP) == GLFW_PRESS)
 		{
 			Inputs[eInput::Arrow_Up] = true;
 			Inputs[eInput::None] = false;
 		}
-		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		if (glfwGetKey(windowReference, GLFW_KEY_DOWN) == GLFW_PRESS)
 		{
 			Inputs[eInput::Arrow_Down] = true;
 			Inputs[eInput::None] = false;
 		}
-		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		if (glfwGetKey(windowReference, GLFW_KEY_LEFT) == GLFW_PRESS)
 		{
 			Inputs[eInput::Arrow_Left] = true;
 			Inputs[eInput::None] = false;
 		}
-		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		if (glfwGetKey(windowReference, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		{
 			Inputs[eInput::Arrow_Right] = true;
 			Inputs[eInput::None] = false;
 		}
-		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		if (glfwGetKey(windowReference, GLFW_KEY_SPACE) == GLFW_PRESS)
 		{
 			Inputs[eInput::Space_Bar] = true;
 			Inputs[eInput::None] = false;
@@ -61,21 +61,21 @@ void InputManager::GetInput(GLFWwindow* window)
 	TimeHelper::CountFrames(!canChangeInput, framesSinceLastInput);	
 
 
-	ReleasedKey(GLFW_KEY_SPACE, window);
-	ReleasedKey(GLFW_KEY_RIGHT, window);
-	ReleasedKey(GLFW_KEY_LEFT, window);
-	ReleasedKey(GLFW_KEY_DOWN, window);
-	ReleasedKey(GLFW_KEY_UP, window);
-	ReleasedKey(GLFW_KEY_S, window);
-	ReleasedKey(GLFW_KEY_A, window);
-	ReleasedKey(GLFW_KEY_D, window);
-	ReleasedKey(GLFW_KEY_W, window);
+	ReleasedKey(GLFW_KEY_SPACE);
+	ReleasedKey(GLFW_KEY_RIGHT);
+	ReleasedKey(GLFW_KEY_LEFT);
+	ReleasedKey(GLFW_KEY_DOWN);
+	ReleasedKey(GLFW_KEY_UP);
+	ReleasedKey(GLFW_KEY_S);
+	ReleasedKey(GLFW_KEY_A);
+	ReleasedKey(GLFW_KEY_D);
+	ReleasedKey(GLFW_KEY_W);
 
 }
 
-void InputManager::ReleasedKey(int key, GLFWwindow* window)
+void InputManager::ReleasedKey(int key)
 {
-	if (glfwGetKey(window, key) == GLFW_RELEASE && Inputs[InputGlfwKeyToEnum(key)] == true)
+	if (glfwGetKey(windowReference, key) == GLFW_RELEASE && Inputs[InputGlfwKeyToEnum(key)] == true)
 	{
 		canChangeInput = true;
 		framesSinceLastInput = framesThreshold;
@@ -131,9 +131,9 @@ eInput InputManager::InputGlfwKeyToEnum(int key)
 }
 
 //TEST
-void InputManager::GetMouseScreenPos(GLFWwindow* window)
+void InputManager::GetMouseScreenPos()
 {
-	glfwGetCursorPos(window, &mouseX, &mouseY);
+	glfwGetCursorPos(windowReference, &mouseX, &mouseY);
 }
 
 glm::vec3 InputManager::GetMouseRayCastDirection(glm::mat4& projectionMatrix, glm::mat4& viewMatrix, int screen_Height, int screen_Width, double mouseX, double mouseY)

@@ -10,6 +10,7 @@
 #include "Helper/TimeHelper.h"
 #include "Misc/Projectile.h"
 #include <vector>
+#include "Renderer/SceneManager.h"
 
 
 const unsigned int SCR_WIDTH = 1920;
@@ -28,6 +29,7 @@ int main()
 	glfwInit();
 
 	Window window = Window(SCR_WIDTH, SCR_HEIGHT, "OpenGL");
+    ContentManager::SetMainWindow(window.window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -44,6 +46,7 @@ int main()
     glfwSetFramebufferSizeCallback(window.window, framebuffer_size_callback);
     window.SetViewPort(window.SCREEN_WIDTH, window.SCREEN_HEIGHT);
 
+    /*
     Shader* instancedUniformShader = ContentManager::LoadShader(
         "src/Shader/instancedUniformVertex.vert",
         "src/Shader/frag.frag",
@@ -104,7 +107,6 @@ int main()
     ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "object", objID++);
     ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "object", objID++);
 
-
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "pinkCube");
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Village/house2.obj", "village");
     //ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/SoccerStadium/SoccerArena.obj", "room");
@@ -150,9 +152,7 @@ int main()
     secondCar->SetScale(baseScale);
     secondCar->SetRotationAngle(270);
 
-    float dt = 0.f;
-    float lastFrame = 0.f;
-    float camSpeed = 10.f;
+
 
     int instances = 100;
     //renderer.SetInstancedTranslations(instances);
@@ -162,6 +162,7 @@ int main()
 
     Model* attachedObj = ContentManager::Models["object"].back();
     attachedObj->AttatchCamera(ContentManager::Cameras["main"], 16);
+    */
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -169,29 +170,39 @@ int main()
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    InputManager* manager = ContentManager::Controllers["main"];
-    renderer.InitQuad3DRenderData();
+    //InputManager* manager = ContentManager::Controllers["main"];
+    //manager->windowReference = window.window;
+    //renderer.InitQuad3DRenderData();
+
+    float dt = 0.f;
+    float lastFrame = 0.f;
+    float camSpeed = 10.f;
+
+    //Finally testing scene classes!
+    SceneManager scene = SceneManager();
+    scene.InitScene();
 
     while (!glfwWindowShouldClose(window.window))
     {
         window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f);
-        manager->GetInput(window.window);
+        //manager->GetInput();
         TimeHelper::Update();
         TimeHelper::ShowFps();
 
         float currentFrame = glfwGetTime();
         dt = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        manager->GetMouseScreenPos(window.window);
+        scene.RenderScene();
+        //manager->GetMouseScreenPos();
       
-       renderer.view = cam.Update(window, ContentManager::Controllers["main"]);
+       //renderer.view = cam.Update(ContentManager::Controllers["main"]);
        //renderer.DrawAimDot(glm::vec3(0.01f, 0.01f, 0.01f), aimDotColor, aimDotShader, SCR_WIDTH, SCR_HEIGHT);
        //renderer.DrawInstances(instances, *ContentManager::Textures["conteiner"], *ContentManager::Textures["conteiner_specular"], scale, rotationAxis, 1.f, ContentManager::GetColor("white"), instancedLayoutShader);   // -> Draw instances by layout
        //renderer.Draw(glm::vec3(500, 0, 0), *ContentManager::Textures["woodenFloor"], glm::vec3(5000, 1, 5000), rotationAxis, 1.f, ContentManager::GetColor("white"), obj3DShader);
        //renderer.DrawScene(assimpShader, outlineShader);
 
        //Test!
-       if (ContentManager::Controllers["main"]->Inputs[eInput::Space_Bar])
+    /*   if (ContentManager::Controllers["main"]->Inputs[eInput::Space_Bar])
        {
            int nextOrPrev = 1;
            int max = ContentManager::Models["object"].size();
@@ -199,19 +210,19 @@ int main()
            attachedObj->outline = false;
            attachedObj = ContentManager::Models["object"].at(attachedObj->Index+=nextOrPrev);
            attachedObj->AttatchCamera(ContentManager::Cameras["main"], 16);
-       }
+       }*/
 
-       renderer.DrawScene(*assimpShader, *outlineShader, *boundBoxShader);
-       attachedObj->Update(ContentManager::Controllers["main"]);
+       //renderer.DrawScene(*assimpShader, *outlineShader, *boundBoxShader);
+       //attachedObj->Update(ContentManager::Controllers["main"]);
 
-       glm::vec3 mouseRayCast = ContentManager::Controllers["main"]->GetMouseRayCastDirection(
+     /*  glm::vec3 mouseRayCast = ContentManager::Controllers["main"]->GetMouseRayCastDirection(
 
            renderer.projection,
            renderer.view,
            ContentManager::SCR_HEIGHT,
            ContentManager::SCR_WIDTH,
            manager->mouseX,
-           manager->mouseY);
+           manager->mouseY);*/
 
        window.Update();
     }

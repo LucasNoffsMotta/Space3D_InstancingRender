@@ -81,7 +81,7 @@ void Model::AttatchCamera(Camera* cam, float distance)
     cam->CameraPos = GetWorldPosition() + glm::vec3(0, distance, 10);
     glm::vec3 direction = GetWorldPosition() - cam->CameraPos;
     cam->CameraFront = glm::normalize(direction);
-    cam->mode = eCameraMode::Attached;
+    cam->mode = eCameraMode::TopDown;
     outline = true;
 }
 

@@ -11,6 +11,7 @@ std::map<std::string, std::unique_ptr<SpotLight>>                 ContentManager
 std::map<std::string, std::unique_ptr<DirectionalLight>>          ContentManager::DirectionalLights;
 std::map<std::string, std::vector<Model*>>                        ContentManager::Models;
 std::map<std::string, InputManager*>                              ContentManager::Controllers;
+GLFWwindow*                                                       ContentManager::mainWindow;
 
 
 Shader* ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)
@@ -87,5 +88,10 @@ void ContentManager::AddDirectionalLight(int index)
 void ContentManager::AddController(std::string name)
 {
     ContentManager::Controllers[name] = new InputManager();
+}
+
+void ContentManager::SetMainWindow(GLFWwindow* window)
+{
+    ContentManager::mainWindow = window;
 }
 

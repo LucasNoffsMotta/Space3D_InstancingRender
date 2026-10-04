@@ -45,7 +45,7 @@ public:
 	void CalculateDirection(float xoffset, float yoffset);
 	void SetMoveSpeed(float newSpeed);
 	void HandleKeybordInput(InputManager* controller);
-	glm::mat4 Update(Window& window, InputManager* controller);
+	glm::mat4 Update(InputManager* controller);
 };
 
 

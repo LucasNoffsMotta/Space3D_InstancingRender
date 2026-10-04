@@ -26,6 +26,7 @@ public:
 	static std::map<std::string, std::unique_ptr<SpotLight>> SpotLights;
 	static std::map<std::string, std::vector<Model*>> Models;
 	static std::map<std::string, InputManager*> Controllers;
+	static GLFWwindow* mainWindow;
 	static const int SCR_WIDTH = 1920;
 	static const int SCR_HEIGHT = 1920;
 	static const int MAX_POINT_LIGHTS = 10;
@@ -43,6 +44,7 @@ public:
 	static void AddSpotLight(int index);
 	static void AddDirectionalLight(int index);
 	static void AddController(std::string name);
+	static void SetMainWindow(GLFWwindow* window);
 };
 
 

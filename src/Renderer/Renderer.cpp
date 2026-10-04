@@ -303,6 +303,7 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
     vao.Unbind();
 }
 
+
 void Renderer::DrawScene(Shader& shader, Shader& stencilShader, Shader& boundBoxShader)
 {
     shader.Activate();
