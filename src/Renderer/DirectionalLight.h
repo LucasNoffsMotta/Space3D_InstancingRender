@@ -17,4 +17,5 @@ public:
 	void SetAmbient(glm::vec3& ambient);
 	void SetDiffuse(glm::vec3& diff);
 	void SetSpecular(glm::vec3& spec);
+	void SetUniformsTest(Shader& shader) override;
 };

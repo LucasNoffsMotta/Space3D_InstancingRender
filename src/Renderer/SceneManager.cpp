@@ -51,15 +51,18 @@ void SceneManager::LoadModelsAndSetPositions()
 
 void SceneManager::LoadGlobalLigths()
 {
-    glm::vec3 pointPos = glm::vec3(9, 0, 3);
-    glm::vec3 pointColor = glm::vec3(0.01);
+    glm::vec3 pointPos = glm::vec3(0.f, 6.f, 0.f);
+    glm::vec3 pointColor = glm::vec3(0.8117, 0.3960f, 0.8784);
+    //r = 0,5960
+    //g = 0,2392
+    //b = 0,6039
 
     for (int i = 0; i < ContentManager::MAX_POINT_LIGHTS; i++)
     {
         ContentManager::AddPointLight(i);
         ContentManager::PointLights[std::to_string(i)]->SetColor(pointColor);
         ContentManager::PointLights[std::to_string(i)]->SetPosition(pointPos);
-        pointPos.x -= 100;
+        pointPos.x +=20;
         GlobalLights.push_back(ContentManager::PointLights[std::to_string(i)].get());
     }
 

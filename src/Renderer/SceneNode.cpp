@@ -11,7 +11,7 @@ void SceneNode::SetUpNodeLights(Shader* shader)
 
 	for (int i = 0; i < Lights.size(); i++)
 	{
-		Lights[i]->SetUniforms(*shader);
+		Lights[i]->SetUniformsTest(*shader);
 	}
 }
 
@@ -54,7 +54,7 @@ void SceneNode::AttatchController(InputManager* controller)
 }
 
 
-//TODO: Need to create a node hierarquiy based on the sequence that I wanna render: Model 1, 2, 4 -> goes on node 1, regular render. Model 2, 4, 5 -> Goes on node 2, stencil test on, etc
+//TODO: This is being responsible for all ther render process. Need to create a node hierarquiy based on the sequence that I wanna render: Render Pass 1-> all nodes, Render Pass 2 -> all nodes, etc
 void SceneNode::Render()
 {
 	//First: Query the necessary shaders

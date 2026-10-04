@@ -32,6 +32,7 @@ public:
     void SetColor(glm::vec3& color);
     void SetAmbient(glm::vec3& ambient);
     std::string SetUniforms(Shader& shader);
+    virtual void SetUniformsTest(Shader& shader);
     void Draw(Shader& shader, Texture& texture, Renderer& renderer);
     std::string GetLightStrucUniformName();
 };

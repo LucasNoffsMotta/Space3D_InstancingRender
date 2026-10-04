@@ -34,6 +34,10 @@ std::string BaseLight::SetUniforms(Shader& shader)
 	return prefix;
 }
 
+void BaseLight::SetUniformsTest(Shader& shader)
+{
+}
+
 void BaseLight::Draw(Shader& shader, Texture& texture, Renderer& renderer)
 {
 	renderer.Draw(position, texture, scale, glm::vec3(0), 0.f, color, shader);

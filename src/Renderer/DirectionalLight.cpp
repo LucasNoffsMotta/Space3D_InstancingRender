@@ -2,7 +2,7 @@
 
 DirectionalLight::DirectionalLight(int index, eLightType type)
 {
-	color = glm::vec3(0.01, 0.01, 0.1);
+	color = glm::vec3(0.01f, 0.01f, 0.01f);
 	this->lightIndex = index;
 	this->type = type;
 }
@@ -25,6 +25,12 @@ void DirectionalLight::SetDiffuse(glm::vec3& diff)
 void DirectionalLight::SetSpecular(glm::vec3& spec)
 {
 	this->specular = spec;
+}
+
+void DirectionalLight::SetUniformsTest(Shader& shader)
+{
+	std::string prefix = BaseLight::SetUniforms(shader);
+	shader.SetUniform3fv((prefix + "direction").c_str(), this->direction);
 }
 
 void DirectionalLight::DrawDirectionalLight(Shader& shader, Texture& texture, Renderer& renderer)
