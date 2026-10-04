@@ -47,6 +47,10 @@ void SceneManager::LoadModelsAndSetPositions()
     testModelTwo->SetScale(baseScale);
     testModelTwo->SetRotationAngle(270);
     testModelTwo->doStencilTest = true;
+
+    HierarchyModelMap[eHierarchyLevel::NO_STENCIL_TEST].push_back(terrain);
+    HierarchyModelMap[eHierarchyLevel::STENCIL_TEST].push_back(testModelOne);
+    HierarchyModelMap[eHierarchyLevel::STENCIL_TEST].push_back(testModelTwo);
 }
 
 void SceneManager::LoadGlobalLigths()
@@ -121,17 +125,36 @@ void SceneManager::LoadCamera()
 void SceneManager::LoadSceneTree(int levels)
 {
     RootNode = new SceneNode(0);
+    
+    if (HierarchyModelMap[eHierarchyLevel::NO_STENCIL_TEST].size() > 0)
+    {
+        for (int i = 0; i < HierarchyModelMap[eHierarchyLevel::NO_STENCIL_TEST].size(); i++)
+        {
+            RootNode->AttatchModel(HierarchyModelMap[eHierarchyLevel::NO_STENCIL_TEST].at(i));
+        }
+    }
+
     if (levels > 0)
     {
-        AddNode(RootNode, 0, levels);
+        AddNode(eHierarchyLevel::STENCIL_TEST, RootNode, 0, levels);
     }
 }
 
-void SceneManager::AddNode(SceneNode* parent, int level, int totalLevels)
+void SceneManager::AddNode(eHierarchyLevel currentHierarchy, SceneNode* parent, int level, int totalLevels)
 {
     if (level < totalLevels)
     {
         SceneNode* node = new SceneNode(level);
+
+        if (HierarchyModelMap[currentHierarchy].size() > 0)
+        {
+            for (int i = 0; i < HierarchyModelMap[currentHierarchy].size(); i++)
+            {
+                node->AttatchModel(HierarchyModelMap[currentHierarchy].at(i));
+            }
+        }
+
+        //How to check the next hierarchy level? 
         parent->AttatchChildNode(node);
         AddNode(node, level++, totalLevels);
     }

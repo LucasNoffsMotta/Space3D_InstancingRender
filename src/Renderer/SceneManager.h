@@ -15,13 +15,14 @@ private:
 	glm::mat4 View;
 	Camera* BaseCamera;
 	std::vector<BaseLight*> GlobalLights;
+	std::map<eHierarchyLevel, std::vector<Model*>> HierarchyModelMap;
 
 	void LoadShaderSingletons();
 	void LoadModelsAndSetPositions();
 	void LoadGlobalLigths();
 	void LoadCamera();
 	void LoadSceneTree(int levels);
-	void AddNode(SceneNode* parent, int level, int totalLevels);
+	void AddNode(eHierarchyLevel currentHierarchy, SceneNode* parent, int level, int totalLevels);
 	void SetUpSceneNode(SceneNode* node);
 	void SetUpSceneProjection(glm::mat4& projection);
 	void LoadViewAndProjectionMatrices();

@@ -7,6 +7,12 @@
 #include "../Helper/InputManager.h"
 #include "Camera.h"
 
+enum eHierarchyLevel : uint8_t
+{
+    NO_STENCIL_TEST,
+    STENCIL_TEST
+};
+
 class Model
 {
 public:
@@ -33,6 +39,7 @@ public:
     void CheckRayCollision(glm::vec3& mouseRayCast);
     int Index;
     bool doStencilTest = false;
+    eHierarchyLevel HIERARCHY_LEVEL = eHierarchyLevel::NO_STENCIL_TEST;
 
 
 private:
