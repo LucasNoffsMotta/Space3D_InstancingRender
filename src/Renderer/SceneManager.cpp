@@ -34,20 +34,21 @@ void SceneManager::LoadModelsAndSetPositions()
 {
     int objID = 0;
     Model* terrain = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", NO_STENCIL_TEST, objID);
-    Model* testModelOne = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", STENCIL_TEST, objID++);
-    Model* testModelTwo = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", STENCIL_TEST, objID++);
+    Model* carOne = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", STENCIL_TEST, objID++);
+    Model* carTwo = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", STENCIL_TEST, objID++);
     Model* hollow = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/HollowKnight/HollowKnightRig.obj", STENCIL_TEST, objID++);
     Model* soldier = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj", STENCIL_TEST, objID++);
-    ContentManager::Models[OUTLINE_MASK].push_back(testModelOne);
-    ContentManager::Models[OUTLINE_MASK].push_back(testModelTwo);
+    ContentManager::Models[OUTLINE_MASK].push_back(carOne);
+    ContentManager::Models[OUTLINE_MASK].push_back(carTwo);
     ContentManager::Models[OUTLINE_MASK].push_back(hollow);
     ContentManager::Models[OUTLINE_MASK].push_back(soldier);
 
     SetObjectDefaults(terrain, sceneOrigin, glm::vec3(1), 0, false);
-    SetObjectDefaults(testModelOne, glm::vec3(0, 4.0, 0), glm::vec3(1), 270, true);
-    SetObjectDefaults(testModelTwo, glm::vec3(0, 4.0, 10), glm::vec3(1), 270, true);
+    SetObjectDefaults(carOne, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, true);
+    SetObjectDefaults(carTwo, glm::vec3(0, 2.5, 10), glm::vec3(1), 180, true);
     SetObjectDefaults(hollow, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, true);
-    SetObjectDefaults(soldier, glm::vec3(0, 1.0, 1), glm::vec3(0.01), 270, true);
+    SetObjectDefaults(soldier, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true);
+    soldier->AttatchCamera(BaseCamera, 10);
 }
 
 void SceneManager::LoadGlobalLigths()
@@ -102,7 +103,6 @@ void SceneManager::InitScene()
 {
     InitHierarchyStructs();
     LoadEmptyTreeBasedOnLevels();
-
     LoadShaderSingletons();
     LoadGlobalLigths();
     LoadCamera();
@@ -120,7 +120,6 @@ void SceneManager::LoadCamera()
     BaseCamera = new Camera(camPos, camFront, camUp);
     ContentManager::AddCamera(BaseCamera, "main");
 }
-
 
 
 void SceneManager::FillSceneTree(SceneNode* node)
