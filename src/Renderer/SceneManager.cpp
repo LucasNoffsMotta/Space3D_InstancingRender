@@ -25,9 +25,12 @@ void SceneManager::LoadShaderSingletons()
 void SceneManager::LoadModelsAndSetPositions()
 {
     int objID = 0;
-    Model* terrain = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "terrain", objID);
-    Model* testModelOne = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "object", objID++);
-    Model* testModelTwo = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "object", objID++);
+    Model* terrain = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", NO_STENCIL_TEST, objID);
+    Model* testModelOne = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", STENCIL_TEST, objID++);
+    Model* testModelTwo = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", STENCIL_TEST, objID++);
+    ContentManager::Models[OUTLINE_MASK].push_back(testModelOne);
+    ContentManager::Models[OUTLINE_MASK].push_back(testModelTwo);
+
 
     glm::vec3 test_pos1 = glm::vec3(0.0f, 2.5f, 0);
     glm::vec3 test_pos2 = glm::vec3(0, 2.5f, 6);
@@ -47,10 +50,6 @@ void SceneManager::LoadModelsAndSetPositions()
     testModelTwo->SetScale(baseScale);
     testModelTwo->SetRotationAngle(270);
     testModelTwo->doStencilTest = true;
-
-    HierarchyModelMap[eHierarchyLevel::NO_STENCIL_TEST].push_back(terrain);
-    HierarchyModelMap[eHierarchyLevel::STENCIL_TEST].push_back(testModelOne);
-    HierarchyModelMap[eHierarchyLevel::STENCIL_TEST].push_back(testModelTwo);
 }
 
 void SceneManager::LoadGlobalLigths()
@@ -103,13 +102,15 @@ void SceneManager::LoadGlobalLigths()
 
 void SceneManager::InitScene()
 {
+    InitHierarchyStructs();
+    LoadEmptyTreeBasedOnLevels();
+
     LoadShaderSingletons();
     LoadGlobalLigths();
     LoadCamera();
     LoadModelsAndSetPositions();
     LoadViewAndProjectionMatrices();
-    LoadSceneTree(0);
-    SetUpSceneNode(RootNode);
+    FillSceneTree(RootNode);
 }
 
 void SceneManager::LoadCamera()
@@ -122,45 +123,9 @@ void SceneManager::LoadCamera()
     ContentManager::AddCamera(BaseCamera, "main");
 }
 
-void SceneManager::LoadSceneTree(int levels)
-{
-    RootNode = new SceneNode(0);
-    
-    if (HierarchyModelMap[eHierarchyLevel::NO_STENCIL_TEST].size() > 0)
-    {
-        for (int i = 0; i < HierarchyModelMap[eHierarchyLevel::NO_STENCIL_TEST].size(); i++)
-        {
-            RootNode->AttatchModel(HierarchyModelMap[eHierarchyLevel::NO_STENCIL_TEST].at(i));
-        }
-    }
 
-    if (levels > 0)
-    {
-        AddNode(eHierarchyLevel::STENCIL_TEST, RootNode, 0, levels);
-    }
-}
 
-void SceneManager::AddNode(eHierarchyLevel currentHierarchy, SceneNode* parent, int level, int totalLevels)
-{
-    if (level < totalLevels)
-    {
-        SceneNode* node = new SceneNode(level);
-
-        if (HierarchyModelMap[currentHierarchy].size() > 0)
-        {
-            for (int i = 0; i < HierarchyModelMap[currentHierarchy].size(); i++)
-            {
-                node->AttatchModel(HierarchyModelMap[currentHierarchy].at(i));
-            }
-        }
-
-        //How to check the next hierarchy level? 
-        parent->AttatchChildNode(node);
-        AddNode(node, level++, totalLevels);
-    }
-}
-
-void SceneManager::SetUpSceneNode(SceneNode* node)
+void SceneManager::FillSceneTree(SceneNode* node)
 {
     ContentManager::AddController("main");
     InputManager* rootController = ContentManager::Controllers["main"];
@@ -174,14 +139,9 @@ void SceneManager::SetUpSceneNode(SceneNode* node)
         node->AttatchLight(GlobalLights[i]);
     }
 
-    for (int i = 0; i < ContentManager::Models["terrain"].size(); i++)
+    for (auto* m : ContentManager::Models[node->level])
     {
-        node->AttatchModel(ContentManager::Models["terrain"].at(i));
-    }
-
-    for (int i = 0; i < ContentManager::Models["object"].size(); i++)
-    {
-        node->AttatchModel(ContentManager::Models["object"].at(i));
+        node->AttatchModel(m);
     }
 
     node->SetShaderMap(RootShaderMap);
@@ -191,7 +151,7 @@ void SceneManager::SetUpSceneNode(SceneNode* node)
     {
         for (int i = 0; i < node->children.size(); i++)
         {
-            SetUpSceneNode(node->children.at(i));
+            FillSceneTree(node->children.at(i));
         }
     }
 }
@@ -218,6 +178,31 @@ void SceneManager::LoadViewAndProjectionMatrices()
     View = glm::mat4(1.0f);
     Projection = glm::mat4(1.0f);
     Projection = glm::perspective(glm::radians(45.0f), (float)1920 / 1200, 0.1f, 6000.f);
+}
+
+void SceneManager::InitHierarchyStructs()
+{
+    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::NO_STENCIL_TEST, 0));
+    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::STENCIL_TEST, 1));
+    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::OUTLINE_MASK, 2));
+}
+
+void SceneManager::LoadEmptyTreeBasedOnLevels()
+{
+    int level = 0;
+    RootNode = new SceneNode(hierarchy[level].level);
+    AddNode(RootNode, level);
+}
+
+void SceneManager::AddNode(SceneNode* node, int level)
+{
+    level++;
+    if (level < hierarchy.size())
+    {
+        SceneNode* child = new SceneNode(hierarchy[level].level);
+        node->AttatchChildNode(child);
+        AddNode(child, level);
+    }
 }
 
 

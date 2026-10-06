@@ -318,7 +318,7 @@ void Renderer::DrawScene(Shader& shader, Shader& stencilShader, Shader& boundBox
     //Draw Terrain - No Stencil Test
     glStencilMask(0x00);
 
-    for (int i = 0; i < ContentManager::Models["terrain"].size(); i++)
+  /*  for (int i = 0; i < ContentManager::Models["terrain"].size(); i++)
     {
         Model* terrain = ContentManager::Models["terrain"].at(i);
 
@@ -332,13 +332,13 @@ void Renderer::DrawScene(Shader& shader, Shader& stencilShader, Shader& boundBox
         model_matrix = glm::scale(model_matrix, terrain->GetScale());
         shader.SetUniformMatrix4fv("model", model_matrix);
         terrain->Draw(shader);
-    }
+    }*/
 
     //Stencil Activated
     glStencilFunc(GL_ALWAYS, 1, 0xFF);
     glStencilMask(0xFF);
 
-    for (int i = 0; i < ContentManager::Models["object"].size(); i++)
+  /*  for (int i = 0; i < ContentManager::Models["object"].size(); i++)
     {
         Model* obj = ContentManager::Models["object"].at(i);
 
@@ -353,7 +353,7 @@ void Renderer::DrawScene(Shader& shader, Shader& stencilShader, Shader& boundBox
         shader.SetUniformMatrix4fv("model", model_matrix);
         obj->Draw(shader);
     }
-    
+    */
     //Second Pass: Draw Outline - If outlined objects exists
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
     glStencilMask(0x00);
@@ -363,7 +363,7 @@ void Renderer::DrawScene(Shader& shader, Shader& stencilShader, Shader& boundBox
     stencilShader.SetUniformMatrix4fv("projection", projection);
     stencilShader.SetUniformMatrix4fv("view", view);
 
-    for (int i = 0; i < ContentManager::Models["object"].size(); i++)
+  /*  for (int i = 0; i < ContentManager::Models["object"].size(); i++)
     {
         Model* obj = ContentManager::Models["object"].at(i);
 
@@ -380,18 +380,18 @@ void Renderer::DrawScene(Shader& shader, Shader& stencilShader, Shader& boundBox
             stencilShader.SetUniformMatrix4fv("model", scaled);
             obj->Draw(stencilShader);
         }
-    }
+    }*/
 
     glStencilMask(0xFF);
     glStencilFunc(GL_ALWAYS, 1, 0xFF);
     glEnable(GL_DEPTH_TEST);
 
     //Third pass: Render bound box!
-    for (int i = 0; i < ContentManager::Models["object"].size(); i++)
+  /*  for (int i = 0; i < ContentManager::Models["object"].size(); i++)
     {
         Model* obj = ContentManager::Models["object"].at(i);
         DrawBoundBox(boundBoxShader, *obj);
-    }
+    }*/
 }
 
 void Renderer::DrawBoundBox(Shader& shader, Model& boundModel)

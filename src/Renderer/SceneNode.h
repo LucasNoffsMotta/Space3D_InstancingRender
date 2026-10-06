@@ -11,6 +11,8 @@ enum eRenderMode:uint8_t {
 	WiredOn //Wire only shader
 };
 
+struct HierarchyLevel;
+
 class SceneNode
 {
 private:
@@ -26,6 +28,7 @@ private:
 	InputManager* Controller;
 	int nodeLevel;
 
+
 	void UpdateController();
 	void RenderOutlineMask(Shader* shader);
 	void RenderRegularObjectsNoStencilTest(Shader* shader);
@@ -35,10 +38,11 @@ private:
 	void SetUpNodeLights(Shader* shader);
 
 public:
+	eHierarchyLevel level;
 	std::vector<SceneNode*> children;
 	void SetShaderMap(std::map<eRenderMode, Shader*> parentMap);
 	Shader* QueryShader(eRenderMode mode);
-	SceneNode(int nodeLevel);
+	SceneNode(eHierarchyLevel nodeLevel);
 	void AttatchCamera(Camera* camera);
 	void AttatchLight(BaseLight* light);
 	void AttatchModel(Model* model);

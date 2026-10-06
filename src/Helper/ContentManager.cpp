@@ -9,7 +9,7 @@ std::map<std::string, Texture*>                                   ContentManager
 std::map<std::string, std::unique_ptr<PointLight>>                ContentManager::PointLights;
 std::map<std::string, std::unique_ptr<SpotLight>>                 ContentManager::SpotLights;
 std::map<std::string, std::unique_ptr<DirectionalLight>>          ContentManager::DirectionalLights;
-std::map<std::string, std::vector<Model*>>                        ContentManager::Models;
+std::map<eHierarchyLevel, std::vector<Model*>>                    ContentManager::Models;
 std::map<std::string, InputManager*>                              ContentManager::Controllers;
 GLFWwindow*                                                       ContentManager::mainWindow;
 
@@ -26,11 +26,11 @@ Texture* ContentManager::LoadTexture(const char* texturePath, std::string name)
     return Textures[name];
 }
 
-Model* ContentManager::LoadModel(const char* modelPath, std::string objType, int ID)
+Model* ContentManager::LoadModel(const char* modelPath, eHierarchyLevel renderLevel, int ID)
 {
-    int current = Models[objType].size();
-    Models[objType].push_back(new Model(modelPath, ID, current++));
-    return Models[objType].back();
+    int current = Models[renderLevel].size();
+    Models[renderLevel].push_back(new Model(modelPath, ID, current++, renderLevel));
+    return Models[renderLevel].back();
 }
 
 glm::vec3 ContentManager::GetColor(std::string color)

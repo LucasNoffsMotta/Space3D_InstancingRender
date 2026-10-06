@@ -20,9 +20,9 @@ Shader* SceneNode::QueryShader(eRenderMode mode)
 	return nullptr;
 }
 
-SceneNode::SceneNode(int nodeLevel)
+SceneNode::SceneNode(eHierarchyLevel nodeLevel)
 {
-	this->nodeLevel = nodeLevel;
+	this->level = nodeLevel;
 }
 
 void SceneNode::AttatchCamera(Camera* camera)
@@ -53,8 +53,6 @@ void SceneNode::AttatchController(InputManager* controller)
 	}
 }
 
-
-//TODO: This is being responsible for all ther render process. Need to create a node hierarquiy based on the sequence that I wanna render: Render Pass 1-> all nodes, Render Pass 2 -> all nodes, etc
 void SceneNode::Render()
 {
 	//First: Query the necessary shaders
@@ -65,14 +63,23 @@ void SceneNode::Render()
 	//Setup Lights
 	SetUpNodeLights(mainShader);
 
-	//First: Render Regular Objects
-	RenderRegularObjectsNoStencilTest(mainShader);
-	
-	//Second: Render Stencil Test On
-	RenderStencilTestOn(mainShader);
+	if (level == eHierarchyLevel::NO_STENCIL_TEST)
+	{
+		//First: Render Regular Objects
+		RenderRegularObjectsNoStencilTest(mainShader);
+	}
 
-	//Third: Render Outline Mask
-	RenderOutlineMask(stencilMaskShader);
+	else if (level == eHierarchyLevel::STENCIL_TEST)
+	{
+		//Second: Render Stencil Test On
+		RenderStencilTestOn(mainShader);
+	}
+
+	else if (level == eHierarchyLevel::OUTLINE_MASK)
+	{
+		//Third: Render Outline Mask
+		RenderOutlineMask(stencilMaskShader);
+	}
 
 	if (children.size() > 0) {
 		for (int i = 0; i < children.size(); i++)

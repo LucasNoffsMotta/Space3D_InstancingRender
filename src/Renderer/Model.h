@@ -7,19 +7,21 @@
 #include "../Helper/InputManager.h"
 #include "Camera.h"
 
-enum eHierarchyLevel : uint8_t
+enum eHierarchyLevel : int
 {
     NO_STENCIL_TEST,
-    STENCIL_TEST
+    STENCIL_TEST,
+    OUTLINE_MASK
 };
 
 class Model
 {
 public:
-    Model(const char* path, int ID, int Index)
+    Model(const char* path, int ID, int Index, eHierarchyLevel HIERARCHY_LEVEL)
     {
         this->Index = Index;
         this->ID = ID;
+        this->HIERARCHY_LEVEL = HIERARCHY_LEVEL;
         loadModel(path);
     }
 
