@@ -16,11 +16,6 @@ struct HierarchyLevel;
 class SceneNode
 {
 private:
-	//Models, lights, cameras
-	//Shaders
-	//Query singleton from shaders based on render mode
-	//Shaders will be shared on the tree hierarquy -> 
-
 	std::vector<BaseLight*> Lights;
 	std::vector<Model*> Models;
 	std::vector<Camera*> Cameras;
@@ -48,7 +43,8 @@ public:
 	void AttatchModel(Model* model);
 	void AttatchChildNode(SceneNode* child);
 	void AttatchController(InputManager* controller);
-	void Render();
+	void RenderNode();
+	void SetModelMatrixAndCallDraw(Model* model, Shader* shader, glm::vec3 scale);
 	void SetProjectionMatrix(glm::mat4& projection);
 	void UpdateNode();
 };
