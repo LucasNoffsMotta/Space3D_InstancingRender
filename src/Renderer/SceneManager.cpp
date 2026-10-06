@@ -1,6 +1,14 @@
 #include "SceneManager.h"
 #include "../Helper/ContentManager.h"
 
+void SceneManager::SetObjectDefaults(Model* model, glm::vec3 pos, glm::vec3 scale, float rotation, bool outline)
+{
+    model->SetWorldPosition(pos);
+    model->SetScale(scale);
+    model->SetRotationAngle(rotation);
+    model->outline = outline;
+}
+
 void SceneManager::LoadShaderSingletons()
 {
     RootShaderMap[eRenderMode::Regular] = ContentManager::LoadShader(
@@ -28,28 +36,18 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* terrain = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", NO_STENCIL_TEST, objID);
     Model* testModelOne = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", STENCIL_TEST, objID++);
     Model* testModelTwo = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", STENCIL_TEST, objID++);
+    Model* hollow = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/HollowKnight/HollowKnightRig.obj", STENCIL_TEST, objID++);
+    Model* soldier = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj", STENCIL_TEST, objID++);
     ContentManager::Models[OUTLINE_MASK].push_back(testModelOne);
     ContentManager::Models[OUTLINE_MASK].push_back(testModelTwo);
+    ContentManager::Models[OUTLINE_MASK].push_back(hollow);
+    ContentManager::Models[OUTLINE_MASK].push_back(soldier);
 
-
-    glm::vec3 test_pos1 = glm::vec3(0.0f, 2.5f, 0);
-    glm::vec3 test_pos2 = glm::vec3(0, 2.5f, 6);
-
-    terrain->doStencilTest = false;
-    terrain->SetWorldPosition(sceneOrigin);
-    terrain->SetScale(baseScale);
-
-    testModelOne->SetWorldPosition(test_pos1);
-    testModelOne->SetScale(baseScale);
-    testModelOne->SetRotationAngle(270);
-    testModelOne->doStencilTest = true;
-
-    testModelOne->AttatchCamera(BaseCamera, 16);
-
-    testModelTwo->SetWorldPosition(test_pos2);
-    testModelTwo->SetScale(baseScale);
-    testModelTwo->SetRotationAngle(270);
-    testModelTwo->doStencilTest = true;
+    SetObjectDefaults(terrain, sceneOrigin, glm::vec3(1), 0, false);
+    SetObjectDefaults(testModelOne, glm::vec3(0, 4.0, 0), glm::vec3(1), 270, true);
+    SetObjectDefaults(testModelTwo, glm::vec3(0, 4.0, 10), glm::vec3(1), 270, true);
+    SetObjectDefaults(hollow, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, true);
+    SetObjectDefaults(soldier, glm::vec3(0, 1.0, 1), glm::vec3(0.01), 270, true);
 }
 
 void SceneManager::LoadGlobalLigths()

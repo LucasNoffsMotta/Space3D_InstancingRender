@@ -29,6 +29,7 @@ private:
 	Camera* BaseCamera;
 	std::vector<BaseLight*> GlobalLights;
 
+	void SetObjectDefaults(Model* model, glm::vec3 pos, glm::vec3 scale, float rotation, bool outline);
 	void LoadShaderSingletons();
 	void LoadModelsAndSetPositions();
 	void LoadGlobalLigths();

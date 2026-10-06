@@ -98,7 +98,6 @@ void SceneNode::RenderRegularObjectsNoStencilTest(Shader* shader)
 	for (int i = 0; i < Models.size(); i++)
 	{
 		Model* model = Models[i];
-		if (model->doStencilTest) continue;
 
 		glm::mat4 modelMatrix = glm::mat4(1);
 		modelMatrix = glm::translate(modelMatrix, model->GetWorldPosition());
@@ -123,8 +122,6 @@ void SceneNode::RenderStencilTestOn(Shader* shader)
 	for (int i = 0; i < Models.size(); i++)
 	{
 		Model* model = Models[i];
-
-		if (!model->doStencilTest) continue;
 
 		glm::mat4 modelMatrix = glm::mat4(1);
 		modelMatrix = glm::translate(modelMatrix, model->GetWorldPosition());

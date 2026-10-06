@@ -40,7 +40,6 @@ public:
     void SetID(int lastID);
     void CheckRayCollision(glm::vec3& mouseRayCast);
     int Index;
-    bool doStencilTest = false;
     eHierarchyLevel HIERARCHY_LEVEL = eHierarchyLevel::NO_STENCIL_TEST;
 
 
@@ -54,8 +53,6 @@ private:
     glm::vec3 scale;
     glm::vec3 rotation;
     
-
-
     //Spring Arm: Distance from the object, relative position from the object
     Camera* attachedCamera;
     float cameraDistance;
