@@ -22,18 +22,12 @@ private:
 	Shader shader;
 	VAO vao;
 	VAO aimDotVao;
-	void CreatePointLights();
-	void CreateSpotLights();
-	void CreateDirectionalLights();
-	void SetSceneLightUniforms(Shader& shader);
 
 public:
 	int MAX_POINT_LIGHTS = 10;
 	void Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
 	void DrawInstances(int amount, Texture& texture, Texture& diffuseMap, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
 	void DrawQuad2D(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height);
-	void DrawScene(Shader& shader, Shader& stencilShader, Shader& boundBoxShader);
-	void DrawBoundBox(Shader& shader, Model& model);
 	void SetInstancedTranslations(int amount);
 	Renderer();
 

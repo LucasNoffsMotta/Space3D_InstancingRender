@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include "SceneNode.h"
+#include "Entity.h"
 
 
 struct HierarchyLevel
@@ -19,7 +20,7 @@ class SceneManager
 {
 private:
 	std::map<eRenderMode, Shader*> RootShaderMap;
-	std::vector<Model*> Models;
+	std::vector<Entity*> Entities;
 	std::vector<HierarchyLevel> hierarchy;
 	SceneNode* RootNode;
 	glm::vec3 sceneOrigin = glm::vec3(0.f);
@@ -29,7 +30,6 @@ private:
 	Camera* BaseCamera;
 	std::vector<BaseLight*> GlobalLights;
 
-	void SetObjectDefaults(Model* model, glm::vec3 pos, glm::vec3 scale, float rotation, bool outline);
 	void LoadShaderSingletons();
 	void LoadModelsAndSetPositions();
 	void LoadGlobalLigths();

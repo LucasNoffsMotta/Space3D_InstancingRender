@@ -9,9 +9,10 @@ std::map<std::string, Texture*>                                   ContentManager
 std::map<std::string, std::unique_ptr<PointLight>>                ContentManager::PointLights;
 std::map<std::string, std::unique_ptr<SpotLight>>                 ContentManager::SpotLights;
 std::map<std::string, std::unique_ptr<DirectionalLight>>          ContentManager::DirectionalLights;
-std::map<eHierarchyLevel, std::vector<Model*>>                    ContentManager::Models;
+std::map<std::string, Model*>                                     ContentManager::Models;
 std::map<std::string, InputManager*>                              ContentManager::Controllers;
 GLFWwindow*                                                       ContentManager::mainWindow;
+std::map<eHierarchyLevel, std::vector<Entity*>>                   ContentManager::Entities;
 
 
 Shader* ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)
@@ -26,11 +27,10 @@ Texture* ContentManager::LoadTexture(const char* texturePath, std::string name)
     return Textures[name];
 }
 
-Model* ContentManager::LoadModel(const char* modelPath, eHierarchyLevel renderLevel, int ID)
+Model* ContentManager::LoadModel(const char* modelPath, std::string name)
 {
-    int current = Models[renderLevel].size();
-    Models[renderLevel].push_back(new Model(modelPath, ID, current++, renderLevel));
-    return Models[renderLevel].back();
+    Models[name] = new Model(modelPath);
+    return Models[name];
 }
 
 glm::vec3 ContentManager::GetColor(std::string color)
@@ -64,6 +64,17 @@ void ContentManager::InitColors()
     InsertColor("brown", brown);
     InsertColor("white", white);
 }
+
+void ContentManager::CreateEntity(eHierarchyLevel level, Model* model, glm::vec3 pos, glm::vec3 scale, float rotation, bool outline)
+{
+    Entity* e = new Entity(model, level);
+    e->SetWorldPosition(pos);
+    e->SetScale(scale);
+    e->SetRotationAngle(rotation);
+    e->outline = outline;
+    Entities[level].push_back(e);
+}
+
 
 void ContentManager::AddCamera(Camera* cam, std::string name)
 {

@@ -31,6 +31,7 @@
     <ClCompile Include="src\Renderer\BaseLight.cpp" />
     <ClCompile Include="src\Renderer\Camera.cpp" />
     <ClCompile Include="src\Renderer\DirectionalLight.cpp" />
+    <ClCompile Include="src\Renderer\Entity.cpp" />
     <ClCompile Include="src\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Renderer\Model.cpp" />
     <ClCompile Include="src\Renderer\PointLight.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="src\Renderer\BaseLight.h" />
     <ClInclude Include="src\Renderer\Camera.h" />
     <ClInclude Include="src\Renderer\DirectionalLight.h" />
+    <ClInclude Include="src\Renderer\Entity.h" />
     <ClInclude Include="src\Renderer\Material.h" />
     <ClInclude Include="src\Renderer\Mesh.h" />
     <ClInclude Include="src\Renderer\Model.h" />

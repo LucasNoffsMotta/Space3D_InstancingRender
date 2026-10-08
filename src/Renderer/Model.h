@@ -7,58 +7,27 @@
 #include "../Helper/InputManager.h"
 #include "Camera.h"
 
-enum eHierarchyLevel : int
-{
-    NO_STENCIL_TEST,
-    STENCIL_TEST,
-    OUTLINE_MASK
-};
 
 class Model
 {
 public:
-    Model(const char* path, int ID, int Index, eHierarchyLevel HIERARCHY_LEVEL)
+    Model(const char* path)
     {
-        this->Index = Index;
-        this->ID = ID;
-        this->HIERARCHY_LEVEL = HIERARCHY_LEVEL;
         loadModel(path);
     }
 
+    Model();
+
     void Draw(Shader& shader);
-    void SetWorldPosition(glm::vec3& newPos);
-    void SetScale(glm::vec3& newScale);
-    glm::vec3 GetWorldPosition();
-    glm::vec3 GetScale();
-    float rotationAngle = 0;
-    glm::vec3 rotationAxis = glm::vec3(0,1,0);
-    void AttatchCamera(Camera* cam, float distance);
-    void Update(InputManager* controller);
-    void SetRotationAngle(float angle);
-    bool outline = false;
-    int GetID();
-    void SetID(int lastID);
-    void CheckRayCollision(glm::vec3& mouseRayCast);
-    int Index;
-    eHierarchyLevel HIERARCHY_LEVEL = eHierarchyLevel::NO_STENCIL_TEST;
 
 
 private:
     // model data
-    int ID;
+
     std::vector<Mesh> meshes;
     std::string directory;
     std::vector<Texture> textures_loaded;
-    glm::vec3 worldPosition;
-    glm::vec3 scale;
-    glm::vec3 rotation;
-    
-    //Spring Arm: Distance from the object, relative position from the object
-    Camera* attachedCamera;
-    float cameraDistance;
-    glm::vec3 cameraDirection;
-
-   
+ 
     void loadModel(std::string path);
     void processNode(aiNode* node, const aiScene* scene);
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);

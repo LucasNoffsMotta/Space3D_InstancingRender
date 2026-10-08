@@ -1,13 +1,7 @@
 #include "SceneManager.h"
 #include "../Helper/ContentManager.h"
 
-void SceneManager::SetObjectDefaults(Model* model, glm::vec3 pos, glm::vec3 scale, float rotation, bool outline)
-{
-    model->SetWorldPosition(pos);
-    model->SetScale(scale);
-    model->SetRotationAngle(rotation);
-    model->outline = outline;
-}
+
 
 void SceneManager::LoadShaderSingletons()
 {
@@ -33,27 +27,21 @@ void SceneManager::LoadShaderSingletons()
 void SceneManager::LoadModelsAndSetPositions()
 {
     int objID = 0;
-    Model* terrain = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", NO_STENCIL_TEST, objID);
-    Model* carOne = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", STENCIL_TEST, objID++);
-    Model* carTwo = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", STENCIL_TEST, objID++);
-    Model* hollow = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/HollowKnight/HollowKnightRig.obj", STENCIL_TEST, objID++);
-    Model* soldier = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj", STENCIL_TEST, objID++);
-    ContentManager::Models[OUTLINE_MASK].push_back(carOne);
-    ContentManager::Models[OUTLINE_MASK].push_back(carTwo);
-    ContentManager::Models[OUTLINE_MASK].push_back(hollow);
-    ContentManager::Models[OUTLINE_MASK].push_back(soldier);
+    Model* carMesh = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "car");
+    Model* terrainMes = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "terrain");
+    Model* hollowMesh = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/HollowKnight/HollowKnightRig.obj", "hollow");
+    Model* soldierMesh = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj","soldier");
 
-    SetObjectDefaults(terrain, sceneOrigin, glm::vec3(1), 0, false);
-    SetObjectDefaults(carOne, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, true);
-    SetObjectDefaults(carTwo, glm::vec3(0, 2.5, 10), glm::vec3(1), 180, true);
-    SetObjectDefaults(hollow, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, true);
-    SetObjectDefaults(soldier, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true);
-    soldier->AttatchCamera(BaseCamera, 10);
+    ContentManager::CreateEntity(STENCIL_TEST, carMesh, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, true);
+    ContentManager::CreateEntity(STENCIL_TEST, carMesh, glm::vec3(0, 2.5, 5), glm::vec3(1), 270, false);
+    ContentManager::CreateEntity(STENCIL_TEST, hollowMesh, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false);
+    ContentManager::CreateEntity(STENCIL_TEST, soldierMesh, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, terrainMes, sceneOrigin, glm::vec3(1), 0, false);
 }
 
 void SceneManager::LoadGlobalLigths()
 {
-    glm::vec3 pointPos = glm::vec3(0.f, 6.f, 0.f);
+    glm::vec3 pointPos = glm::vec3(0, 5, 3);
     glm::vec3 pointColor = glm::vec3(0.8117, 0.3960f, 0.8784);
     //r = 0,5960
     //g = 0,2392
@@ -121,6 +109,24 @@ void SceneManager::LoadCamera()
     ContentManager::AddCamera(BaseCamera, "main");
 }
 
+void SceneManager::LoadEmptyTreeBasedOnLevels()
+{
+    int level = 0;
+    RootNode = new SceneNode(hierarchy[level].level);
+    AddNode(RootNode, level);
+}
+
+void SceneManager::AddNode(SceneNode* node, int level)
+{
+    level++;
+    if (level < hierarchy.size())
+    {
+        SceneNode* child = new SceneNode(hierarchy[level].level);
+        node->AttatchChildNode(child);
+        AddNode(child, level);
+    }
+}
+
 
 void SceneManager::FillSceneTree(SceneNode* node)
 {
@@ -136,9 +142,9 @@ void SceneManager::FillSceneTree(SceneNode* node)
         node->AttatchLight(GlobalLights[i]);
     }
 
-    for (auto* m : ContentManager::Models[node->level])
+    for (auto* m : ContentManager::Entities[node->level])
     {
-        node->AttatchModel(m);
+        node->AttatchEntity(m);
     }
 
     node->SetShaderMap(RootShaderMap);
@@ -167,6 +173,8 @@ void SceneManager::SetUpSceneProjection(glm::mat4& projection)
 
 void SceneManager::RenderScene()
 {
+
+    //Setup Lights
     RootNode->UpdateNode();
 }
 
@@ -181,25 +189,7 @@ void SceneManager::InitHierarchyStructs()
 {
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::NO_STENCIL_TEST, 0));
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::STENCIL_TEST, 1));
-    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::OUTLINE_MASK, 2));
 }
 
-void SceneManager::LoadEmptyTreeBasedOnLevels()
-{
-    int level = 0;
-    RootNode = new SceneNode(hierarchy[level].level);
-    AddNode(RootNode, level);
-}
-
-void SceneManager::AddNode(SceneNode* node, int level)
-{
-    level++;
-    if (level < hierarchy.size())
-    {
-        SceneNode* child = new SceneNode(hierarchy[level].level);
-        node->AttatchChildNode(child);
-        AddNode(child, level);
-    }
-}
 
 

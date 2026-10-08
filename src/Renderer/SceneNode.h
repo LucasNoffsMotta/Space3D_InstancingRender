@@ -4,6 +4,7 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "DirectionalLight.h"
+#include "Entity.h"
 
 enum eRenderMode:uint8_t {
 	Regular, //Lit, texture, etc
@@ -17,7 +18,7 @@ class SceneNode
 {
 private:
 	std::vector<BaseLight*> Lights;
-	std::vector<Model*> Models;
+	std::vector<Entity*> Entities;
 	std::vector<Camera*> Cameras;
 	std::map<eRenderMode, Shader*> shaderMap;
 	InputManager* Controller;
@@ -40,11 +41,11 @@ public:
 	SceneNode(eHierarchyLevel nodeLevel);
 	void AttatchCamera(Camera* camera);
 	void AttatchLight(BaseLight* light);
-	void AttatchModel(Model* model);
+	void AttatchEntity(Entity* entity);
 	void AttatchChildNode(SceneNode* child);
 	void AttatchController(InputManager* controller);
 	void RenderNode();
-	void SetModelMatrixAndCallDraw(Model* model, Shader* shader, glm::vec3 scale);
+	void SetModelMatrixAndCallDraw(Entity* entity, Shader* shader, glm::vec3 scale);
 	void SetProjectionMatrix(glm::mat4& projection);
 	void UpdateNode();
 };

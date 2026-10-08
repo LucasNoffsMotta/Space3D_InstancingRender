@@ -35,9 +35,9 @@ void SceneNode::AttatchLight(BaseLight* light)
 	Lights.push_back(light);
 }
 
-void SceneNode::AttatchModel(Model* model)
+void SceneNode::AttatchEntity(Entity * entity)
 {
-	Models.push_back(model);
+	Entities.push_back(entity);
 }
 
 void SceneNode::AttatchChildNode(SceneNode* child)
@@ -73,13 +73,14 @@ void SceneNode::RenderNode()
 	{
 		//Second: Render Stencil Test On
 		RenderStencilTestOn(mainShader);
-	}
-
-	else if (level == eHierarchyLevel::OUTLINE_MASK)
-	{
-		//Third: Render Outline Mask
 		RenderOutlineMask(stencilMaskShader);
 	}
+
+	//else if (level == eHierarchyLevel::OUTLINE_MASK)
+	//{
+	//	//Third: Render Outline Mask
+	//	RenderOutlineMask(stencilMaskShader);
+	//}
 
 	if (children.size() > 0) {
 		for (int i = 0; i < children.size(); i++)
@@ -89,19 +90,19 @@ void SceneNode::RenderNode()
 	}
 }
 
-void SceneNode::SetModelMatrixAndCallDraw(Model* model, Shader* shader, glm::vec3 scale)
+void SceneNode::SetModelMatrixAndCallDraw(Entity* entity, Shader* shader, glm::vec3 scale)
 {
 	glm::mat4 modelMatrix = glm::mat4(1);
-	modelMatrix = glm::translate(modelMatrix, model->GetWorldPosition());
+	modelMatrix = glm::translate(modelMatrix, entity->GetWorldPosition());
 
-	if (model->rotationAngle > 0)
+	if (entity->rotationAngle > 0)
 	{
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(model->rotationAngle), model->rotationAxis);
+		modelMatrix = glm::rotate(modelMatrix, glm::radians(entity->rotationAngle), entity->rotationAxis);
 	}
 
-	modelMatrix = glm::scale(modelMatrix, model->GetScale() * scale);
+	modelMatrix = glm::scale(modelMatrix, entity->GetScale() * scale);
 	shader->SetUniformMatrix4fv("model", modelMatrix);
-	model->Draw(*shader);
+	entity->Draw(shader);
 }
 
 
@@ -110,10 +111,10 @@ void SceneNode::RenderRegularObjectsNoStencilTest(Shader* shader)
 	glStencilMask(0x00);
 	shader->Activate();
 
-	for (int i = 0; i < Models.size(); i++)
+	for (int i = 0; i < Entities.size(); i++)
 	{
-		Model* model = Models[i];
-		SetModelMatrixAndCallDraw(model, shader, glm::vec3(1));
+		Entity* entity = Entities[i];
+		SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
 	}
 }
 
@@ -123,10 +124,10 @@ void SceneNode::RenderStencilTestOn(Shader* shader)
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
 	glStencilMask(0xFF);
 
-	for (int i = 0; i < Models.size(); i++)
+	for (int i = 0; i < Entities.size(); i++)
 	{
-		Model* model = Models[i];
-		SetModelMatrixAndCallDraw(model, shader, glm::vec3(1));
+		Entity* entity = Entities[i];
+		SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
 	}
 }
 
@@ -137,11 +138,11 @@ void SceneNode::RenderOutlineMask(Shader* shader)
 	glDisable(GL_DEPTH_TEST);
 
 	shader->Activate();
-	for (int i = 0; i < Models.size(); i++)
+	for (int i = 0; i < Entities.size(); i++)
 	{
-		Model* model = Models[i];
-		if (!model->outline) continue;
-		SetModelMatrixAndCallDraw(model, shader, glm::vec3(1.01));
+		Entity* entity = Entities[i];
+		if (!entity->outline) continue;
+		SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1.01));
 	}
 
 	glStencilMask(0xFF);

@@ -111,6 +111,9 @@
     <ClCompile Include="src\Renderer\SceneNode.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer\Entity.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Helper\ContentManager.h">
@@ -189,6 +192,9 @@
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\SceneNode.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Entity.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
   </ItemGroup>

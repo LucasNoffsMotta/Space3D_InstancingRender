@@ -2,88 +2,16 @@
 #include "../Helper/ContentManager.h"
 
 
+Model::Model()
+{
+}
+
 void Model::Draw(Shader& shader)
 {
 	for (unsigned int i = 0; i < meshes.size(); i++)
 		meshes[i].Draw(shader);
 }
 
-void Model::SetWorldPosition(glm::vec3& newPos)
-{
-    this->worldPosition = newPos;
-}
-
-void Model::SetScale(glm::vec3& newScale)
-{
-    this->scale = newScale;
-}
-
-glm::vec3 Model::GetWorldPosition()
-{
-    return this->worldPosition;
-}
-
-glm::vec3 Model::GetScale()
-{
-    return this->scale;
-}
-
-void Model::Update(InputManager* controller)
-{
-    if (controller->Inputs[eInput::None] || attachedCamera == nullptr)
-    {
-        return;
-    }
-
-    if (controller->Inputs[eInput::Arrow_Up])
-    {
-        worldPosition.z -= 10 * TimeHelper::GetDeltaTime();
-        attachedCamera->CameraPos.z -= 10 * TimeHelper::GetDeltaTime();
-    }
-
-    if (controller->Inputs[eInput::Arrow_Down])
-    {
-        worldPosition.z += 10 * TimeHelper::GetDeltaTime();
-        attachedCamera->CameraPos.z += 10 * TimeHelper::GetDeltaTime();
-    }
-
-    if (controller->Inputs[eInput::Arrow_Left])
-    {
-        worldPosition.x -= 10 * TimeHelper::GetDeltaTime();
-        attachedCamera->CameraPos.x -= 10 * TimeHelper::GetDeltaTime();
-    }
-
-    if (controller->Inputs[eInput::Arrow_Right])
-    {
-        worldPosition.x += 10 * TimeHelper::GetDeltaTime();
-        attachedCamera->CameraPos.x += 10 * TimeHelper::GetDeltaTime();
-    }
-}
-
-void Model::SetRotationAngle(float angle)
-{
-    rotationAngle = angle;
-}
-
-int Model::GetID()
-{
-    return ID;
-}
-
-void Model::SetID(int lastID)
-{
-    ID = lastID++;
-}
-
-void Model::AttatchCamera(Camera* cam, float distance)
-{
-    attachedCamera = cam;
-    cam->CameraPos = GetWorldPosition() + glm::vec3(0, distance, 10);
-    glm::vec3 direction = GetWorldPosition() - cam->CameraPos;
-    cam->CameraFront = glm::normalize(direction);
-    cam->mode = eCameraMode::TopDown;
-    outline = true;
-}
 
 void Model::loadModel(std::string path)
 {
@@ -191,15 +119,6 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     return Mesh(vertices, indices, textures, meshColor, shininess);
 }
 
-void Model::CheckRayCollision(glm::vec3& mouseRayCast)
-{
-    //Need to check if the model bound box position is trasversed by the mouse ray cast
-    //For this I would might need a 
-
-    //Distance (t) = model position - camera position
-    //point t1 = camera position  +  direction * position
-    std::cout << "mouse cast x = " << mouseRayCast.x << " // mouse cast y = " << mouseRayCast.y << " // mouse cast z = " << mouseRayCast.z << std::endl;
-}
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, eTextureType eType)
 {
