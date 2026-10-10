@@ -40,7 +40,7 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* soldierModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj","soldier");
     Model* grassModel = new Model();
     grassModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/grass.png");
-    grassModel->SetUseInstanced(10000);
+    grassModel->SetUseInstanced(1000);
 
     ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false);
     ContentManager::CreateEntity(STENCIL_TEST, carModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, true);

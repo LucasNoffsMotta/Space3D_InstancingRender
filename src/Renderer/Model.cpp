@@ -142,34 +142,9 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
 void Model::Load2DQuadTextureMesh(std::string filePath)
 {
-    std::vector<Vertex> vertices;
+    std::vector<Vertex> vertices = LoadCustomPrimitiveMesh(ePrimitive::Quad);
     std::vector<Texture> textures;
 
-    Vertex vert1;
-    Vertex vert2;
-    Vertex vert3;
-    Vertex vert4;
-    Vertex vert5;
-    Vertex vert6;
-
-
-    vert1.Position = glm::vec3(0.5f, 0.5f, 0.0f);
-    vert1.TexCoords = glm::vec2(1.f, 1.0f);
-
-    vert2.Position = glm::vec3(0.5f, -0.5f, 0.0f);
-    vert2.TexCoords = glm::vec2(1.0f, 0.0f);
-
-    vert3.Position = glm::vec3(-0.5f, -0.5f, 0.0f);
-    vert3.TexCoords = glm::vec2(0.0f, 0.0f);
-
-    vert4.Position = glm::vec3(-0.5f, 0.5f, 0.0f);
-    vert4.TexCoords = glm::vec2(0.0f, 1.0f);
-
-
-    vertices.push_back(vert1);
-    vertices.push_back(vert2);
-    vertices.push_back(vert3);
-    vertices.push_back(vert4);
     textures.push_back(Texture(filePath.c_str(), false, true));
 
     glm::vec3 color = glm::vec3(1);
@@ -227,14 +202,50 @@ void Model::InitInstancesTranslations()
     {
         instancesTranslationPtr[i] = pos;
         float displacement = (float)(rand()) / (float)(RAND_MAX);
-        pos.z += (displacement * 0.5);
+        pos.z += (displacement);
 
-        if (pos.z > 45)
+        if (pos.z > 10)
         {
             pos.z = -20;
-            pos.x += displacement;
+            pos.x += (displacement);
         }
     }
+}
+
+std::vector<Vertex> Model::LoadCustomPrimitiveMesh(ePrimitive primitive)
+{
+    std::vector<Vertex> vertices;
+
+    if (primitive == ePrimitive::Quad)
+    {
+        Vertex vert1;
+        Vertex vert2;
+        Vertex vert3;
+        Vertex vert4;
+        Vertex vert5;
+        Vertex vert6;
+
+
+        vert1.Position = glm::vec3(0.5f, 0.5f, 0.0f);
+        vert1.TexCoords = glm::vec2(1.f, 1.0f);
+
+        vert2.Position = glm::vec3(0.5f, -0.5f, 0.0f);
+        vert2.TexCoords = glm::vec2(1.0f, 0.0f);
+
+        vert3.Position = glm::vec3(-0.5f, -0.5f, 0.0f);
+        vert3.TexCoords = glm::vec2(0.0f, 0.0f);
+
+        vert4.Position = glm::vec3(-0.5f, 0.5f, 0.0f);
+        vert4.TexCoords = glm::vec2(0.0f, 1.0f);
+
+
+        vertices.push_back(vert1);
+        vertices.push_back(vert2);
+        vertices.push_back(vert3);
+        vertices.push_back(vert4);
+    }
+
+    return vertices;
 }
 
 

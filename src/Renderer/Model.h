@@ -7,11 +7,14 @@
 #include "../Helper/InputManager.h"
 #include "Camera.h"
 
+enum ePrimitive :uint8_t
+{
+    Quad,
+    Cube
+};
 
 class Model
 {
-
-
 private:
     // model data
 
@@ -25,6 +28,7 @@ private:
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);
     void SetUpMeshesInstancedVao(int amount);
     void InitInstancesTranslations();
+    std::vector<Vertex> LoadCustomPrimitiveMesh(ePrimitive primitive);
 
 
     std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, eTextureType eType);
