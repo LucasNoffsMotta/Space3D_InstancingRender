@@ -14,20 +14,21 @@ class Texture
 private:
 
 
-	void LoadImageData(const char* filename);
+	void LoadImageData(const char* filename, bool repeat, bool flip);
 
 public:
 	unsigned char* data;
 	GLuint texture;
 	void ActiveTextureUnit(int unit);
+	void FlipTextureOnLoad();
 	void SetTextureType(eTextureType type);
 	float width;
 	float height;
 	std::string path;
 	eTextureType type;
 	void BindTexture();
-	void InitializeTexture(const char* filename, bool repeat = false);
-	Texture(const char* filename, bool repeat = false);
+	void InitializeTexture(const char* filename, bool repeat = false, bool flip = false);
+	Texture(const char* filename, bool repeat = false, bool flip = false);
 	Texture();
 };
 

@@ -63,7 +63,7 @@ int main()
 
     while (!glfwWindowShouldClose(window.window))
     {
-        window.ChangeBackgroundColor(0.f, 0.f, 0.f, 1.0f);
+        window.ChangeBackgroundColor(0.07f, 0.88, 0.98, 1.0f);
         TimeHelper::Update();
         TimeHelper::ShowFps();
 

@@ -4,9 +4,9 @@
 #include <gl/GL.h>
 
 
-Texture::Texture(const char* filename, bool repeat)
+Texture::Texture(const char* filename, bool repeat, bool flip)
 {
-	InitializeTexture(filename, repeat);
+	InitializeTexture(filename, repeat, flip);
 }
 
 Texture::Texture()
@@ -19,6 +19,11 @@ void Texture::ActiveTextureUnit(int unit)
      glActiveTexture(GL_TEXTURE0 + unit);
 }
 
+void Texture::FlipTextureOnLoad()
+{
+	stbi_set_flip_vertically_on_load(true);
+}
+
 void Texture::SetTextureType(eTextureType type)
 {
 	this->type = type;
@@ -29,21 +34,21 @@ void Texture::BindTexture()
 	glBindTexture(GL_TEXTURE_2D, texture);
 }
 
-void Texture::InitializeTexture(const char* filename, bool repeat)
+void Texture::InitializeTexture(const char* filename, bool repeat, bool flip)
 {
-	LoadImageData(filename);
+	LoadImageData(filename, repeat, flip);
 }
 
-void Texture::LoadImageData(const char* filename)
+void Texture::LoadImageData(const char* filename, bool repeat, bool flip)
 {
 	int width, height, nrChannels;
-	//stbi_set_flip_vertically_on_load(true);
 
 	std::ifstream test(filename);
 	if (!test.is_open()) {
 		std::cout << "Arquivo não encontrado: " << filename << std::endl;
 	}
 
+	if (flip) FlipTextureOnLoad();
 
 	glGenTextures(1, &texture);
 	data = stbi_load(filename, &width, &height, &nrChannels, 0);
@@ -63,8 +68,19 @@ void Texture::LoadImageData(const char* filename)
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		if (repeat)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		}
+
+		else
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		}
+
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 

@@ -26,6 +26,7 @@ private:
     void SetUpMeshesInstancedVao(int amount);
     void InitInstancesTranslations();
 
+
     std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, eTextureType eType);
 
 
@@ -36,6 +37,7 @@ public:
     }
 
     Model();
+    void Load2DQuadTextureMesh(std::string filePath);
     bool useInstanced;
     void Draw(Shader& shader);
     void DrawInstanced(Shader& shader, int amount);

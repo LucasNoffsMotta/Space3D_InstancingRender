@@ -34,17 +34,19 @@ void SceneManager::LoadShaderSingletons()
 void SceneManager::LoadModelsAndSetPositions()
 {
     int objID = 0;
-    Model* carMesh = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "car");
-    carMesh->SetUseInstanced(1000);
+    Model* carModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "car");
+    Model* terrainModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "terrain");
+    Model* hollowModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/HollowKnight/HollowKnightRig.obj", "hollow");
+    Model* soldierModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj","soldier");
+    Model* grassModel = new Model();
+    grassModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/grass.png");
+    grassModel->SetUseInstanced(10000);
 
-    Model* terrainMes = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "terrain");
-    Model* hollowMesh = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/HollowKnight/HollowKnightRig.obj", "hollow");
-    Model* soldierMesh = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj","soldier");
-
-    ContentManager::CreateEntity(STENCIL_TEST, carMesh, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, true);
-    ContentManager::CreateEntity(STENCIL_TEST, hollowMesh, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false);
-    ContentManager::CreateEntity(STENCIL_TEST, soldierMesh, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true);
-    ContentManager::CreateEntity(NO_STENCIL_TEST, terrainMes, sceneOrigin, glm::vec3(1), 0, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false);
+    ContentManager::CreateEntity(STENCIL_TEST, carModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, true);
+    ContentManager::CreateEntity(STENCIL_TEST, hollowModel, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false);
+    ContentManager::CreateEntity(STENCIL_TEST, soldierModel, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(1), 0, false);
 }
 
 void SceneManager::LoadGlobalLigths()
@@ -55,6 +57,7 @@ void SceneManager::LoadGlobalLigths()
     //g = 0,2392
     //b = 0,6039
 
+    //POINT
     for (int i = 0; i < ContentManager::MAX_POINT_LIGHTS; i++)
     {
         ContentManager::AddPointLight(i);
@@ -64,6 +67,8 @@ void SceneManager::LoadGlobalLigths()
         GlobalLights.push_back(ContentManager::PointLights[std::to_string(i)].get());
     }
 
+
+    //DIR
     glm::vec3 directionalDir = glm::vec3(-0.2f, -1.0f, -0.3f);
     glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f);
     glm::vec3 diff = glm::vec3(0.4f, 0.4f, 0.4f);
@@ -79,7 +84,9 @@ void SceneManager::LoadGlobalLigths()
         GlobalLights.push_back(ContentManager::DirectionalLights[std::to_string(i)].get());
     }
 
-    glm::vec3 spotPos = glm::vec3(10, -1000, 0);
+
+    //SPOT
+    glm::vec3 spotPos = glm::vec3(10, -1000, 0); //Not visible!
     glm::vec3 direction = glm::vec3(0, -1, 0);
     glm::vec3 color = glm::vec3(0.3, 0, 0.3);
 
@@ -195,8 +202,6 @@ void SceneManager::SetUpSceneProjection(glm::mat4& projection)
 
 void SceneManager::RenderScene()
 {
-
-    //Setup Lights
     RootNode->UpdateNode();
 }
 

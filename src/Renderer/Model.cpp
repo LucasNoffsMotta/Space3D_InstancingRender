@@ -25,23 +25,6 @@ void Model::DrawInstanced(Shader& shader, int amount)
         meshes[i].DrawInstanced(shader, amount);
 }
 
-void Model::CreateInstancedModelMatrices(int amount)
-{
-    modelMatrices = new glm::mat4[amount];
-
-    for (int i = 0; i < amount; i++)
-    {
-        glm::vec3 trans = *instancesTranslationPtr;
-        glm::mat4 model = glm::mat4(1.f);
-        model = glm::translate(model, trans);
-        model = glm::scale(model, glm::vec3(1));
-        modelMatrices[i] = model;
-        //float scale = static_cast<float>((rand() % 20) / 100.0 + 0.05);
-        //model = glm::scale(model, glm::vec3(scale));
-        instancesTranslationPtr++;
-    }
-}
-
 
 
 void Model::SetUseInstanced(int amount)
@@ -153,7 +136,52 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
 
-    return Mesh(vertices, indices, textures, meshColor, shininess);
+    return Mesh
+    (vertices, indices, textures, meshColor, shininess);
+}
+
+void Model::Load2DQuadTextureMesh(std::string filePath)
+{
+    std::vector<Vertex> vertices;
+    std::vector<Texture> textures;
+
+    Vertex vert1;
+    Vertex vert2;
+    Vertex vert3;
+    Vertex vert4;
+    Vertex vert5;
+    Vertex vert6;
+
+
+    vert1.Position = glm::vec3(0.5f, 0.5f, 0.0f);
+    vert1.TexCoords = glm::vec2(1.f, 1.0f);
+
+    vert2.Position = glm::vec3(0.5f, -0.5f, 0.0f);
+    vert2.TexCoords = glm::vec2(1.0f, 0.0f);
+
+    vert3.Position = glm::vec3(-0.5f, -0.5f, 0.0f);
+    vert3.TexCoords = glm::vec2(0.0f, 0.0f);
+
+    vert4.Position = glm::vec3(-0.5f, 0.5f, 0.0f);
+    vert4.TexCoords = glm::vec2(0.0f, 1.0f);
+
+
+    vertices.push_back(vert1);
+    vertices.push_back(vert2);
+    vertices.push_back(vert3);
+    vertices.push_back(vert4);
+    textures.push_back(Texture(filePath.c_str(), false, true));
+
+    glm::vec3 color = glm::vec3(1);
+    float shininess = 10.f;
+
+    std::vector<unsigned int> indices =  {  
+    0, 1, 3,   
+    1, 2, 3   
+    };
+
+    Mesh mesh = Mesh(vertices, indices, textures, color, shininess);
+    meshes.push_back(mesh);
 }
 
 void Model::SetUpMeshesInstancedVao(int amount)
@@ -189,19 +217,42 @@ void Model::SetUpMeshesInstancedVao(int amount)
 
 void Model::InitInstancesTranslations()
 {
+    srand(static_cast<unsigned int>(glfwGetTime())); // initialize random seed
+
     instancesTranslationPtr = new glm::vec3[instancesAmmount];
-    glm::vec3 pos = glm::vec3(0, 2.5, 0);
+
+    glm::vec3 pos = glm::vec3(-20, 1.8, -20);
+    int index = 0;
     for (int i = 0; i < instancesAmmount; i++)
     {
         instancesTranslationPtr[i] = pos;
-        pos.x += 3;
+        float displacement = (float)(rand()) / (float)(RAND_MAX);
+        pos.z += (displacement * 0.5);
 
-        if (pos.x > 100)
+        if (pos.z > 45)
         {
-            pos.x = 2.5;
-            pos.z = 2.5;
+            pos.z = -20;
+            pos.x += displacement;
         }
+    }
+}
 
+
+void Model::CreateInstancedModelMatrices(int amount)
+{
+    modelMatrices = new glm::mat4[amount];
+
+
+    for (int i = 0; i < amount; i++)
+    {
+        glm::vec3 trans = *instancesTranslationPtr;
+        glm::mat4 model = glm::mat4(1.f);
+        model = glm::translate(model, trans);
+        model = glm::scale(model, glm::vec3(1));
+        modelMatrices[i] = model;
+        //float scale = static_cast<float>((rand() % 20) / 100.0 + 0.05);
+        //model = glm::scale(model, glm::vec3(scale));
+        instancesTranslationPtr++;
     }
 }
 
