@@ -6,10 +6,10 @@
 struct Material
 {
 	std::vector<Texture> textures;
-	glm::vec3 color;
+	glm::vec4 color;
 	float shininess = 20.f;
 
-	Material(std::vector<Texture> _textures, glm::vec3 _color, float _shininess)
+	Material(std::vector<Texture> _textures, glm::vec4 _color, float _shininess)
 	{
 		textures = _textures;
 		color = _color;

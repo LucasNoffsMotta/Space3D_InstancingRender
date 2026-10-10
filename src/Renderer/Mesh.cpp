@@ -35,7 +35,7 @@ int Mesh::GetVAO()
 	return VAO;
 }
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures, glm::vec3& color, float shininess)
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures, glm::vec4& color, float shininess)
 {
 	this->vertices = vertices;
 	this->indices = indices;

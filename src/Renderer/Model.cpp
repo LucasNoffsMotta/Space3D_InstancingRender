@@ -71,7 +71,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
-    glm::vec3 meshColor = glm::vec3(0);
+    glm::vec4 meshColor = glm::vec4(0);
     float shininess;
 
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -112,7 +112,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     // process material
     if (mesh->mMaterialIndex >= 0)
     {
-        aiColor3D color(0.f, 0.f, 0.f);
+        aiColor4D color(0.f, 0.f, 0.f, 1.f);
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
         if (AI_SUCCESS != aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &shininess))
@@ -125,6 +125,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
             meshColor.x = color.r;
             meshColor.y = color.g;
             meshColor.z = color.b;
+            meshColor.a = color.a;
         }
         
         std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, eTextureType::Diffuse);
@@ -147,7 +148,7 @@ void Model::Load2DQuadTextureMesh(std::string filePath)
 
     textures.push_back(Texture(filePath.c_str(), false, true));
 
-    glm::vec3 color = glm::vec3(1);
+    glm::vec4 color = glm::vec4(0);
     float shininess = 10.f;
 
     std::vector<unsigned int> indices =  {  

@@ -102,6 +102,7 @@ vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir)
 	}
 
 	else {
+		
 		ambient = light.ambient *  material.color.xyz; 
 		diffuse = light.diffuse * diff *  material.color.xyz;
 		specular = light.specular * spec * material.color.xyz;
