@@ -124,6 +124,14 @@ void Shader::SetUniform3fv(const char* uniformName, glm::vec3 vec)
 	glUniform3fv(uniformLocation, 1, glm::value_ptr(vec));
 }
 
+
+void Shader::SetUniform4fv(const char* uniformName, glm::vec4 vec)
+{
+	int uniformLocation = glGetUniformLocation(Id, uniformName);
+	glUniform4fv(uniformLocation, 1, glm::value_ptr(vec));
+}
+
+
 void Shader::SetUniformFloat(const char* uniformName, GLfloat f)
 {
 	int uniformLocation = glGetUniformLocation(Id, uniformName);

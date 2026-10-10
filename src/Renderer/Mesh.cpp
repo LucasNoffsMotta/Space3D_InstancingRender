@@ -78,7 +78,7 @@ void Mesh::Draw(Shader& shader)
 		shader.SetUniformInt(("material." + name + number).c_str(), i);
 	}
 
-	shader.SetUniform3fv("material.color", material.color);
+	shader.SetUniform4fv("material.color", material.color);
 	shader.SetUniformFloat("material.shininess", material.shininess);
 
 	glBindVertexArray(VAO);
@@ -123,7 +123,7 @@ void Mesh::DrawInstanced(Shader& shader, int amount)
 		shader.SetUniformInt(("material." + name + number).c_str(), i);
 	}
 
-	shader.SetUniform3fv("material.color", material.color);
+	shader.SetUniform4fv("material.color", material.color);
 	shader.SetUniformFloat("material.shininess", material.shininess);
 
 	glBindVertexArray(VAO);

@@ -103,9 +103,9 @@ vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir)
 
 	else {
 		
-		ambient = light.ambient *  material.color.xyz; 
-		diffuse = light.diffuse * diff *  material.color.xyz;
-		specular = light.specular * spec * material.color.xyz;
+		ambient = light.ambient *  material.color.rgb; 
+		diffuse = light.diffuse * diff *  material.color.rgb;
+		specular = light.specular * spec * material.color.rgb;
 	}
 
 	return ambient + diffuse + specular;
@@ -141,9 +141,9 @@ vec3 GetPointLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
 	}
 
 	else {
-		ambient = light.ambient * material.color.xyz; 
-		diffuse = light.diffuse * diff *  material.color.xyz;
-		specular = light.specular * spec * material.color.xyz;
+		ambient = light.ambient * material.color.rgb; 
+		diffuse = light.diffuse * diff *  material.color.rgb;
+		specular = light.specular * spec * material.color.rgb;
 	}
 
 	ambient *= atenuation;
@@ -189,9 +189,9 @@ vec3 GetSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	}
 	 
 	 else {
-		ambient = light.ambient *  material.color.xyz; 
-		diffuse = light.diffuse * diff *  material.color.xyz;
-		specular = light.specular * spec * material.color.xyz;
+		ambient = light.ambient *  material.color.rgb; 
+		diffuse = light.diffuse * diff *  material.color.rgb;
+		specular = light.specular * spec * material.color.rgb;
 	}
 
 	ambient *= atenuation * intensity;
@@ -222,10 +222,11 @@ void main()
 	//float depth = LinearizeDepth(gl_FragCoord.z) / far; // divide by far for demonstration
 	//FragColor = vec4(texCoord, 0.0, 1.0);
     //FragColor = vec4(vec3(depth), 1.0);
-	//FragColor = vec4(material.color, 1);
+	//FragColor = material.color;
 
 	//Full lightning render
 	FragColor = vec4(result, 1);
+
 
 
 	//FragColor = vec4(1, 0, 0, 1.0);

@@ -26,6 +26,7 @@ public:
 	void SetUniformFloat(const char* uniformName, GLfloat f);
 	void SetUniform3f(const char* uniformName, GLfloat x, GLfloat y, GLfloat z);
 	void SetUniform3fv(const char* uniformName, glm::vec3 vec);
+	void SetUniform4fv(const char* uniformName, glm::vec4 vec);
 	void SetUniformMatrix4fv(const char* uniformName, glm::mat4 mat);
 };
 
