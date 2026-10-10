@@ -8,10 +8,48 @@ Model::Model()
 
 void Model::Draw(Shader& shader)
 {
+    if (useInstanced)
+    {
+        DrawInstanced(shader, instancesAmmount);
+        return;
+    }
+
 	for (unsigned int i = 0; i < meshes.size(); i++)
 		meshes[i].Draw(shader);
 }
 
+
+void Model::DrawInstanced(Shader& shader, int amount)
+{
+    for (unsigned int i = 0; i < meshes.size(); i++)
+        meshes[i].DrawInstanced(shader, amount);
+}
+
+void Model::CreateInstancedModelMatrices(int amount)
+{
+    modelMatrices = new glm::mat4[amount];
+
+    for (int i = 0; i < amount; i++)
+    {
+        glm::vec3 trans = *instancesTranslationPtr;
+        glm::mat4 model = glm::mat4(1.f);
+        model = glm::translate(model, trans);
+        model = glm::scale(model, glm::vec3(1));
+        modelMatrices[i] = model;
+        //float scale = static_cast<float>((rand() % 20) / 100.0 + 0.05);
+        //model = glm::scale(model, glm::vec3(scale));
+        instancesTranslationPtr++;
+    }
+}
+
+
+
+void Model::SetUseInstanced(int amount)
+{
+    useInstanced = true;
+    instancesAmmount = amount;
+    SetUpMeshesInstancedVao(instancesAmmount);
+}
 
 void Model::loadModel(std::string path)
 {
@@ -47,7 +85,6 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 {
-
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
@@ -117,6 +154,55 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     }
 
     return Mesh(vertices, indices, textures, meshColor, shininess);
+}
+
+void Model::SetUpMeshesInstancedVao(int amount)
+{
+    InitInstancesTranslations();
+    CreateInstancedModelMatrices(amount);
+
+    unsigned int buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
+
+    for (int i = 0; i < meshes.size(); i++)
+    {
+        unsigned int vao = meshes[i].GetVAO();
+        glBindVertexArray(vao);
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+        glEnableVertexAttribArray(5);
+        glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+        glEnableVertexAttribArray(6);
+        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
+        glVertexAttribDivisor(3, 1);
+        glVertexAttribDivisor(4, 1);
+        glVertexAttribDivisor(5, 1);
+        glVertexAttribDivisor(6, 1);
+        glBindVertexArray(0);
+    }
+}
+
+void Model::InitInstancesTranslations()
+{
+    instancesTranslationPtr = new glm::vec3[instancesAmmount];
+    glm::vec3 pos = glm::vec3(0, 2.5, 0);
+    for (int i = 0; i < instancesAmmount; i++)
+    {
+        instancesTranslationPtr[i] = pos;
+        pos.x += 3;
+
+        if (pos.x > 100)
+        {
+            pos.x = 2.5;
+            pos.z = 2.5;
+        }
+
+    }
 }
 
 

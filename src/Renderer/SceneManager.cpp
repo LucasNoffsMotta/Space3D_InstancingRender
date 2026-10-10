@@ -3,10 +3,17 @@
 
 
 
+
 void SceneManager::LoadShaderSingletons()
 {
     RootShaderMap[eRenderMode::Regular] = ContentManager::LoadShader(
         "src/Shader/model.vert",
+        "src/Shader/frag.frag",
+        "assimpShader"
+    );
+
+    RootShaderMap[eRenderMode::RegularInstanced] = ContentManager::LoadShader(
+        "src/Shader/instancedLayoutVertex.vert",
         "src/Shader/frag.frag",
         "assimpShader"
     );
@@ -28,12 +35,13 @@ void SceneManager::LoadModelsAndSetPositions()
 {
     int objID = 0;
     Model* carMesh = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "car");
+    carMesh->SetUseInstanced(1000);
+
     Model* terrainMes = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "terrain");
     Model* hollowMesh = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/HollowKnight/HollowKnightRig.obj", "hollow");
     Model* soldierMesh = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj","soldier");
 
     ContentManager::CreateEntity(STENCIL_TEST, carMesh, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, true);
-    ContentManager::CreateEntity(STENCIL_TEST, carMesh, glm::vec3(0, 2.5, 5), glm::vec3(1), 270, false);
     ContentManager::CreateEntity(STENCIL_TEST, hollowMesh, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false);
     ContentManager::CreateEntity(STENCIL_TEST, soldierMesh, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true);
     ContentManager::CreateEntity(NO_STENCIL_TEST, terrainMes, sceneOrigin, glm::vec3(1), 0, false);
@@ -96,6 +104,7 @@ void SceneManager::InitScene()
     LoadCamera();
     LoadModelsAndSetPositions();
     LoadViewAndProjectionMatrices();
+    SetUpSceneProjection(Projection);
     FillSceneTree(RootNode);
 }
 
@@ -127,7 +136,6 @@ void SceneManager::AddNode(SceneNode* node, int level)
     }
 }
 
-
 void SceneManager::FillSceneTree(SceneNode* node)
 {
     ContentManager::AddController("main");
@@ -148,7 +156,6 @@ void SceneManager::FillSceneTree(SceneNode* node)
     }
 
     node->SetShaderMap(RootShaderMap);
-    node->SetProjectionMatrix(Projection);
 
     if (node->children.size() > 0)
     {
@@ -159,16 +166,31 @@ void SceneManager::FillSceneTree(SceneNode* node)
     }
 }
 
+void SceneManager::SetGlobalLightUniforms(Shader& shader)
+{
+    for (int i = 0; i < GlobalLights.size(); i++)
+    {
+        GlobalLights[i]->SetUniformsTest(shader);
+    }
+}
+
+
 void SceneManager::SetUpSceneProjection(glm::mat4& projection)
 {
     RootShaderMap[eRenderMode::Regular]->Activate();
     RootShaderMap[eRenderMode::Regular]->SetUniformMatrix4fv("projection", projection);
+    SetGlobalLightUniforms(*RootShaderMap[eRenderMode::Regular]);
 
     RootShaderMap[eRenderMode::StencilMask]->Activate();
     RootShaderMap[eRenderMode::StencilMask]->SetUniformMatrix4fv("projection", projection);
+    SetGlobalLightUniforms(*RootShaderMap[eRenderMode::StencilMask]);
 
     RootShaderMap[eRenderMode::WiredOn]->Activate();
     RootShaderMap[eRenderMode::WiredOn]->SetUniformMatrix4fv("projection", projection);
+
+    RootShaderMap[eRenderMode::RegularInstanced]->Activate();
+    RootShaderMap[eRenderMode::RegularInstanced]->SetUniformMatrix4fv("projection", projection);
+    SetGlobalLightUniforms(*RootShaderMap[eRenderMode::RegularInstanced]);
 }
 
 void SceneManager::RenderScene()
@@ -187,8 +209,8 @@ void SceneManager::LoadViewAndProjectionMatrices()
 
 void SceneManager::InitHierarchyStructs()
 {
-    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::NO_STENCIL_TEST, 0));
-    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::STENCIL_TEST, 1));
+    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::NO_STENCIL_TEST));
+    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::STENCIL_TEST));
 }
 
 

@@ -8,6 +8,7 @@
 
 enum eRenderMode:uint8_t {
 	Regular, //Lit, texture, etc
+	RegularInstanced,
 	StencilMask, //Mask shader
 	WiredOn //Wire only shader
 };

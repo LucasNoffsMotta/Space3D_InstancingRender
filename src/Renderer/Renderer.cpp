@@ -141,9 +141,9 @@ void Renderer::InitQuad3DRenderData()
 Renderer::Renderer()
 {
     InitViewAndProjectionMatrices();
-    CreatePointLights();
-    CreateSpotLights();
-    CreateDirectionalLights();
+    //CreatePointLights();
+    //CreateSpotLights();
+    //CreateDirectionalLights();
 }
 
 void Renderer::SetModelMatrices(glm::vec3* translations, int ammount)
@@ -279,23 +279,24 @@ void Renderer::DrawQuad2D(glm::vec3 scale, glm::vec3 color, Shader& shader, floa
 void Renderer::SetInstancedTranslations(int amount)
 {
     instancesTranslationPtr = new glm::vec3[amount];
+    SetCircularInstancesPositions(1500.f, 250.f, amount);
+}
 
+void Renderer::SetCircularInstancesPositions(float radius, float offSet, int amount)
+{
 
     srand(static_cast<unsigned int>(glfwGetTime())); // initialize random seed
-    float radius = 1500.0;
-    float offset = 250.0f;
-
 
     for (int i = 0; i < amount; i++)
     {
         float angle = (float)i / (float)amount * 360.0f;
-        float displacement = (rand() % (int)(2 * offset * 100000)) / 10.0f - offset;
+        float displacement = (rand() % (int)(2 * offSet * 100000)) / 10.0f - offSet;
         float x = sin(angle) * radius + displacement;
-        displacement = (rand() % (int)(2 * offset * 100000)) / 10.0f - offset;
+        displacement = (rand() % (int)(2 * offSet * 100000)) / 10.0f - offSet;
         float y = displacement * 0.4f; // keep height of asteroid field smaller compared to width of x and z
-        displacement = (rand() % (int)(2 * offset * 100000)) / 10.0f - offset;
+        displacement = (rand() % (int)(2 * offSet * 100000)) / 10.0f - offSet;
         float z = cos(angle) * radius + displacement;
-        glm::vec3 translation = glm::vec3(x,y,z);
+        glm::vec3 translation = glm::vec3(x, y, z);
         instancesTranslationPtr[i] = translation;
         std::cout << i << std::endl;
     }

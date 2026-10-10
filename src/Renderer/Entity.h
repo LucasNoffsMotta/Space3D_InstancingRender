@@ -41,6 +41,7 @@ public:
 	void Update(InputManager* controller);
 	void SetRotationAngle(float angle);
 	void SetModel(Model* model);
+	Model* GetModel();
 
 	void SetWorldPosition(glm::vec3& newPos);
 	void SetScale(glm::vec3& newScale);

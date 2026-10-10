@@ -56,31 +56,24 @@ void SceneNode::AttatchController(InputManager* controller)
 void SceneNode::RenderNode()
 {
 	//First: Query the necessary shaders
-	Shader* mainShader = shaderMap[eRenderMode::Regular];
-	Shader* stencilMaskShader = shaderMap[eRenderMode::StencilMask];
-	Shader* wireShader = shaderMap[eRenderMode::WiredOn];
 
 	//Setup Lights
-	SetUpNodeLights(mainShader);
+	//SetUpNodeLights(mainShader); // only need this if light position is changing per frame
 
 	if (level == eHierarchyLevel::NO_STENCIL_TEST)
 	{
-		//First: Render Regular Objects
+		Shader* mainShader = shaderMap[eRenderMode::Regular];
 		RenderRegularObjectsNoStencilTest(mainShader);
 	}
 
 	else if (level == eHierarchyLevel::STENCIL_TEST)
 	{
-		//Second: Render Stencil Test On
+		Shader* mainShader = shaderMap[eRenderMode::Regular];
+		Shader* stencilMaskShader = shaderMap[eRenderMode::StencilMask];
 		RenderStencilTestOn(mainShader);
 		RenderOutlineMask(stencilMaskShader);
 	}
 
-	//else if (level == eHierarchyLevel::OUTLINE_MASK)
-	//{
-	//	//Third: Render Outline Mask
-	//	RenderOutlineMask(stencilMaskShader);
-	//}
 
 	if (children.size() > 0) {
 		for (int i = 0; i < children.size(); i++)
@@ -109,12 +102,24 @@ void SceneNode::SetModelMatrixAndCallDraw(Entity* entity, Shader* shader, glm::v
 void SceneNode::RenderRegularObjectsNoStencilTest(Shader* shader)
 {
 	glStencilMask(0x00);
-	shader->Activate();
 
 	for (int i = 0; i < Entities.size(); i++)
 	{
 		Entity* entity = Entities[i];
-		SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
+
+		if (entity->GetModel()->useInstanced)
+		{
+			Shader* shaderInstanced = shaderMap[eRenderMode::RegularInstanced];
+			shaderInstanced->Activate();
+			SetModelMatrixAndCallDraw(entity, shaderInstanced, glm::vec3(1));
+		}
+
+		else
+		{
+			shader->Activate();
+			SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
+		}
+
 	}
 }
 
@@ -127,7 +132,19 @@ void SceneNode::RenderStencilTestOn(Shader* shader)
 	for (int i = 0; i < Entities.size(); i++)
 	{
 		Entity* entity = Entities[i];
-		SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
+
+		if (entity->GetModel()->useInstanced)
+		{
+			Shader* shaderInstanced = shaderMap[eRenderMode::RegularInstanced];
+			shaderInstanced->Activate();
+			SetModelMatrixAndCallDraw(entity, shaderInstanced, glm::vec3(1));
+		}
+
+		else
+		{
+			shader->Activate();
+			SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
+		}
 	}
 }
 
@@ -141,7 +158,7 @@ void SceneNode::RenderOutlineMask(Shader* shader)
 	for (int i = 0; i < Entities.size(); i++)
 	{
 		Entity* entity = Entities[i];
-		if (!entity->outline) continue;
+		if (!entity->outline || entity->GetModel()->useInstanced) continue;
 		SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1.01));
 	}
 
@@ -161,6 +178,7 @@ void SceneNode::SetViewMatrix()
 	Shader* mainShader = shaderMap[eRenderMode::Regular];
 	Shader* stencilMaskShader = shaderMap[eRenderMode::StencilMask];
 	Shader* wireShader = shaderMap[eRenderMode::WiredOn];
+	Shader* instanced = shaderMap[eRenderMode::RegularInstanced];
 
 	mainShader->Activate();
 	mainShader->SetUniformMatrix4fv("view", view);
@@ -170,6 +188,9 @@ void SceneNode::SetViewMatrix()
 
 	wireShader->Activate();
 	wireShader->SetUniformMatrix4fv("view", view);
+
+	instanced->Activate();
+	instanced->SetUniformMatrix4fv("view", view);
 }
 
 void SceneNode::SetProjectionMatrix(glm::mat4& projection)

@@ -72,6 +72,9 @@ float LinearizeDepth(float depth)
 	 return (2.0 * near * far) / (far + near - z * (far - near));
 }
 
+
+
+
 vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir)
 {
 	vec3 ambient;

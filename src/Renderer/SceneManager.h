@@ -7,12 +7,10 @@
 struct HierarchyLevel
 {
 	eHierarchyLevel level;
-	int index;
 
-	HierarchyLevel(eHierarchyLevel _level, int _index)
+	HierarchyLevel(eHierarchyLevel _level)
 	{
 		level = _level;
-		index = _index;
 	}
 };
 
@@ -30,6 +28,7 @@ private:
 	Camera* BaseCamera;
 	std::vector<BaseLight*> GlobalLights;
 
+	void SetGlobalLightUniforms(Shader& shader);
 	void LoadShaderSingletons();
 	void LoadModelsAndSetPositions();
 	void LoadGlobalLigths();

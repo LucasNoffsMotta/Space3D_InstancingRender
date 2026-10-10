@@ -63,6 +63,11 @@ void Entity::SetModel(Model* model)
     this->model = model;
 }
 
+Model* Entity::GetModel()
+{
+    return this->model;
+}
+
 int Entity::GetID()
 {
     return ID;

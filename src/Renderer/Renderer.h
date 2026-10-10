@@ -29,6 +29,7 @@ public:
 	void DrawInstances(int amount, Texture& texture, Texture& diffuseMap, glm::vec3 scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 color, Shader& shader);
 	void DrawQuad2D(glm::vec3 scale, glm::vec3 color, Shader& shader, float screen_width, float screen_height);
 	void SetInstancedTranslations(int amount);
+	void SetCircularInstancesPositions(float radius, float offSet, int amount);
 	Renderer();
 
 	void SetModelMatrices(glm::vec3* translations, int ammount);

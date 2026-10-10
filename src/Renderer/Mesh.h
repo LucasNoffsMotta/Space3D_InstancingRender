@@ -26,10 +26,10 @@ private:
     unsigned int VAO, VBO, EBO;
     Material material;
 public:
+    int GetVAO();
     std::vector<Vertex>       vertices;
     std::vector<unsigned int> indices;
     Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures, glm::vec3& color, float shininess);
     void Draw(Shader& shader);
-
-
+    void DrawInstanced(Shader& shader, int amount);
 };
