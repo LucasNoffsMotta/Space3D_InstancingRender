@@ -45,7 +45,7 @@ public:
 	static void InsertColor(std::string name, glm::vec3 rgb);
 	static Shader* GetShader(std::string shader);
 	static void InitColors();
-	static void CreateEntity(eHierarchyLevel level, Model* model, glm::vec3 pos, glm::vec3 scale, float rotation, bool outline);
+	static void CreateEntity(eHierarchyLevel level, Model* model, glm::vec3 pos, glm::vec3 scale, float rotation, bool outline, bool isTranslucid);
 	static void AddCamera(Camera* cam, std::string name);
 	static void AddPointLight(int index);
 	static void AddSpotLight(int index);

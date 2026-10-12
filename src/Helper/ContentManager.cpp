@@ -65,13 +65,14 @@ void ContentManager::InitColors()
     InsertColor("white", white);
 }
 
-void ContentManager::CreateEntity(eHierarchyLevel level, Model* model, glm::vec3 pos, glm::vec3 scale, float rotation, bool outline)
+void ContentManager::CreateEntity(eHierarchyLevel level, Model* model, glm::vec3 pos, glm::vec3 scale, float rotation, bool outline, bool isTranslucid)
 {
     Entity* e = new Entity(model, level);
     e->SetWorldPosition(pos);
     e->SetScale(scale);
     e->SetRotationAngle(rotation);
     e->outline = outline;
+    e->SetIsTranslucid(isTranslucid);
     Entities[level].push_back(e);
 }
 

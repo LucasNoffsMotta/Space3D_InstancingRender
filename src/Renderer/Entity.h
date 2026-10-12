@@ -4,6 +4,7 @@
 
 enum eHierarchyLevel : int
 {
+	TRANSLUCID,
 	NO_STENCIL_TEST,
 	STENCIL_TEST,
 	OUTLINE_MASK
@@ -26,12 +27,14 @@ private:
 	float cameraDistance;
 	glm::vec3 cameraDirection;
 
-
+	bool isTranslucid;
 
 
 
 
 public:
+	void SetIsTranslucid(bool isTranslucid);
+	bool GetIsTranslucid();
 	float rotationAngle = 0;
 	glm::vec3 rotationAxis = glm::vec3(0, 1, 0);
 	bool outline = false;
@@ -42,6 +45,7 @@ public:
 	void SetRotationAngle(float angle);
 	void SetModel(Model* model);
 	Model* GetModel();
+
 
 	void SetWorldPosition(glm::vec3& newPos);
 	void SetScale(glm::vec3& newScale);

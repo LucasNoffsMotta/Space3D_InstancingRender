@@ -83,6 +83,16 @@ void Entity::Draw(Shader* shader)
     this->model->Draw(*shader);
 }
 
+void Entity::SetIsTranslucid(bool isTranslucid)
+{
+    this->isTranslucid = isTranslucid;
+}
+
+bool Entity::GetIsTranslucid()
+{
+    return this->isTranslucid;
+}
+
 Entity::Entity(Model* model, eHierarchyLevel level)
 {
     this->model = model;

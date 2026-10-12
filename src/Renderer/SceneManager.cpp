@@ -37,22 +37,28 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* carModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "car");
     Model* terrainModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "terrain");
     Model* hollowModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/HollowKnight/HollowKnightRig.obj", "hollow");
-    Model* soldierModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj","soldier");
+    //Model* soldierModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj","soldier");
     Model* grassModel = new Model();
+    Model* transparentWindow = new Model();
 
-    Model* treesAndBrushes = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/FoliageTwo/Trees_Bushes.obj", "trees");
-    //Model* pinkCube = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "cube");
-
+    //Model* treesAndBrushes = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/FoliageTwo/Trees_Bushes.obj", "trees");
+    
+    Model* pinkCube = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "cube");
+    transparentWindow->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/blending_transparent_window.png");
     grassModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/grass.png");
     grassModel->SetUseInstanced(1000);
 
-    ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false);
-    ContentManager::CreateEntity(STENCIL_TEST, carModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, true);
-    ContentManager::CreateEntity(STENCIL_TEST, hollowModel, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false);
-    ContentManager::CreateEntity(STENCIL_TEST, soldierModel, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true);
-    ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(1), 0, false);
-    ContentManager::CreateEntity(NO_STENCIL_TEST, treesAndBrushes, sceneOrigin, glm::vec3(1), 0, false);
-    //ContentManager::CreateEntity(NO_STENCIL_TEST, pinkCube, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, false, false);
+    ContentManager::CreateEntity(STENCIL_TEST, hollowModel, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, true, false);
+    //ContentManager::CreateEntity(STENCIL_TEST, soldierModel, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(1), 0, false, false);
+    //ContentManager::CreateEntity(NO_STENCIL_TEST, treesAndBrushes, sceneOrigin, glm::vec3(1), 0, false);
+    ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
+    ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
+    ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
+
+    ContentManager::CreateEntity(TRANSLUCID, pinkCube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
 }
 
 void SceneManager::LoadGlobalLigths()
@@ -141,6 +147,7 @@ void SceneManager::LoadEmptyTreeBasedOnLevels()
 void SceneManager::AddNode(SceneNode* node, int level)
 {
     level++;
+
     if (level < hierarchy.size())
     {
         SceneNode* child = new SceneNode(hierarchy[level].level);
@@ -221,7 +228,9 @@ void SceneManager::LoadViewAndProjectionMatrices()
 void SceneManager::InitHierarchyStructs()
 {
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::NO_STENCIL_TEST));
+    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::TRANSLUCID));
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::STENCIL_TEST));
+
 }
 
 

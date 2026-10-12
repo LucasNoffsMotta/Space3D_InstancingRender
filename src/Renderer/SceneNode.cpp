@@ -60,7 +60,14 @@ void SceneNode::RenderNode()
 	//Setup Lights
 	//SetUpNodeLights(mainShader); // only need this if light position is changing per frame
 
-	if (level == eHierarchyLevel::NO_STENCIL_TEST)
+	if (level == eHierarchyLevel::TRANSLUCID)
+	{
+		Shader* mainShader = shaderMap[eRenderMode::Regular];
+		RenderTranslucidObjectsNoStenciltest(mainShader);
+
+	}
+
+	else if (level == eHierarchyLevel::NO_STENCIL_TEST)
 	{
 		Shader* mainShader = shaderMap[eRenderMode::Regular];
 		RenderRegularObjectsNoStencilTest(mainShader);
@@ -120,6 +127,31 @@ void SceneNode::RenderRegularObjectsNoStencilTest(Shader* shader)
 			SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
 		}
 
+	}
+}
+
+void SceneNode::RenderTranslucidObjectsNoStenciltest(Shader* shader)
+{
+	glStencilMask(0x00);
+
+	std::map<float, Entity*> orderedEntities = GetOrderedTranslucidEntities();
+
+	for (auto iter = orderedEntities.rbegin(); iter != orderedEntities.rend(); iter++)
+	{
+		Entity* entity = iter->second;
+
+		if (entity->GetModel()->useInstanced)
+		{
+			Shader* shaderInstanced = shaderMap[eRenderMode::RegularInstanced];
+			shaderInstanced->Activate();
+			SetModelMatrixAndCallDraw(entity, shaderInstanced, glm::vec3(1));
+		}
+
+		else
+		{
+			shader->Activate();
+			SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
+		}
 	}
 }
 
@@ -207,6 +239,29 @@ void SceneNode::SetProjectionMatrix(glm::mat4& projection)
 
 	wireShader->Activate();
 	wireShader->SetUniformMatrix4fv("projection", projection);
+}
+
+std::map<float, Entity*> SceneNode::GetOrderedTranslucidEntities()
+{
+	std::vector<Entity*> translucidGroup;
+	Camera* cam = Cameras.back();
+	std::map<float, Entity*> orderedMap;
+
+	for (auto entity : Entities)
+	{
+		if (entity->GetIsTranslucid())
+		{
+			translucidGroup.push_back(entity);
+		}
+	}
+
+	for (int i = 0; i < translucidGroup.size(); i++)
+	{
+		float distance = glm::length(cam->CameraPos - translucidGroup[i]->GetWorldPosition());
+		orderedMap[distance] = translucidGroup[i];
+	}
+
+	return orderedMap;
 }
 
 void SceneNode::UpdateController()

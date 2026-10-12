@@ -73,9 +73,7 @@ float LinearizeDepth(float depth)
 }
 
 
-
-
-vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir)
+vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir, vec4 diffuseColor, vec3 specularColor)
 {
 	vec3 ambient;
 	vec3 diffuse;
@@ -88,14 +86,7 @@ vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir)
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
 	if (hasTexture == 1) {
-		vec4 diffuseColor = vec4(texture(material.texture_diffuse1, texCoord));
 
-		if (diffuseColor.a < 0.1)
-		{
-			discard;
-		}
-
-		vec3 specularColor = vec3(texture(material.texture_specular1, texCoord));
 		ambient = light.ambient * diffuseColor.xyz; 
 		diffuse = light.diffuse * diff *  diffuseColor.xyz;
 		specular = light.specular * spec * specularColor;
@@ -111,7 +102,7 @@ vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir)
 	return ambient + diffuse + specular;
 }
 
-vec3 GetPointLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
+vec3 GetPointLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir, vec4 diffuseColor, vec3 specularColor)
 {
 	vec3 ambient;
 	vec3 diffuse;
@@ -127,14 +118,7 @@ vec3 GetPointLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
 	float atenuation = 1.0 / (light.constant + light.linear * dist +  light.quadratic * (dist * dist)); 
 
 	if (hasTexture == 1) {
-		vec4 diffuseColor = vec4(texture(material.texture_diffuse1, texCoord));
-
-		if (diffuseColor.a < 0.1)
-		{
-			discard;
-		}
 		
-		vec3 specularColor = vec3(texture(material.texture_specular1, texCoord));
 		ambient = light.ambient * diffuseColor.xyz;
 		diffuse = light.diffuse * diff * diffuseColor.xyz;
 		specular = light.specular * spec * specularColor;
@@ -154,7 +138,7 @@ vec3 GetPointLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir)
 }
 
 
-vec3 GetSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+vec3 GetSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir,  vec4 diffuseColor, vec3 specularColor)
 {
 	vec3 ambient;
 	vec3 diffuse;
@@ -174,15 +158,6 @@ vec3 GetSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	float intensity = clamp((theta - light.outerCutoff) / epsilon, 0.0, 1.0);
 
 	if (hasTexture == 1) {
-
-		vec4 diffuseColor = vec4(texture(material.texture_diffuse1, texCoord));
-
-		if (diffuseColor.a < 0.1)
-		{
-			discard;
-		}
-		
-		vec3 specularColor = vec3(texture(material.texture_specular1, texCoord));
 		ambient = light.ambient * diffuseColor.xyz;
 		diffuse = light.diffuse * diff * diffuseColor.xyz;
 		specular = light.specular * spec * specularColor;
@@ -208,15 +183,28 @@ void main()
 	vec3 normal = normalize(Normal);
 	vec3 viewDir = normalize(viewPos - FragPos);
     vec3 result = vec3(0);
+	vec4 diffuseColor = vec4(texture(material.texture_diffuse1, texCoord));
+	vec3 specularColor = vec3(texture(material.texture_specular1, texCoord));
 
 
 	for (int i = 0; i < MAX_POINTLIGHTS; i++)
 	{
-		result += GetDirLight(dirLight[i], normal, viewDir);
-		result += GetPointLight(pointLight[i], normal, FragPos, viewDir);
-		result += GetSpotLight(spotLight[i], normal, FragPos, viewDir);
+		result += GetDirLight(dirLight[i], normal, viewDir, diffuseColor, specularColor);
+		result += GetPointLight(pointLight[i], normal, FragPos, viewDir, diffuseColor, specularColor);
+		result += GetSpotLight(spotLight[i], normal, FragPos, viewDir, diffuseColor, specularColor);
 	}
 
+	float finalAlpha;
+
+	if (hasTexture == 1)
+	{
+		finalAlpha = diffuseColor.a;
+	}
+
+	else
+	{
+		finalAlpha = material.color.a;
+	}
 
 	//For depth test:
 	//float depth = LinearizeDepth(gl_FragCoord.z) / far; // divide by far for demonstration
@@ -225,7 +213,15 @@ void main()
 	//FragColor = material.color;
 
 	//Full lightning render
-	FragColor = vec4(result, 1);
+
+	
+	if (diffuseColor.a < 0.1)
+	{
+		discard;
+	}
+
+
+	FragColor = vec4(result, finalAlpha);
 
 
 

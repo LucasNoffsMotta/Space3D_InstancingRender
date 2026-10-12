@@ -114,6 +114,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     {
         aiColor4D color(0.f, 0.f, 0.f, 1.f);
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+        float opacity;
 
         if (AI_SUCCESS != aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &shininess))
         {
@@ -125,7 +126,11 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
             meshColor.x = color.r;
             meshColor.y = color.g;
             meshColor.z = color.b;
-            meshColor.a = color.a;
+        }
+
+        if (AI_SUCCESS == material->Get(AI_MATKEY_OPACITY, opacity))
+        {
+            meshColor.a = opacity;
         }
         
         std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, eTextureType::Diffuse);

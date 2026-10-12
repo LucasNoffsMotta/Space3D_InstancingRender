@@ -24,11 +24,13 @@ private:
 	std::map<eRenderMode, Shader*> shaderMap;
 	InputManager* Controller;
 	int nodeLevel;
+	std::map<float, Entity*> GetOrderedTranslucidEntities();
 
 
 	void UpdateController();
 	void RenderOutlineMask(Shader* shader);
 	void RenderRegularObjectsNoStencilTest(Shader* shader);
+	void RenderTranslucidObjectsNoStenciltest(Shader* shader);
 	void RenderWired(Shader* shader);
 	void RenderStencilTestOn(Shader* shader);
 	void SetViewMatrix();
@@ -39,6 +41,7 @@ public:
 	std::vector<SceneNode*> children;
 	void SetShaderMap(std::map<eRenderMode, Shader*> parentMap);
 	Shader* QueryShader(eRenderMode mode);
+
 	SceneNode(eHierarchyLevel nodeLevel);
 	void AttatchCamera(Camera* camera);
 	void AttatchLight(BaseLight* light);
