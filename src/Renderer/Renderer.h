@@ -22,6 +22,8 @@ private:
 	Shader shader;
 	VAO vao;
 	VAO aimDotVao;
+	unsigned int rbo;
+	unsigned int fbo;
 
 public:
 	int MAX_POINT_LIGHTS = 10;
@@ -31,6 +33,8 @@ public:
 	void SetInstancedTranslations(int amount);
 	void SetCircularInstancesPositions(float radius, float offSet, int amount);
 	Renderer();
+	void InitFrameBuffer();
+	void InitRenderBuffer();
 
 	void SetModelMatrices(glm::vec3* translations, int ammount);
 	void SetInstancesBuffers(int amount);

@@ -14,6 +14,11 @@ Texture::Texture()
 	//
 }
 
+void Texture::AttatchToFramebuffer()
+{
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+}
+
 void Texture::ActiveTextureUnit(int unit)
 {
      glActiveTexture(GL_TEXTURE0 + unit);
@@ -36,10 +41,33 @@ void Texture::BindTexture()
 
 void Texture::InitializeTexture(const char* filename, bool repeat, bool flip)
 {
-	LoadImageData(filename, repeat, flip);
+	LoadImageDataFromFile(filename, repeat, flip);
 }
 
-void Texture::LoadImageData(const char* filename, bool repeat, bool flip)
+void Texture::GenerateTexture(GLenum format, int width, int height, bool repeat, unsigned char* data)
+{
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	if (repeat)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	}
+
+	else
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void Texture::LoadImageDataFromFile(const char* filename, bool repeat, bool flip)
 {
 	int width, height, nrChannels;
 
@@ -50,7 +78,6 @@ void Texture::LoadImageData(const char* filename, bool repeat, bool flip)
 
 	if (flip) FlipTextureOnLoad();
 
-	glGenTextures(1, &texture);
 	data = stbi_load(filename, &width, &height, &nrChannels, 0);
 
 	if (data)
@@ -64,30 +91,10 @@ void Texture::LoadImageData(const char* filename, bool repeat, bool flip)
 		else if (nrChannels == 4)
 			format = GL_RGBA;
 
-
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		if (repeat)
-		{
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		}
-
-		else
-		{
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		}
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+		GenerateTexture(format, width, height, repeat, data);
 
 		this->width = width;
 		this->height = height;
-
 	}
 	else
 	{

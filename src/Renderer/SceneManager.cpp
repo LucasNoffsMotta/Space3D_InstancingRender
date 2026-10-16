@@ -57,7 +57,6 @@ void SceneManager::LoadModelsAndSetPositions()
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
-
     ContentManager::CreateEntity(TRANSLUCID, pinkCube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
 }
 

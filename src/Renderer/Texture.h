@@ -14,7 +14,7 @@ class Texture
 private:
 
 
-	void LoadImageData(const char* filename, bool repeat, bool flip);
+	void LoadImageDataFromFile(const char* filename, bool repeat, bool flip);
 
 public:
 	unsigned char* data;
@@ -28,8 +28,10 @@ public:
 	eTextureType type;
 	void BindTexture();
 	void InitializeTexture(const char* filename, bool repeat = false, bool flip = false);
+	void GenerateTexture(GLenum format, int width, int height, bool repeat, unsigned char* data = nullptr);
 	Texture(const char* filename, bool repeat = false, bool flip = false);
 	Texture();
+	void AttatchToFramebuffer();
 };
 
 

@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Renderer.h"
 #include "../OpenGL/VAO.h"
 #include "../Helper/ContentManager.h"
 
@@ -136,6 +137,16 @@ void Renderer::InitQuad3DRenderData()
     VBO vbo = VBO(square, sizeof(square));
     vao.Bind();
     vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(float) * 3, (void*)0);
+}
+
+void Renderer::BindFrameBuffer()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+}
+
+void Renderer::UnbindFramebuffer()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 Renderer::Renderer()
@@ -300,4 +311,23 @@ void Renderer::SetCircularInstancesPositions(float radius, float offSet, int amo
         instancesTranslationPtr[i] = translation;
         std::cout << i << std::endl;
     }
+}
+
+void Renderer::InitFrameBuffer()
+{
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+}
+
+void Renderer::InitRenderBuffer()
+{
+    glGenRenderbuffers(1, &rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, ContentManager::SCR_WIDTH, ContentManager::SCR_HEIGHT);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 }

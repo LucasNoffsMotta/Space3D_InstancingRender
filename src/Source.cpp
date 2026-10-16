@@ -64,6 +64,14 @@ int main()
     float camSpeed = 10.f;
 
     SceneManager scene = SceneManager();
+    Renderer renderer = Renderer();
+
+    renderer.InitFrameBuffer();
+    Texture frameBufferTexture = Texture();
+    frameBufferTexture.GenerateTexture(GL_RGB, ContentManager::SCR_WIDTH, ContentManager::SCR_HEIGHT, false, nullptr);
+    frameBufferTexture.AttatchToFramebuffer();
+    renderer.InitRenderBuffer();
+
     scene.InitScene();
 
     while (!glfwWindowShouldClose(window.window))
@@ -72,10 +80,16 @@ int main()
         TimeHelper::Update();
         TimeHelper::ShowFps();
 
+
         float currentFrame = glfwGetTime();
         dt = currentFrame - lastFrame;
         lastFrame = currentFrame;
+
+
+
         scene.RenderScene();
+
+
        window.Update();
     }
 
