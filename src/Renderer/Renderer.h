@@ -24,6 +24,8 @@ private:
 	VAO aimDotVao;
 	unsigned int rbo;
 	unsigned int fbo;
+	unsigned int frameBufferVao;
+	Texture frameBufferTexture;
 
 public:
 	int MAX_POINT_LIGHTS = 10;
@@ -34,12 +36,19 @@ public:
 	void SetCircularInstancesPositions(float radius, float offSet, int amount);
 	Renderer();
 	void InitFrameBuffer();
-	void InitRenderBuffer();
+	void InitRenderBuffer(int frameBufferSizeX, int frameBufferSizeY);
 
 	void SetModelMatrices(glm::vec3* translations, int ammount);
 	void SetInstancesBuffers(int amount);
 	void InitQuad2DRenderData();
 	void InitQuad3DRenderData();
+
+	//Framebuffer
+	void BindFrameBuffer();
+	void UnbindFramebuffer();
+	void InitScreenQuadVAO();
+	void InitFramebufferTexture();
+	void RenderFramebuffer(Shader& shader);
 
 	glm::mat4 projection;
 	glm::mat4 view;

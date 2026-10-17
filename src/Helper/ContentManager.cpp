@@ -13,6 +13,8 @@ std::map<std::string, Model*>                                     ContentManager
 std::map<std::string, InputManager*>                              ContentManager::Controllers;
 GLFWwindow*                                                       ContentManager::mainWindow;
 std::map<eHierarchyLevel, std::vector<Entity*>>                   ContentManager::Entities;
+int ContentManager::FRAMEBUFFER_SCREEN_SIZE_X = 0;
+int ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y = 0;
 
 
 Shader* ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)

@@ -13,8 +13,6 @@
 #include "Renderer/SceneManager.h"
 
 
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1200;
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -28,7 +26,7 @@ int main()
 {
 	glfwInit();
 
-	Window window = Window(SCR_WIDTH, SCR_HEIGHT, "OpenGL");
+	Window window = Window(ContentManager::SCR_WIDTH, ContentManager::SCR_HEIGHT, "Void Engine");
     ContentManager::SetMainWindow(window.window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -43,8 +41,12 @@ int main()
         return -1;
     }
 
+    glfwGetFramebufferSize(window.window, &ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, &ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
     glfwSetFramebufferSizeCallback(window.window, framebuffer_size_callback);
-    window.SetViewPort(window.SCREEN_WIDTH, window.SCREEN_HEIGHT);
+
+
+
+    window.SetViewPort(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
 
 
     glEnable(GL_DEPTH_TEST);
@@ -63,34 +65,29 @@ int main()
     float lastFrame = 0.f;
     float camSpeed = 10.f;
 
+
     SceneManager scene = SceneManager();
-    Renderer renderer = Renderer();
-
-    renderer.InitFrameBuffer();
-    Texture frameBufferTexture = Texture();
-    frameBufferTexture.GenerateTexture(GL_RGB, ContentManager::SCR_WIDTH, ContentManager::SCR_HEIGHT, false, nullptr);
-    frameBufferTexture.AttatchToFramebuffer();
-    renderer.InitRenderBuffer();
-
     scene.InitScene();
+
+    //renderer.InitScreenQuadVAO();
 
     while (!glfwWindowShouldClose(window.window))
     {
-        window.ChangeBackgroundColor(0.07f, 0.88, 0.98, 1.0f);
+        //Per frame logic
         TimeHelper::Update();
         TimeHelper::ShowFps();
-
 
         float currentFrame = glfwGetTime();
         dt = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+      
+        scene.RenderScene(window);
 
+        //Important:
+        //For the framebuffer work properly, it is necessary to set get the screen size in pixels and pass it on the gl calls (texture, generate framebuffer, viewport and projection matrix), otherwise the logic size will be different of the actual framebuffer size
 
-        scene.RenderScene();
-
-
-       window.Update();
+        window.Update();
     }
 
     glfwTerminate();     

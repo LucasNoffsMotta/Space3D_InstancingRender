@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include "SceneNode.h"
+#include "Renderer.h"
 #include "Entity.h"
 
 
@@ -27,7 +28,9 @@ private:
 	glm::mat4 View;
 	Camera* BaseCamera;
 	std::vector<BaseLight*> GlobalLights;
+	Renderer renderer;
 
+	void InitFramebuffer();
 	void SetGlobalLightUniforms(Shader& shader);
 	void LoadShaderSingletons();
 	void LoadModelsAndSetPositions();
@@ -41,7 +44,8 @@ private:
 	void AddNode(SceneNode* node, int level);
 
 
+
 public:
 	void InitScene();	
-	void RenderScene();
+	void RenderScene(Window& window);
 };

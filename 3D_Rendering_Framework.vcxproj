@@ -79,6 +79,8 @@
     <None Include="src\Shader\BoundBox.frag" />
     <None Include="src\Shader\BoundBox.vert" />
     <None Include="src\Shader\frag.frag" />
+    <None Include="src\Shader\FrameBufferFragment.frag" />
+    <None Include="src\Shader\FrameBufferVertex.vert" />
     <None Include="src\Shader\instancedLayoutVertex.vert" />
     <None Include="src\Shader\instancedUniformVertex.vert" />
     <None Include="src\Shader\model.vert" />

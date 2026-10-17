@@ -65,7 +65,7 @@ void Renderer::InitViewAndProjectionMatrices()
 {
     view = glm::mat4(1.0f);
     projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)1920 / 1200, 0.1f, 6000.f);
+    projection = glm::perspective(glm::radians(45.0f), (float)ContentManager::SCR_WIDTH / ContentManager::SCR_HEIGHT , 0.1f, 6000.f);
 }
 
 void Renderer::InitQuad2DRenderData()
@@ -147,6 +147,50 @@ void Renderer::BindFrameBuffer()
 void Renderer::UnbindFramebuffer()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+
+void Renderer::InitScreenQuadVAO()
+{
+    float quadVertices[] = { 
+        // positions   // texCoords
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f
+    };
+
+    // screen quad VAO
+    unsigned int quadVBO;
+    glGenVertexArrays(1, &frameBufferVao);
+    glGenBuffers(1, &quadVBO);
+    glBindVertexArray(frameBufferVao);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+}
+
+void Renderer::InitFramebufferTexture()
+{
+    frameBufferTexture = Texture();
+    frameBufferTexture.GenerateTexture(GL_RGB, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y, false, nullptr);
+    frameBufferTexture.AttatchToFramebuffer();
+}
+
+void Renderer::RenderFramebuffer(Shader& shader)
+{
+    frameBufferTexture.BindTexture();
+    shader.Activate();
+    shader.SetUniformInt("postProcessEffect", -1);
+    shader.SetUniformInt("colorScaleEffectNumber", -1);
+    glBindVertexArray(frameBufferVao);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 Renderer::Renderer()
@@ -319,12 +363,12 @@ void Renderer::InitFrameBuffer()
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 }
 
-void Renderer::InitRenderBuffer()
+void Renderer::InitRenderBuffer(int frameBufferSizeX, int frameBufferSizeY)
 {
     glGenRenderbuffers(1, &rbo);
     glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, ContentManager::SCR_WIDTH, ContentManager::SCR_HEIGHT);
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, frameBufferSizeX, frameBufferSizeY);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;

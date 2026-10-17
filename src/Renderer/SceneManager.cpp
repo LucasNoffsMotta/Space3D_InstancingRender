@@ -29,6 +29,11 @@ void SceneManager::LoadShaderSingletons()
         "src/Shader/BoundBox.frag",
         "boundBoxShader"
     );
+
+    ContentManager::LoadShader(
+        "src/Shader/FrameBufferVertex.vert",
+        "src/Shader/FrameBufferFragment.frag",
+        "frameBufferShader");
 }
 
 void SceneManager::LoadModelsAndSetPositions()
@@ -50,7 +55,7 @@ void SceneManager::LoadModelsAndSetPositions()
 
     ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, false, false);
-    ContentManager::CreateEntity(STENCIL_TEST, hollowModel, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, true, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, hollowModel, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false, false);
     //ContentManager::CreateEntity(STENCIL_TEST, soldierModel, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(1), 0, false, false);
     //ContentManager::CreateEntity(NO_STENCIL_TEST, treesAndBrushes, sceneOrigin, glm::vec3(1), 0, false);
@@ -122,6 +127,7 @@ void SceneManager::InitScene()
     LoadCamera();
     LoadModelsAndSetPositions();
     LoadViewAndProjectionMatrices();
+    InitFramebuffer();
     SetUpSceneProjection(Projection);
     FillSceneTree(RootNode);
 }
@@ -185,6 +191,15 @@ void SceneManager::FillSceneTree(SceneNode* node)
     }
 }
 
+void SceneManager::InitFramebuffer()
+{
+    renderer = Renderer(); //Lives troughtr the scope of this class! No need to create newptr
+    renderer.InitFrameBuffer();
+    renderer.InitFramebufferTexture();
+    renderer.InitRenderBuffer(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
+    renderer.InitScreenQuadVAO();
+}
+
 void SceneManager::SetGlobalLightUniforms(Shader& shader)
 {
     for (int i = 0; i < GlobalLights.size(); i++)
@@ -212,16 +227,32 @@ void SceneManager::SetUpSceneProjection(glm::mat4& projection)
     SetGlobalLightUniforms(*RootShaderMap[eRenderMode::RegularInstanced]);
 }
 
-void SceneManager::RenderScene()
+void SceneManager::RenderScene(Window& window)
 {
+    //First pass
+    renderer.BindFrameBuffer();
+    glEnable(GL_DEPTH_TEST);
+    window.ChangeBackgroundColor(0.07f, 0.88, 0.98, 1.0f); //glClear Color, Stencil and Depth buffer
+    
+    //Draw Scene nodes recursively:
     RootNode->UpdateNode();
+
+    //Second pass 
+    renderer.UnbindFramebuffer();
+
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
+
+    //Draw FrameBuffer texture
+    renderer.RenderFramebuffer(*ContentManager::Shaders["frameBufferShader"]);
 }
 
 void SceneManager::LoadViewAndProjectionMatrices()
 {
     View = glm::mat4(1.0f);
     Projection = glm::mat4(1.0f);
-    Projection = glm::perspective(glm::radians(45.0f), (float)1920 / 1200, 0.1f, 6000.f);
+    Projection = glm::perspective(glm::radians(45.0f), (float)ContentManager::FRAMEBUFFER_SCREEN_SIZE_X / ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y, 0.1f, 6000.f);
 }
 
 void SceneManager::InitHierarchyStructs()
@@ -229,7 +260,6 @@ void SceneManager::InitHierarchyStructs()
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::NO_STENCIL_TEST));
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::TRANSLUCID));
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::STENCIL_TEST));
-
 }
 
 

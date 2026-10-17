@@ -229,10 +229,16 @@
     <None Include="src\Shader\outline.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="src\Shader\BoundBox.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
     <None Include="src\Shader\BoundBox.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="src\Shader\BoundBox.vert">
+    <None Include="src\Shader\FrameBufferFragment.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="src\Shader\FrameBufferVertex.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>

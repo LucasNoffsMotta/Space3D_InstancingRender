@@ -33,8 +33,12 @@ public:
 
 	static std::map<std::string, InputManager*> Controllers;
 	static GLFWwindow* mainWindow;
-	static const int SCR_WIDTH = 1920;
-	static const int SCR_HEIGHT = 1920;
+	static const int SCR_WIDTH = 1800;
+	static const int SCR_HEIGHT = 1800;
+
+	static int FRAMEBUFFER_SCREEN_SIZE_X;
+	static int FRAMEBUFFER_SCREEN_SIZE_Y;
+
 	static const int MAX_POINT_LIGHTS = 10;
 
 	static Shader* LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName);
