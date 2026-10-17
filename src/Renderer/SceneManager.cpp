@@ -197,7 +197,7 @@ void SceneManager::InitFramebuffer()
     renderer.InitFrameBuffer();
     renderer.InitFramebufferTexture();
     renderer.InitRenderBuffer(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
-    renderer.InitScreenQuadVAO();
+    renderer.InitFrameBufferScreenQuad();
 }
 
 void SceneManager::SetGlobalLightUniforms(Shader& shader)
@@ -233,17 +233,20 @@ void SceneManager::RenderScene(Window& window)
     renderer.BindFrameBuffer();
     glEnable(GL_DEPTH_TEST);
     window.ChangeBackgroundColor(0.07f, 0.88, 0.98, 1.0f); //glClear Color, Stencil and Depth buffer
-    
+
     //Draw Scene nodes recursively:
     RootNode->UpdateNode();
 
     //Second pass 
     renderer.UnbindFramebuffer();
+    window.ChangeBackgroundColor(0.07f, 0.88, 0.98, 1.0f); //glClear Color, Stencil and Depth buffer
 
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glDisable(GL_DEPTH_TEST);
+    //Draw Scene nodes recursively:
+    //RootNode->UpdateNode();
 
+
+     glDisable(GL_DEPTH_TEST);
+    // glClear(GL_COLOR_BUFFER_BIT);
     //Draw FrameBuffer texture
     renderer.RenderFramebuffer(*ContentManager::Shaders["frameBufferShader"]);
 }

@@ -150,18 +150,44 @@ void Renderer::UnbindFramebuffer()
 }
 
 
-void Renderer::InitScreenQuadVAO()
+void Renderer::InitFrameBufferScreenQuad()
 {
-    float quadVertices[] = { 
+
+    float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
         // positions   // texCoords
         -1.0f,  1.0f,  0.0f, 1.0f,
         -1.0f, -1.0f,  0.0f, 0.0f,
          1.0f, -1.0f,  1.0f, 0.0f,
 
         -1.0f,  1.0f,  0.0f, 1.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
+        1.0f, -1.0f,  1.0f, 0.0f,
          1.0f,  1.0f,  1.0f, 1.0f
     };
+
+    //Debug:
+    //Depois, o teste mais conclusivo é ler um pixel da textura do FBO com glReadPixels enquanto esse FBO está vinculado, antes de executar UnbindFramebuffer().Assim podemos determinar se a textura já contém pixels pretos antes de desenhar o quad.
+    //float quadVertices[] = {
+    ////    // positions       // texCoords
+    //    -0.5f,  0.5f,      0.0f, 1.0f,
+    //    -0.5f, -0.5f,      0.0f, 0.0f,
+    //     0.5f, -0.5f,      1.0f, 0.0f,
+
+    //    -0.5f,  0.5f,      0.0f, 1.0f,
+    //     0.5f, -0.5f,      1.0f, 0.0f,
+    //     0.5f,  0.5f,      1.0f, 1.0f
+    //};
+    //
+    //     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates. NOTE that this plane is now much smaller and at the top of the screen
+    //    // positions   // texCoords
+    //    -1.0f,  0.5f,  0.0f, 1.0f,
+    //    -1.0f,  0.0f,  0.0f, 0.0f,
+    //     1.0f,  0.0f,  1.0f, 0.0f,
+
+    //    -1.0f,  0.0f,  0.0f, 1.0f,
+    //     1.0f,  0.0f,  1.0f, 0.0f,
+    //     1.0f,  0.0f,  1.0f, 1.0f
+    //};
+
 
     // screen quad VAO
     unsigned int quadVBO;
@@ -187,7 +213,7 @@ void Renderer::RenderFramebuffer(Shader& shader)
 {
     frameBufferTexture.BindTexture();
     shader.Activate();
-    shader.SetUniformInt("postProcessEffect", -1);
+    shader.SetUniformInt("postProcessEffect", 1);
     shader.SetUniformInt("colorScaleEffectNumber", -1);
     glBindVertexArray(frameBufferVao);
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -253,7 +279,6 @@ void Renderer::Draw(glm::vec3 translation, Texture& texture, glm::vec3 scale, gl
     {
         ContentManager::DirectionalLights[std::to_string(i)]->SetUniforms(shader);
     }
-
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {

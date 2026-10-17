@@ -44,8 +44,6 @@ int main()
     glfwGetFramebufferSize(window.window, &ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, &ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
     glfwSetFramebufferSizeCallback(window.window, framebuffer_size_callback);
 
-
-
     window.SetViewPort(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
 
 

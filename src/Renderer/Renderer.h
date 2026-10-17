@@ -46,7 +46,7 @@ public:
 	//Framebuffer
 	void BindFrameBuffer();
 	void UnbindFramebuffer();
-	void InitScreenQuadVAO();
+	void InitFrameBufferScreenQuad();
 	void InitFramebufferTexture();
 	void RenderFramebuffer(Shader& shader);
 

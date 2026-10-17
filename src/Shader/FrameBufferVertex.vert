@@ -6,6 +6,6 @@ out vec2 TextCoord;
 
 void main()
 {
-    gl_Position = vec4(aPos.x, aPos.y, 0, 1);
+    gl_Position =  vec4(aPos.x, aPos.y, 0, 1);
     TextCoord = aTex;
 }  
