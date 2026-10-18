@@ -272,8 +272,9 @@ void SceneNode::UpdateController()
 
 void SceneNode::UpdateNode()
 {
+
+	RenderNode();
 	UpdateController();
 	SetViewMatrix();
-	RenderNode();
 }
 

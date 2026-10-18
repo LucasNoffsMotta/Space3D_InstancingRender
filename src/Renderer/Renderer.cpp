@@ -213,7 +213,7 @@ void Renderer::RenderFramebuffer(Shader& shader)
 {
     frameBufferTexture.BindTexture();
     shader.Activate();
-    shader.SetUniformInt("postProcessEffect", -1);
+    shader.SetUniformInt("postProcessEffect", 1);
     shader.SetUniformInt("colorScaleEffectNumber", -1);
     glBindVertexArray(frameBufferVao);
     glDrawArrays(GL_TRIANGLES, 0, 6);

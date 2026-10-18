@@ -30,10 +30,20 @@ void SceneManager::LoadShaderSingletons()
         "boundBoxShader"
     );
 
-    ContentManager::LoadShader(
+    RootShaderMap[eRenderMode::PostProcessing] = ContentManager::LoadShader(
         "src/Shader/FrameBufferVertex.vert",
         "src/Shader/FrameBufferFragment.frag",
         "frameBufferShader");
+
+    RootShaderMap[eRenderMode::PostProcessing] = ContentManager::LoadShader(
+        "src/Shader/FrameBufferVertex.vert",
+        "src/Shader/FrameBufferFragment.frag",
+        "PostProcessingrShader");
+
+    RootShaderMap[eRenderMode::PostProcessingOnModel] = ContentManager::LoadShader(
+        "src/Shader/model.vert",
+        "src/Shader/FrameBufferFragment.frag",
+        "PostProcessingOnModelShader");
 }
 
 void SceneManager::LoadModelsAndSetPositions()
@@ -54,6 +64,9 @@ void SceneManager::LoadModelsAndSetPositions()
     grassModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/grass.png");
     grassModel->SetUseInstanced(1000);
 
+    Model* fbTest = new Model();
+    fbTest->Load2DQuadTextureMesh(renderer.GetFramebufferTexture());
+
 
     ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, false, false);
@@ -65,16 +78,13 @@ void SceneManager::LoadModelsAndSetPositions()
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, pinkCube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
-
+    ContentManager::CreateEntity(NO_STENCIL_TEST, fbTest, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, false);
 }
 
 void SceneManager::LoadGlobalLigths()
 {
     glm::vec3 pointPos = glm::vec3(0, 5, 3);
     glm::vec3 pointColor = glm::vec3(0.8117, 0.3960f, 0.8784);
-    //r = 0,5960
-    //g = 0,2392
-    //b = 0,6039
 
     //POINT
     for (int i = 0; i < ContentManager::MAX_POINT_LIGHTS; i++)
@@ -102,7 +112,6 @@ void SceneManager::LoadGlobalLigths()
         ContentManager::DirectionalLights[std::to_string(i)]->SetAmbient(ambient);
         GlobalLights.push_back(ContentManager::DirectionalLights[std::to_string(i)].get());
     }
-
 
     //SPOT
     glm::vec3 spotPos = glm::vec3(10, -1000, 0); //Not visible!

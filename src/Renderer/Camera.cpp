@@ -30,18 +30,20 @@ void Camera::SetUp(glm::vec3& up)
 }
 
 
-void Camera::CalculateDirection(float xoffset, float yoffset)
+void Camera::CalculateDirection(float xoffset, float yoffset, bool constraintOnPitch)
 {
 	Yaw += xoffset * TimeHelper::dt;
 	Pitch += yoffset * TimeHelper::dt;
 
 	//std::cout << Yaw << std::endl;
 
-	if (Pitch > 89.0f)
-		Pitch = 89.0f;
-	if (Pitch < -89.0f)
-		Pitch = -89.0f;
-
+	if (constraintOnPitch)
+	{
+		if (Pitch > 89.0f)
+			Pitch = 89.0f;
+		if (Pitch < -89.0f)
+			Pitch = -89.0f;
+	}
 	glm::vec3 direction;
 	direction.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
 	direction.y = sin(glm::radians(Pitch));
@@ -100,6 +102,13 @@ void Camera::HandleKeybordInput(InputManager* controller)
 	}
 }
 
+void Camera::Turn(float degrees)
+{
+	Yaw += degrees;
+	HandleMouseInput(0, 0, false);
+}
+
+
 glm::mat4 Camera::CalculateView()
 {
 	return glm::lookAt(CameraPos, CameraPos + CameraFront, CameraUp);
@@ -117,7 +126,7 @@ glm::mat4 Camera::Update(InputManager* controller)
 	return CalculateView();
 }
 
-void Camera::HandleMouseInput(double xpos, double ypos)
+void Camera::HandleMouseInput(double xpos, double ypos, bool constraintOnPitch)
 {
 	if (FirstMouseMovement)
 	{
@@ -136,5 +145,6 @@ void Camera::HandleMouseInput(double xpos, double ypos)
 	xoffset *= sensivity;
 	yoffset *= sensivity *-1.0f;
 
-	CalculateDirection(xoffset, yoffset);
+	CalculateDirection(xoffset, yoffset, constraintOnPitch);
 }
+

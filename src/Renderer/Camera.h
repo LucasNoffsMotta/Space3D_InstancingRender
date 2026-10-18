@@ -41,10 +41,11 @@ public:
 	glm::vec3 CameraFront;
 	glm::vec3 CameraUp;
 	glm::mat4 CalculateView();
-	void HandleMouseInput(double xpos, double ypos);
-	void CalculateDirection(float xoffset, float yoffset);
+	void HandleMouseInput(double xpos, double ypos, bool costraintOnPitch=true);
+	void CalculateDirection(float xoffset, float yoffset, bool constraintOnPitch);
 	void SetMoveSpeed(float newSpeed);
 	void HandleKeybordInput(InputManager* controller);
+	void Turn(float degrees);
 	glm::mat4 Update(InputManager* controller);
 };
 

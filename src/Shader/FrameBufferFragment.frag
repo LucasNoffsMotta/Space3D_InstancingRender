@@ -84,8 +84,10 @@ void main()
 
     else
     {
-         FragColor = vec4(texture(screenTexture, TextCoord));
+          FragColor = vec4(texture(screenTexture, TextCoord));
          //FragColor = vec4(TextCoord.x, TextCoord.y, 0, 1);
          //FragColor = vec4(1, 0,0,1);
+
+
     }
 }  
