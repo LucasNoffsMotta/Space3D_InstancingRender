@@ -84,7 +84,9 @@ void SceneManager::LoadModelsAndSetPositions()
 void SceneManager::LoadGlobalLigths()
 {
     glm::vec3 pointPos = glm::vec3(0, 5, 3);
-    glm::vec3 pointColor = glm::vec3(0.8117, 0.3960f, 0.8784);
+    //glm::vec3 pointColor = glm::vec3(0.8117, 0.3960f, 0.8784);
+
+    glm::vec3 pointColor = glm::vec3(0.01, 0.01, 0.01);
 
     //POINT
     for (int i = 0; i < ContentManager::MAX_POINT_LIGHTS; i++)
@@ -244,14 +246,14 @@ void SceneManager::RenderScene(Window& window)
     //First pass
     renderer.BindFrameBuffer();
     glEnable(GL_DEPTH_TEST);
-    window.GL_ClearBuffers(0.07f, 0.88, 0.98, 1.0f); //glClear Color, Stencil and Depth buffer
+    window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
 
     //Draw Scene nodes recursively:
     RootNode->UpdateNode();
 
     //Second pass 
     renderer.UnbindFramebuffer();
-    window.GL_ClearBuffers(0.07f, 0.88, 0.98, 1.0f); //glClear Color, Stencil and Depth buffer
+    window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
 
     //Draw Scene nodes recursively:
     RootNode->UpdateNode();
