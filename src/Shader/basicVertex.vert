@@ -14,7 +14,9 @@ uniform vec3 color;
 
 void main()
 {
-    gl_Position = projection * view * model * vec4(aPos , 1.0);
+    gl_Position =  model * vec4(aPos , 1.0);
+    //gl_Position = projection * view * model * vec4(aPos , 1.0);
+    fColor = aColor + color;
     fColor = aColor + color;
     position = gl_Position.xyz;
     FragPos = vec3(model * vec4(aPos, 1));

@@ -40,7 +40,7 @@ void Window::Update()
     glfwSwapBuffers(window);
 }
 
-void Window::ChangeBackgroundColor(float r, float g, float b, float alpha)
+void Window::GL_ClearBuffers(float r, float g, float b, float alpha)
 {
     glClearColor(r, g, b, alpha);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

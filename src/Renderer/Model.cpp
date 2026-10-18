@@ -165,6 +165,25 @@ void Model::Load2DQuadTextureMesh(std::string filePath)
     meshes.push_back(mesh);
 }
 
+void Model::Load2DQuadTextureMesh(Texture& texture)
+{
+    std::vector<Texture> textures;
+    std::vector<Vertex> vertices = LoadCustomPrimitiveMesh(ePrimitive::Quad);
+
+    textures.push_back(texture);
+
+    glm::vec4 color = glm::vec4(0);
+    float shininess = 10.f;
+
+    std::vector<unsigned int> indices = {
+    0, 1, 3,
+    1, 2, 3
+    };
+
+    Mesh mesh = Mesh(vertices, indices, textures, color, shininess);
+    meshes.push_back(mesh);
+}
+
 void Model::SetUpMeshesInstancedVao(int amount)
 {
     InitInstancesTranslations();

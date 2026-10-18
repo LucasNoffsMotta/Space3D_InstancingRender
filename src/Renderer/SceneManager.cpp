@@ -45,6 +45,7 @@ void SceneManager::LoadModelsAndSetPositions()
     //Model* soldierModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj","soldier");
     Model* grassModel = new Model();
     Model* transparentWindow = new Model();
+    Model* frameBufferTestModel = new Model();
 
     //Model* treesAndBrushes = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/FoliageTwo/Trees_Bushes.obj", "trees");
     
@@ -52,6 +53,7 @@ void SceneManager::LoadModelsAndSetPositions()
     transparentWindow->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/blending_transparent_window.png");
     grassModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/grass.png");
     grassModel->SetUseInstanced(1000);
+
 
     ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, false, false);
@@ -63,6 +65,7 @@ void SceneManager::LoadModelsAndSetPositions()
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, pinkCube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
+
 }
 
 void SceneManager::LoadGlobalLigths()
@@ -125,10 +128,10 @@ void SceneManager::InitScene()
     LoadShaderSingletons();
     LoadGlobalLigths();
     LoadCamera();
-    LoadModelsAndSetPositions();
     LoadViewAndProjectionMatrices();
     InitFramebuffer();
     SetUpSceneProjection(Projection);
+    LoadModelsAndSetPositions();
     FillSceneTree(RootNode);
 }
 
@@ -232,22 +235,20 @@ void SceneManager::RenderScene(Window& window)
     //First pass
     renderer.BindFrameBuffer();
     glEnable(GL_DEPTH_TEST);
-    window.ChangeBackgroundColor(0.07f, 0.88, 0.98, 1.0f); //glClear Color, Stencil and Depth buffer
+    window.GL_ClearBuffers(0.07f, 0.88, 0.98, 1.0f); //glClear Color, Stencil and Depth buffer
 
     //Draw Scene nodes recursively:
     RootNode->UpdateNode();
 
     //Second pass 
     renderer.UnbindFramebuffer();
-    window.ChangeBackgroundColor(0.07f, 0.88, 0.98, 1.0f); //glClear Color, Stencil and Depth buffer
+    window.GL_ClearBuffers(0.07f, 0.88, 0.98, 1.0f); //glClear Color, Stencil and Depth buffer
 
     //Draw Scene nodes recursively:
-    //RootNode->UpdateNode();
+    RootNode->UpdateNode();
 
+    glDisable(GL_DEPTH_TEST);
 
-     glDisable(GL_DEPTH_TEST);
-    // glClear(GL_COLOR_BUFFER_BIT);
-    //Draw FrameBuffer texture
     renderer.RenderFramebuffer(*ContentManager::Shaders["frameBufferShader"]);
 }
 

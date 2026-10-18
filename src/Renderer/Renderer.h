@@ -49,6 +49,7 @@ public:
 	void InitFrameBufferScreenQuad();
 	void InitFramebufferTexture();
 	void RenderFramebuffer(Shader& shader);
+	Texture& GetFramebufferTexture();
 
 	glm::mat4 projection;
 	glm::mat4 view;

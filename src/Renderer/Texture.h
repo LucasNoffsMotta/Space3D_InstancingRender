@@ -29,6 +29,7 @@ public:
 	void BindTexture();
 	void InitializeTexture(const char* filename, bool repeat = false, bool flip = false);
 	void GenerateTexture(GLenum format, int width, int height, bool repeat, unsigned char* data = nullptr);
+	void GenerateFramebufferTexture(GLenum format, int width, int height, bool repeat);
 	Texture(const char* filename, bool repeat = false, bool flip = false);
 	Texture();
 	void AttatchToFramebuffer();

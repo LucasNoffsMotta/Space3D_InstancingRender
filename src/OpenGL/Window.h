@@ -16,7 +16,7 @@ public:
 	bool CheckIfWindowWasCreated();
 	void SetViewPort(int width, int height);
 	void Update();
-	void ChangeBackgroundColor(float r, float g, float b, float alpha);
+	void GL_ClearBuffers(float r, float g, float b, float alpha);
 	int CloseRequest() const;
 };
 

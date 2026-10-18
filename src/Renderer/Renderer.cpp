@@ -153,16 +153,16 @@ void Renderer::UnbindFramebuffer()
 void Renderer::InitFrameBufferScreenQuad()
 {
 
-    float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-        // positions   // texCoords
-        -1.0f,  1.0f,  0.0f, 1.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
+    //float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+    //    // positions   // texCoords
+    //    -1.0f,  0.6f,  0.0f, 1.0f,
+    //    -1.0f, -0.6f,  0.0f, 0.0f,
+    //     1.0f, -0.6f,  1.0f, 0.0f,
 
-        -1.0f,  1.0f,  0.0f, 1.0f,
-        1.0f, -1.0f,  1.0f, 0.0f,
-         1.0f,  1.0f,  1.0f, 1.0f
-    };
+    //    -1.0f,  0.6f,  0.0f, 1.0f,
+    //    1.0f, -0.6f,  1.0f, 0.0f,
+    //     1.0f,  0.6f,  1.0f, 1.0f
+    //};
 
     //Debug:
     //Depois, o teste mais conclusivo é ler um pixel da textura do FBO com glReadPixels enquanto esse FBO está vinculado, antes de executar UnbindFramebuffer().Assim podemos determinar se a textura já contém pixels pretos antes de desenhar o quad.
@@ -177,16 +177,16 @@ void Renderer::InitFrameBufferScreenQuad()
     //     0.5f,  0.5f,      1.0f, 1.0f
     //};
     //
-    //     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates. NOTE that this plane is now much smaller and at the top of the screen
-    //    // positions   // texCoords
-    //    -1.0f,  0.5f,  0.0f, 1.0f,
-    //    -1.0f,  0.0f,  0.0f, 0.0f,
-    //     1.0f,  0.0f,  1.0f, 0.0f,
+    float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates. NOTE that this plane is now much smaller and at the top of the screen
+        // positions   // texCoords
+        -0.3f,  1.0f,  0.0f, 1.0f,
+        -0.3f,  0.7f,  0.0f, 0.0f,
+         0.3f,  0.7f,  1.0f, 0.0f,
 
-    //    -1.0f,  0.0f,  0.0f, 1.0f,
-    //     1.0f,  0.0f,  1.0f, 0.0f,
-    //     1.0f,  0.0f,  1.0f, 1.0f
-    //};
+        -0.3f,  1.0f,  0.0f, 1.0f,
+         0.3f,  0.7f,  1.0f, 0.0f,
+         0.3f,  1.0f,  1.0f, 1.0f
+    };
 
 
     // screen quad VAO
@@ -205,7 +205,7 @@ void Renderer::InitFrameBufferScreenQuad()
 void Renderer::InitFramebufferTexture()
 {
     frameBufferTexture = Texture();
-    frameBufferTexture.GenerateTexture(GL_RGB, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y, false, nullptr);
+    frameBufferTexture.GenerateFramebufferTexture(GL_RGB, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y, false);
     frameBufferTexture.AttatchToFramebuffer();
 }
 
@@ -213,10 +213,15 @@ void Renderer::RenderFramebuffer(Shader& shader)
 {
     frameBufferTexture.BindTexture();
     shader.Activate();
-    shader.SetUniformInt("postProcessEffect", 1);
+    shader.SetUniformInt("postProcessEffect", -1);
     shader.SetUniformInt("colorScaleEffectNumber", -1);
     glBindVertexArray(frameBufferVao);
     glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+Texture& Renderer::GetFramebufferTexture()
+{
+    return frameBufferTexture;
 }
 
 Renderer::Renderer()

@@ -67,6 +67,16 @@ void Texture::GenerateTexture(GLenum format, int width, int height, bool repeat,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
+void Texture::GenerateFramebufferTexture(GLenum format, int width, int height, bool repeat)
+{
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void Texture::LoadImageDataFromFile(const char* filename, bool repeat, bool flip)
 {
 	int width, height, nrChannels;
