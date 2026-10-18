@@ -46,6 +46,9 @@ int main()
 
     window.SetViewPort(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
 
+    ContentManager::SetGlobalRenderMode(eRenderMode::FullRender);
+    ContentManager::SetPostProcessEffect(ePostProcessEffect::NightVision);
+
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);

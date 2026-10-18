@@ -13,6 +13,8 @@
 #include "../Renderer/DirectionalLight.h"
 #include "glm/glm.hpp"
 #include "../Renderer/Entity.h"
+#include "eRenderMode.h"
+#include "ePostProcessEffect.h"
 
 
 static class ContentManager
@@ -29,6 +31,8 @@ public:
 
 	static std::map<eHierarchyLevel, std::vector<Entity*>> Entities;
 
+	static eRenderMode GlobalRenderMode;
+	static ePostProcessEffect GlobalPostProcessMode;
 	
 
 	static std::map<std::string, InputManager*> Controllers;
@@ -56,6 +60,8 @@ public:
 	static void AddDirectionalLight(int index);
 	static void AddController(std::string name);
 	static void SetMainWindow(GLFWwindow* window);
+	static void SetGlobalRenderMode(eRenderMode mode);
+	static void SetPostProcessEffect(ePostProcessEffect effect);
 };
 
 

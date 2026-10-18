@@ -3,6 +3,7 @@
 #include "SceneNode.h"
 #include "Renderer.h"
 #include "Entity.h"
+#include "../Helper/eRenderMode.h"
 
 
 struct HierarchyLevel

@@ -42,9 +42,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\GraphicsProgramming\glad.c">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Helper\ContentManager.cpp">
       <Filter>Source Files\Helper</Filter>
     </ClCompile>
@@ -113,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="src\Renderer\Renderer.cpp">
       <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GraphicsProgramming\glad.c">
+      <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -197,48 +197,36 @@
     <ClInclude Include="src\Renderer\Entity.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Helper\eRenderMode.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helper\ePostProcessEffect.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Shader\2dVertex.vert">
+    <None Include="src\Shader\2DVertex.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="src\Shader\basicVertex.vert">
+    <None Include="src\Shader\FullRenderFragment.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="src\Shader\frag.frag">
+    <None Include="src\Shader\3DVertex_Instancing.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="src\Shader\instancedLayoutVertex.vert">
+    <None Include="src\Shader\NoLightsNoTexture_Frag.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="src\Shader\instancedUniformVertex.vert">
+    <None Include="src\Shader\3DVertex.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="src\Shader\object3DFragment.vert">
+    <None Include="src\Shader\OutLineColor.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="src\Shader\SimpleColorFragmentShader.frag">
+    <None Include="src\Shader\PostProcessFragment.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="src\Shader\model.vert">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="testDebug.vert">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="src\Shader\outline.frag">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="src\Shader\BoundBox.vert">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="src\Shader\BoundBox.frag">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="src\Shader\FrameBufferFragment.frag">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="src\Shader\FrameBufferVertex.vert">
+    <None Include="src\Shader\PostProcessVertex.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>

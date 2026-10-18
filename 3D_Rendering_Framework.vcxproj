@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\GraphicsProgramming\glad.c" />
+    <ClCompile Include="..\GraphicsProgramming\glad.c" />
     <ClCompile Include="src\Helper\ContentManager.cpp" />
     <ClCompile Include="src\Helper\InputManager.cpp" />
     <ClCompile Include="src\Helper\TimeHelper.cpp" />
@@ -49,6 +49,8 @@
     <ClInclude Include="src\Helper\ContentManager.h" />
     <ClInclude Include="src\Helper\eCameraMode.h" />
     <ClInclude Include="src\Helper\eInput.h" />
+    <ClInclude Include="src\Helper\ePostProcessEffect.h" />
+    <ClInclude Include="src\Helper\eRenderMode.h" />
     <ClInclude Include="src\Helper\eTextureType.h" />
     <ClInclude Include="src\Helper\InputManager.h" />
     <ClInclude Include="src\Helper\TimeHelper.h" />
@@ -74,20 +76,14 @@
     <ClInclude Include="src\Renderer\Texture.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Shader\2dVertex.vert" />
-    <None Include="src\Shader\basicVertex.vert" />
-    <None Include="src\Shader\BoundBox.frag" />
-    <None Include="src\Shader\BoundBox.vert" />
-    <None Include="src\Shader\frag.frag" />
-    <None Include="src\Shader\FrameBufferFragment.frag" />
-    <None Include="src\Shader\FrameBufferVertex.vert" />
-    <None Include="src\Shader\instancedLayoutVertex.vert" />
-    <None Include="src\Shader\instancedUniformVertex.vert" />
-    <None Include="src\Shader\model.vert" />
-    <None Include="src\Shader\object3DFragment.vert" />
-    <None Include="src\Shader\outline.frag" />
-    <None Include="src\Shader\SimpleColorFragmentShader.frag" />
-    <None Include="testDebug.vert" />
+    <None Include="src\Shader\2DVertex.vert" />
+    <None Include="src\Shader\FullRenderFragment.glsl" />
+    <None Include="src\Shader\PostProcessFragment.glsl" />
+    <None Include="src\Shader\PostProcessVertex.glsl" />
+    <None Include="src\Shader\3DVertex_Instancing.glsl" />
+    <None Include="src\Shader\3DVertex.glsl" />
+    <None Include="src\Shader\OutLineColor.glsl" />
+    <None Include="src\Shader\NoLightsNoTexture_Frag.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -95,7 +91,7 @@
     <ProjectGuid>{0d95c625-f6cc-4836-b88d-30fb25070e8f}</ProjectGuid>
     <RootNamespace>My3DRenderingFramework</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>3DSpace</ProjectName>
+    <ProjectName>VoidEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -6,6 +6,7 @@ in vec2 TextCoord;
 uniform sampler2D screenTexture;
 uniform int postProcessEffect;
 uniform int colorScaleEffectNumber;
+uniform int nightVisionEffect;
 
 const float offset = 1.0 / 300.0;  
 
@@ -23,6 +24,30 @@ float edgeDetectionKernel[9] = float[] (
 
 bool applyKernelEffect = false;
 bool applyColorScaleEffect = false;
+
+vec3 GetNightVisionEffect()
+{ 
+         // 1. Amostra a cor da cena original
+        vec4 sceneColor = texture(screenTexture, TextCoord);
+
+        // 2. Calcula a luminância (proporção RGB: 30% Vermelho, 59% Verde, 11% Azul)
+        float luminance = dot(sceneColor.rgb, vec3(0.3, 0.59, 0.11));
+
+        // 3. Amplifica áreas escuras (simula o ganho da lente de visão noturna)
+        float boosted = luminance * 100;
+
+        // 4. Aplica a tonalidade verde clássica de fósforo
+        vec3 greenTint = vec3(0.1, 0.95, 0.2);
+        vec3 nightVisionColor = boosted * greenTint;
+
+        // 6. Efeito de vinheta (escurece as bordas da tela)
+        vec2 uv = TextCoord * (1.0 - TextCoord.yx);
+        float vignette = uv.x * uv.y * 15.0;
+        vignette = clamp(pow(vignette, 0.25), 0.0, 1.0);
+        nightVisionColor *= vignette;
+        return nightVisionColor;
+}
+
 
 
 void main()
@@ -53,11 +78,18 @@ void main()
         applyKernelEffect = true;
     }
 
-    else if (postProcessEffect == -1 && colorScaleEffectNumber == 1)
+    else if (postProcessEffect == 3)
     {
-        applyColorScaleEffect = true;
+         FragColor = vec4(GetNightVisionEffect(), 1);
+         return;
     }
-    
+
+    else if (postProcessEffect == 4)
+    {
+         applyColorScaleEffect = true;
+    }
+
+
     if (applyKernelEffect) 
     {
          vec3 sampleTex[9];
@@ -73,6 +105,7 @@ void main()
             col += sampleTex[i] * kernel[i];
     
         FragColor = vec4(col, 1.0);
+        return;
     }
 
     else if(applyColorScaleEffect)
@@ -80,41 +113,9 @@ void main()
          FragColor = vec4(texture(screenTexture, TextCoord));
          float average = 0.2126 * FragColor.r + 0.7152 * FragColor.g + 0.0722 * FragColor.b;
          FragColor = vec4(average, average, average, 1.0);
+         return;
     }
 
-    else
-    {
-         // FragColor = vec4(texture(screenTexture, TextCoord));
-         //FragColor = vec4(TextCoord.x, TextCoord.y, 0, 1);
-         //FragColor = vec4(1, 0,0,1);
+     FragColor = vec4(texture(screenTexture, TextCoord));
 
-
-//         FragColor = vec4(texture(screenTexture, TextCoord));
-//         float average = 0 * FragColor.r + 0.7152 * FragColor.g + 0 * FragColor.b;
-//         FragColor = vec4(average, average, average, 1.0);
-
-
-         // 1. Amostra a cor da cena original
-        vec4 sceneColor = texture(screenTexture, TextCoord);
-
-        // 2. Calcula a luminância (proporção RGB: 30% Vermelho, 59% Verde, 11% Azul)
-        float luminance = dot(sceneColor.rgb, vec3(0.3, 0.59, 0.11));
-
-        // 3. Amplifica áreas escuras (simula o ganho da lente de visão noturna)
-        float boosted = luminance * 100;
-
-        // 4. Aplica a tonalidade verde clássica de fósforo
-        vec3 greenTint = vec3(0.1, 0.95, 0.2);
-        vec3 nightVisionColor = boosted * greenTint;
-
-        // 6. Efeito de vinheta (escurece as bordas da tela)
-        vec2 uv = TextCoord * (1.0 - TextCoord.yx);
-        float vignette = uv.x * uv.y * 15.0;
-        vignette = clamp(pow(vignette, 0.25), 0.0, 1.0);
-        nightVisionColor *= vignette;
-
-        FragColor = vec4(nightVisionColor, 1.0);
-
-
-    }
 }  

@@ -6,43 +6,33 @@
 
 void SceneManager::LoadShaderSingletons()
 {
-    RootShaderMap[eRenderMode::Regular] = ContentManager::LoadShader(
-        "src/Shader/model.vert",
-        "src/Shader/frag.frag",
-        "assimpShader"
+    RootShaderMap[eRenderMode::FullRender] = ContentManager::LoadShader(
+        "src/Shader/3DVertex.glsl",
+        "src/Shader/FullRenderFragment.glsl",
+        "fullRender"
     );
 
-    RootShaderMap[eRenderMode::RegularInstanced] = ContentManager::LoadShader(
-        "src/Shader/instancedLayoutVertex.vert",
-        "src/Shader/frag.frag",
-        "assimpShader"
+    RootShaderMap[eRenderMode::FullRender_Instanced] = ContentManager::LoadShader(
+        "src/Shader/3DVertex_Instancing.glsl",
+        "src/Shader/FullRenderFragment.glsl",
+        "fullRender_Instanced"
     );
 
-    RootShaderMap[eRenderMode::StencilMask] = ContentManager::LoadShader(
-        "src/Shader/model.vert",
-        "src/Shader/outline.frag",
+    RootShaderMap[eRenderMode::Outline] = ContentManager::LoadShader(
+        "src/Shader/3DVertex.glsl",
+        "src/Shader/OutLineColor.glsl",
         "outlineShader"
     );
 
-    RootShaderMap[eRenderMode::WiredOn]  = ContentManager::LoadShader(
-        "src/Shader/BoundBox.vert",
-        "src/Shader/BoundBox.frag",
-        "boundBoxShader"
-    );
-
     RootShaderMap[eRenderMode::PostProcessing] = ContentManager::LoadShader(
-        "src/Shader/FrameBufferVertex.vert",
-        "src/Shader/FrameBufferFragment.frag",
+        "src/Shader/PostProcessVertex.glsl",
+        "src/Shader/PostProcessFragment.glsl",
         "frameBufferShader");
 
-    RootShaderMap[eRenderMode::PostProcessing] = ContentManager::LoadShader(
-        "src/Shader/FrameBufferVertex.vert",
-        "src/Shader/FrameBufferFragment.frag",
-        "PostProcessingrShader");
 
     RootShaderMap[eRenderMode::PostProcessingOnModel] = ContentManager::LoadShader(
-        "src/Shader/model.vert",
-        "src/Shader/FrameBufferFragment.frag",
+        "src/Shader/3DVertex.glsl",
+        "src/Shader/PostProcessFragment.glsl",
         "PostProcessingOnModelShader");
 }
 
@@ -84,9 +74,9 @@ void SceneManager::LoadModelsAndSetPositions()
 void SceneManager::LoadGlobalLigths()
 {
     glm::vec3 pointPos = glm::vec3(0, 5, 3);
-    //glm::vec3 pointColor = glm::vec3(0.8117, 0.3960f, 0.8784);
+    glm::vec3 pointColor = glm::vec3(0.8117, 0.3960f, 0.8784);
 
-    glm::vec3 pointColor = glm::vec3(0.01, 0.01, 0.01);
+    //glm::vec3 pointColor = glm::vec3(0.01, 0.01, 0.01);
 
     //POINT
     for (int i = 0; i < ContentManager::MAX_POINT_LIGHTS; i++)
@@ -207,7 +197,7 @@ void SceneManager::FillSceneTree(SceneNode* node)
 
 void SceneManager::InitFramebuffer()
 {
-    renderer = Renderer(); //Lives troughtr the scope of this class! No need to create newptr
+    renderer = Renderer(); 
     renderer.InitFrameBuffer();
     renderer.InitFramebufferTexture();
     renderer.InitRenderBuffer(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
@@ -225,20 +215,16 @@ void SceneManager::SetGlobalLightUniforms(Shader& shader)
 
 void SceneManager::SetUpSceneProjection(glm::mat4& projection)
 {
-    RootShaderMap[eRenderMode::Regular]->Activate();
-    RootShaderMap[eRenderMode::Regular]->SetUniformMatrix4fv("projection", projection);
-    SetGlobalLightUniforms(*RootShaderMap[eRenderMode::Regular]);
+    RootShaderMap[eRenderMode::FullRender]->Activate();
+    RootShaderMap[eRenderMode::FullRender]->SetUniformMatrix4fv("projection", projection);
 
-    RootShaderMap[eRenderMode::StencilMask]->Activate();
-    RootShaderMap[eRenderMode::StencilMask]->SetUniformMatrix4fv("projection", projection);
-    SetGlobalLightUniforms(*RootShaderMap[eRenderMode::StencilMask]);
 
-    RootShaderMap[eRenderMode::WiredOn]->Activate();
-    RootShaderMap[eRenderMode::WiredOn]->SetUniformMatrix4fv("projection", projection);
+    RootShaderMap[eRenderMode::Outline]->Activate();
+    RootShaderMap[eRenderMode::Outline]->SetUniformMatrix4fv("projection", projection);
 
-    RootShaderMap[eRenderMode::RegularInstanced]->Activate();
-    RootShaderMap[eRenderMode::RegularInstanced]->SetUniformMatrix4fv("projection", projection);
-    SetGlobalLightUniforms(*RootShaderMap[eRenderMode::RegularInstanced]);
+
+    RootShaderMap[eRenderMode::FullRender_Instanced]->Activate();
+    RootShaderMap[eRenderMode::FullRender_Instanced]->SetUniformMatrix4fv("projection", projection);
 }
 
 void SceneManager::RenderScene(Window& window)

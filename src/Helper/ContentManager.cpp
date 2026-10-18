@@ -15,6 +15,8 @@ GLFWwindow*                                                       ContentManager
 std::map<eHierarchyLevel, std::vector<Entity*>>                   ContentManager::Entities;
 int ContentManager::FRAMEBUFFER_SCREEN_SIZE_X = 0;
 int ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y = 0;
+eRenderMode ContentManager::GlobalRenderMode;
+ePostProcessEffect ContentManager::GlobalPostProcessMode;
 
 
 Shader* ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)
@@ -107,5 +109,15 @@ void ContentManager::AddController(std::string name)
 void ContentManager::SetMainWindow(GLFWwindow* window)
 {
     ContentManager::mainWindow = window;
+}
+
+void ContentManager::SetGlobalRenderMode(eRenderMode mode)
+{
+    ContentManager::GlobalRenderMode = mode;
+}
+
+void ContentManager::SetPostProcessEffect(ePostProcessEffect effect)
+{
+    ContentManager::GlobalPostProcessMode = effect;
 }
 

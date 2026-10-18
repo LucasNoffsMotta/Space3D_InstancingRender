@@ -5,15 +5,34 @@ void SceneNode::SetShaderMap(std::map<eRenderMode, Shader*> shaderMap)
 	this->shaderMap = shaderMap;
 }
 
-void SceneNode::SetUpNodeLights(Shader* shader)
+void SceneNode::SetUpNodeLightsUniforms(Shader* shader)
 {
-	shader->Activate();
-
 	for (int i = 0; i < Lights.size(); i++)
 	{
 		Lights[i]->SetUniformsTest(*shader);
 	}
 }
+
+void SceneNode::SetRenderModeOnMainShader(eRenderMode mode, Shader* mainShader)
+{
+	if (mode == eRenderMode::FullRender)
+	{
+		mainShader->SetUniformInt("LightsOn", 1);
+		SetUpNodeLightsUniforms(mainShader);
+	}
+
+	else if (mode == eRenderMode::NoLights_NoTextures)
+	{
+		mainShader->SetUniformInt("DebugMode", 1);
+	}
+
+	else if (mode == eRenderMode::DepthTestMode)
+	{
+		mainShader->SetUniformInt("DepthTestMode", 1);
+	}
+}
+
+
 
 Shader* SceneNode::QueryShader(eRenderMode mode)
 {
@@ -55,28 +74,28 @@ void SceneNode::AttatchController(InputManager* controller)
 
 void SceneNode::RenderNode()
 {
-	//First: Query the necessary shaders
-
-	//Setup Lights
-	//SetUpNodeLights(mainShader); // only need this if light position is changing per frame
-
 	if (level == eHierarchyLevel::TRANSLUCID)
 	{
-		Shader* mainShader = shaderMap[eRenderMode::Regular];
+		Shader* mainShader = shaderMap[eRenderMode::FullRender];
+		mainShader->Activate();
+		SetRenderModeOnMainShader(ContentManager::GlobalRenderMode, mainShader);
 		RenderTranslucidObjectsNoStenciltest(mainShader);
-
 	}
 
 	else if (level == eHierarchyLevel::NO_STENCIL_TEST)
 	{
-		Shader* mainShader = shaderMap[eRenderMode::Regular];
+		Shader* mainShader = shaderMap[eRenderMode::FullRender];
+		mainShader->Activate();
+		SetRenderModeOnMainShader(ContentManager::GlobalRenderMode, mainShader);
 		RenderRegularObjectsNoStencilTest(mainShader);
 	}
 
 	else if (level == eHierarchyLevel::STENCIL_TEST)
 	{
-		Shader* mainShader = shaderMap[eRenderMode::Regular];
-		Shader* stencilMaskShader = shaderMap[eRenderMode::StencilMask];
+		Shader* mainShader = shaderMap[eRenderMode::FullRender];
+		Shader* stencilMaskShader = shaderMap[eRenderMode::Outline];
+		mainShader->Activate();
+		SetRenderModeOnMainShader(ContentManager::GlobalRenderMode, mainShader);
 		RenderStencilTestOn(mainShader);
 		RenderOutlineMask(stencilMaskShader);
 	}
@@ -116,7 +135,7 @@ void SceneNode::RenderRegularObjectsNoStencilTest(Shader* shader)
 
 		if (entity->GetModel()->useInstanced)
 		{
-			Shader* shaderInstanced = shaderMap[eRenderMode::RegularInstanced];
+			Shader* shaderInstanced = shaderMap[eRenderMode::FullRender_Instanced];
 			shaderInstanced->Activate();
 			SetModelMatrixAndCallDraw(entity, shaderInstanced, glm::vec3(1));
 		}
@@ -126,7 +145,6 @@ void SceneNode::RenderRegularObjectsNoStencilTest(Shader* shader)
 			shader->Activate();
 			SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
 		}
-
 	}
 }
 
@@ -142,7 +160,7 @@ void SceneNode::RenderTranslucidObjectsNoStenciltest(Shader* shader)
 
 		if (entity->GetModel()->useInstanced)
 		{
-			Shader* shaderInstanced = shaderMap[eRenderMode::RegularInstanced];
+			Shader* shaderInstanced = shaderMap[eRenderMode::FullRender_Instanced];
 			shaderInstanced->Activate();
 			SetModelMatrixAndCallDraw(entity, shaderInstanced, glm::vec3(1));
 		}
@@ -167,7 +185,7 @@ void SceneNode::RenderStencilTestOn(Shader* shader)
 
 		if (entity->GetModel()->useInstanced)
 		{
-			Shader* shaderInstanced = shaderMap[eRenderMode::RegularInstanced];
+			Shader* shaderInstanced = shaderMap[eRenderMode::FullRender_Instanced];
 			shaderInstanced->Activate();
 			SetModelMatrixAndCallDraw(entity, shaderInstanced, glm::vec3(1));
 		}
@@ -207,10 +225,9 @@ void SceneNode::RenderWired(Shader* shader)
 void SceneNode::SetViewMatrix()
 {
 	glm::mat4 view = Cameras.back()->Update(Controller);
-	Shader* mainShader = shaderMap[eRenderMode::Regular];
-	Shader* stencilMaskShader = shaderMap[eRenderMode::StencilMask];
-	Shader* wireShader = shaderMap[eRenderMode::WiredOn];
-	Shader* instanced = shaderMap[eRenderMode::RegularInstanced];
+	Shader* mainShader = shaderMap[eRenderMode::FullRender];
+	Shader* stencilMaskShader = shaderMap[eRenderMode::Outline];
+	Shader* instanced = shaderMap[eRenderMode::FullRender_Instanced];
 
 	mainShader->Activate();
 	mainShader->SetUniformMatrix4fv("view", view);
@@ -218,27 +235,20 @@ void SceneNode::SetViewMatrix()
 	stencilMaskShader->Activate();
 	stencilMaskShader->SetUniformMatrix4fv("view", view);
 
-	wireShader->Activate();
-	wireShader->SetUniformMatrix4fv("view", view);
-
 	instanced->Activate();
 	instanced->SetUniformMatrix4fv("view", view);
 }
 
 void SceneNode::SetProjectionMatrix(glm::mat4& projection)
 {
-	Shader* mainShader = shaderMap[eRenderMode::Regular];
-	Shader* stencilMaskShader = shaderMap[eRenderMode::StencilMask];
-	Shader* wireShader = shaderMap[eRenderMode::WiredOn];
+	Shader* mainShader = shaderMap[eRenderMode::FullRender];
+	Shader* stencilMaskShader = shaderMap[eRenderMode::Outline];
 
 	mainShader->Activate();
 	mainShader->SetUniformMatrix4fv("projection", projection);
 
 	stencilMaskShader->Activate();
 	stencilMaskShader->SetUniformMatrix4fv("projection", projection);
-
-	wireShader->Activate();
-	wireShader->SetUniformMatrix4fv("projection", projection);
 }
 
 std::map<float, Entity*> SceneNode::GetOrderedTranslucidEntities()
@@ -272,7 +282,6 @@ void SceneNode::UpdateController()
 
 void SceneNode::UpdateNode()
 {
-
 	RenderNode();
 	UpdateController();
 	SetViewMatrix();

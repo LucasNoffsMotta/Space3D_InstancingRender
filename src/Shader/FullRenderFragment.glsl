@@ -56,11 +56,15 @@ uniform SpotLight spotLight[MAX_POINTLIGHTS];
 uniform DirLight dirLight[MAX_POINTLIGHTS];
 uniform vec3 viewPos;
 uniform int hasTexture;
+uniform int LightsOn;
+uniform int DebugMode;
+uniform int DepthTestMode;
 
 in vec3 FragPos;
 in vec3 position;
 in vec3 Normal;
 in vec2 texCoord;
+
 out vec4 FragColor;
 
 float near = 0.1;
@@ -176,16 +180,26 @@ vec3 GetSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir,  vec
 	return ambient + diffuse + specular;
 }
 
+float GetFinalAlphaValue(vec4 diffuseColor, Material material)
+{
+	if (hasTexture == 1)
+	{
+		return diffuseColor.a;
+	}
+
+	else
+	{
+		return material.color.a;
+	}
+}
 
 
-void main()
+vec3 GetFullLitColorResult(vec4 diffuseColor)
 {
 	vec3 normal = normalize(Normal);
 	vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 result = vec3(0);
-	vec4 diffuseColor = vec4(texture(material.texture_diffuse1, texCoord));
+	vec3 result = vec3(0);
 	vec3 specularColor = vec3(texture(material.texture_specular1, texCoord));
-
 
 	for (int i = 0; i < MAX_POINTLIGHTS; i++)
 	{
@@ -194,36 +208,40 @@ void main()
 		result += GetSpotLight(spotLight[i], normal, FragPos, viewDir, diffuseColor, specularColor);
 	}
 
-	float finalAlpha;
-
-	if (hasTexture == 1)
-	{
-		finalAlpha = diffuseColor.a;
-	}
-
-	else
-	{
-		finalAlpha = material.color.a;
-	}
-
-	//For depth test:
-	//float depth = LinearizeDepth(gl_FragCoord.z) / far; // divide by far for demonstration
-	//FragColor = vec4(texCoord, 0.0, 1.0);
-    //FragColor = vec4(vec3(depth), 1.0);
-	//FragColor = material.color;
-
-	//Full lightning render
-
-	
 	if (diffuseColor.a < 0.1)
 	{
 		discard;
 	}
 
+	return result;
+}
 
-	FragColor = vec4(result, finalAlpha);
 
+void main()
+{
+	//Turn On Debug Mode
+	if (DebugMode == 1)
+	{
+		FragColor =  vec4(texCoord, 0.0, 1.0);
+		return;
+	}
 
+	//Turn On Depth Test Mode
+	if (DepthTestMode == 1)
+	{
+		float depth = LinearizeDepth(gl_FragCoord.z) / far; 
+		FragColor = vec4(vec3(depth), 1.0);
+		return;
+	}
 
-	//FragColor = vec4(1, 0, 0, 1.0);
+	//Turn Off lit mode
+	if (LightsOn == 0)
+	{
+		FragColor =  vec4(texture(material.texture_diffuse1, texCoord));
+		return;
+	}
+
+	//Full Lit Mode
+	vec4 diffuseColor = vec4(texture(material.texture_diffuse1, texCoord));
+	FragColor = vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material));
 }

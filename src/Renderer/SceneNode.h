@@ -5,15 +5,9 @@
 #include "SpotLight.h"
 #include "DirectionalLight.h"
 #include "Entity.h"
+#include "../Helper/ContentManager.h"
+#include "../Helper/eRenderMode.h"
 
-enum eRenderMode:uint8_t {
-	Regular, //Lit, texture, etc
-	RegularInstanced,
-	StencilMask, //Mask shader
-	WiredOn, //Wire only shader
-	PostProcessing,
-	PostProcessingOnModel
-};
 
 struct HierarchyLevel;
 
@@ -36,7 +30,8 @@ private:
 	void RenderWired(Shader* shader);
 	void RenderStencilTestOn(Shader* shader);
 	void SetViewMatrix();
-	void SetUpNodeLights(Shader* shader);
+	void SetUpNodeLightsUniforms(Shader* shader);
+	void SetRenderModeOnMainShader(eRenderMode mode, Shader* mainShader);
 
 public:
 	eHierarchyLevel level;
