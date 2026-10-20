@@ -16,4 +16,5 @@ public:
 	void SetUniforms(Shader& shader);
 	void DrawPointLight(Shader& shader, Texture& texture, Renderer& renderer);
 	void SetUniformsTest(Shader& shader) override;
+	eLightType GetLightType() override;
 };

@@ -208,11 +208,6 @@ vec3 GetFullLitColorResult(vec4 diffuseColor)
 		result += GetSpotLight(spotLight[i], normal, FragPos, viewDir, diffuseColor, specularColor);
 	}
 
-	if (diffuseColor.a < 0.1)
-	{
-		discard;
-	}
-
 	return result;
 }
 
@@ -234,6 +229,14 @@ void main()
 		return;
 	}
 
+	//Discard fragmets
+	vec4 diffuseColor = vec4(texture(material.texture_diffuse1, texCoord));
+
+	if (diffuseColor.a < 0.1)
+	{
+		discard;
+	}
+
 	//Turn Off lit mode
 	if (LightsOn == 0)
 	{
@@ -241,7 +244,7 @@ void main()
 		return;
 	}
 
-	//Full Lit Mode
-	vec4 diffuseColor = vec4(texture(material.texture_diffuse1, texCoord));
+
+
 	FragColor = vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material));
 }

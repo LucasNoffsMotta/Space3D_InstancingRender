@@ -33,7 +33,6 @@ void SceneNode::SetRenderModeOnMainShader(eRenderMode mode, Shader* mainShader)
 }
 
 
-
 Shader* SceneNode::QueryShader(eRenderMode mode)
 {
 	return nullptr;
@@ -113,12 +112,7 @@ void SceneNode::SetModelMatrixAndCallDraw(Entity* entity, Shader* shader, glm::v
 {
 	glm::mat4 modelMatrix = glm::mat4(1);
 	modelMatrix = glm::translate(modelMatrix, entity->GetWorldPosition());
-
-	if (entity->rotationAngle > 0)
-	{
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(entity->rotationAngle), entity->rotationAxis);
-	}
-
+	modelMatrix = entity->RotateMatrix(modelMatrix);
 	modelMatrix = glm::scale(modelMatrix, entity->GetScale() * scale);
 	shader->SetUniformMatrix4fv("model", modelMatrix);
 	entity->Draw(shader);

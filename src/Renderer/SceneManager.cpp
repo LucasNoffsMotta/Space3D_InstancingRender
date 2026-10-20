@@ -47,9 +47,14 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* transparentWindow = new Model();
     Model* frameBufferTestModel = new Model();
 
+
     //Model* treesAndBrushes = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/FoliageTwo/Trees_Bushes.obj", "trees");
     
-    Model* pinkCube = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "cube");
+    //TODO: make possible to copy vertex data from one obj to another
+    Model* cube = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "cube");
+    Model* pointLightModel = new Model(); 
+    pointLightModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/PointLight.png");
+
     transparentWindow->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/blending_transparent_window.png");
     grassModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/grass.png");
     grassModel->SetUseInstanced(1000);
@@ -59,7 +64,7 @@ void SceneManager::LoadModelsAndSetPositions()
 
 
     ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false, false);
-    ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, false, false);
+    ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 270, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, hollowModel, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false, false);
     //ContentManager::CreateEntity(STENCIL_TEST, soldierModel, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(1), 0, false, false);
@@ -67,13 +72,25 @@ void SceneManager::LoadModelsAndSetPositions()
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
-    ContentManager::CreateEntity(TRANSLUCID, pinkCube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
+    ContentManager::CreateEntity(TRANSLUCID, cube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
     ContentManager::CreateEntity(NO_STENCIL_TEST, fbTest, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, false);
+
+
+    ControlledEntity->AttatchCamera(BaseCamera, 10);
+
+
+    for (int i = 0; i < GlobalLights.size(); i++)
+    {
+        if (GlobalLights[i]->GetLightType() == eLightType::Point)
+        {
+            ContentManager::CreateEntity(NO_STENCIL_TEST, pointLightModel, GlobalLights[i]->GetWorldPosition(), glm::vec3(0.4), 90, false, false);
+        }
+    }
 }
 
 void SceneManager::LoadGlobalLigths()
 {
-    glm::vec3 pointPos = glm::vec3(0, 5, 3);
+    glm::vec3 pointPos = glm::vec3(0, 15, 3);
     glm::vec3 pointColor = glm::vec3(0.8117, 0.3960f, 0.8784);
 
     //glm::vec3 pointColor = glm::vec3(0.01, 0.01, 0.01);
@@ -236,6 +253,9 @@ void SceneManager::RenderScene(Window& window)
 
     //Draw Scene nodes recursively:
     RootNode->UpdateNode();
+
+    //Doinng here only for testing!
+    ControlledEntity->Update(ContentManager::Controllers["main"]);
 
     //Second pass 
     renderer.UnbindFramebuffer();

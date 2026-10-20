@@ -31,6 +31,9 @@ private:
 	std::vector<BaseLight*> GlobalLights;
 	Renderer renderer;
 
+	//ROTATION TEST
+	Entity* ControlledEntity;
+
 	void InitFramebuffer();
 	void SetGlobalLightUniforms(Shader& shader);
 	void LoadShaderSingletons();

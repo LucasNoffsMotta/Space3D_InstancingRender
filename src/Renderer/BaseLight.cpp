@@ -4,6 +4,11 @@ BaseLight::BaseLight()
 {
 }
 
+glm::vec3 BaseLight::GetWorldPosition()
+{
+	return this->position;
+}
+
 BaseLight::BaseLight(int index, eLightType type)
 {
 	this->lightIndex = index;
@@ -55,5 +60,10 @@ std::string BaseLight::GetLightStrucUniformName()
 	default:
 		return "";
 	}
+}
+
+eLightType BaseLight::GetLightType()
+{
+	return eLightType();
 }
 

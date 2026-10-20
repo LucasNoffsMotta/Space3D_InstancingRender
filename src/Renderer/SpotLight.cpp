@@ -47,3 +47,8 @@ void SpotLight::SetUniformsTest(Shader& shader)
 	shader.SetUniformFloat((prefix + "outerCutoff").c_str(), this->outerCutoff);
 }
 
+eLightType SpotLight::GetLightType()
+{
+	return this->type;
+}
+

@@ -184,6 +184,19 @@ void Model::Load2DQuadTextureMesh(Texture& texture)
     meshes.push_back(mesh);
 }
 
+//TODO: NEED TO FIX THE TEXTURE COORS ON A UNTEXTURED MODEL FROM BLENDER
+void Model::SetNewTexturelForSingleMesh(int meshIndex, int textureIndex, std::string filePath)
+{
+    Texture newTexture = Texture(filePath.c_str(), false, false);
+
+    if (meshes.at(meshIndex).material.textures.size() <= textureIndex)
+    {
+        meshes.at(meshIndex).material.textures.push_back(newTexture);
+        return;
+    }
+    meshes.at(meshIndex).material.textures[textureIndex] = newTexture;
+}
+
 void Model::SetUpMeshesInstancedVao(int amount)
 {
     InitInstancesTranslations();
@@ -247,9 +260,6 @@ std::vector<Vertex> Model::LoadCustomPrimitiveMesh(ePrimitive primitive)
         Vertex vert2;
         Vertex vert3;
         Vertex vert4;
-        Vertex vert5;
-        Vertex vert6;
-
 
         vert1.Position = glm::vec3(0.5f, 0.5f, 0.0f);
         vert1.TexCoords = glm::vec2(1.f, 1.0f);
@@ -290,6 +300,16 @@ void Model::CreateInstancedModelMatrices(int amount)
         //model = glm::scale(model, glm::vec3(scale));
         instancesTranslationPtr++;
     }
+}
+
+void Model::RotatePitch(float offSet)
+{
+    Pitch += offSet;
+}
+
+void Model::RotateYaw(float offSet)
+{
+    Yaw += offSet;
 }
 
 

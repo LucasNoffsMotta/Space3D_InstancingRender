@@ -8,5 +8,8 @@ enum eInput : uint8_t
 	Arrow_Down,
 	Arrow_Left,
 	Arrow_Right,
-	Space_Bar
+	Space_Bar,
+	RotatePitch,
+	RotateYaw,
+	RotateRoll
 };

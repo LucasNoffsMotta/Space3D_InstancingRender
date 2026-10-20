@@ -28,6 +28,11 @@ void Entity::Update(InputManager* controller)
         return;
     }
 
+    if (controller->Inputs[eInput::RotatePitch])
+    {
+        this->model->RotatePitch(400);
+    }
+
     if (controller->Inputs[eInput::Arrow_Up])
     {
         worldPosition.z -= 10 * TimeHelper::GetDeltaTime();
@@ -68,6 +73,20 @@ Model* Entity::GetModel()
     return this->model;
 }
 
+glm::mat4 Entity::RotateMatrix(glm::mat4& modelMatrix)
+{
+    float pitch = glm::radians(this->model->Pitch);
+    std::cout << "PITCH VALUE: " << this->model->Pitch << std::endl;
+
+    float yaw = glm::radians(this->model->Yaw);
+    float roll = glm::radians(this->model->Roll);
+
+
+    glm::mat4 yawRotated = glm::rotate(modelMatrix, yaw, YawAxis);
+    glm::mat4 pitchRotated = glm::rotate(yawRotated, pitch, PitchAxis);
+    return glm::rotate(pitchRotated, roll, RollAxis);
+}
+
 int Entity::GetID()
 {
     return ID;
@@ -103,6 +122,8 @@ Entity::Entity()
 {
 
 }
+
+
 
 void Entity::AttatchCamera(Camera* cam, float distance)
 {

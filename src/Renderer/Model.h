@@ -23,6 +23,8 @@ private:
     std::vector<Texture> textures_loaded;
 
 
+
+
     void loadModel(std::string path);
     void processNode(aiNode* node, const aiScene* scene);
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);
@@ -35,6 +37,10 @@ private:
 
 
 public:
+    float Pitch = 0.f;
+    float Yaw = 0.f;
+    float Roll = 0.f;
+
     Model(const char* path)
     {
         loadModel(path);
@@ -43,11 +49,16 @@ public:
     Model();
     void Load2DQuadTextureMesh(std::string filePath);
     void Load2DQuadTextureMesh(Texture& texture);
+    void SetNewTexturelForSingleMesh(int meshIndex, int textureIndex, std::string filePath);
     //void SetFramebufferTexture(Texture& texture);
     bool useInstanced;
     void Draw(Shader& shader);
     void DrawInstanced(Shader& shader, int amount);
     void CreateInstancedModelMatrices(int amount);
+
+    void RotatePitch(float offSet);
+    void RotateYaw(float offSet);
+
 
     //Instancing:
     glm::mat4* modelMatrices;  //Large object array 

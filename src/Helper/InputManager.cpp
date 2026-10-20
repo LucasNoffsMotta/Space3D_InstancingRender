@@ -56,6 +56,24 @@ void InputManager::GetInput()
 			Inputs[eInput::Space_Bar] = true;
 			Inputs[eInput::None] = false;
 		}
+
+		if (glfwGetKey(windowReference, GLFW_KEY_P) == GLFW_PRESS)
+		{
+			Inputs[eInput::RotatePitch] = true;
+			Inputs[eInput::None] = false;
+		}
+
+		if (glfwGetKey(windowReference, GLFW_KEY_Y) == GLFW_PRESS)
+		{
+			Inputs[eInput::RotateYaw] = true;
+			Inputs[eInput::None] = false;
+		}
+
+		if (glfwGetKey(windowReference, GLFW_KEY_R) == GLFW_PRESS)
+		{
+			Inputs[eInput::RotateRoll] = true;
+			Inputs[eInput::None] = false;
+		}
 	}
 
 	TimeHelper::CountFrames(!canChangeInput, framesSinceLastInput);	
@@ -70,6 +88,7 @@ void InputManager::GetInput()
 	ReleasedKey(GLFW_KEY_A);
 	ReleasedKey(GLFW_KEY_D);
 	ReleasedKey(GLFW_KEY_W);
+	ReleasedKey(GLFW_KEY_P);
 
 }
 
@@ -125,6 +144,9 @@ eInput InputManager::InputGlfwKeyToEnum(int key)
 		break;
 	case GLFW_KEY_SPACE:
 		return eInput::Space_Bar;
+		break;
+	case GLFW_KEY_P:
+		return eInput::RotatePitch;
 		break;
 	}
 	return eInput::None;

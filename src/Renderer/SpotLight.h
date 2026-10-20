@@ -20,5 +20,6 @@ public:
 	void SetDirection(glm::vec3& dir);
 	void DrawSpotLight(Shader& shader, Texture& texture, Renderer& renderer);
 	void SetUniformsTest(Shader& shader) override;
+	eLightType GetLightType() override;
 };
 

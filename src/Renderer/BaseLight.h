@@ -35,4 +35,6 @@ public:
     virtual void SetUniformsTest(Shader& shader);
     void Draw(Shader& shader, Texture& texture, Renderer& renderer);
     std::string GetLightStrucUniformName();
+    virtual eLightType GetLightType();
+    glm::vec3 GetWorldPosition();
 };

@@ -24,11 +24,11 @@ private:
     VBO vbo;
     void setupMesh();
     unsigned int VAO, VBO, EBO;
-    Material material;
 public:
     int GetVAO();
     std::vector<Vertex>       vertices;
     std::vector<unsigned int> indices;
+    Material material;
     Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures, glm::vec4& color, float shininess);
     void Draw(Shader& shader);
     void DrawInstanced(Shader& shader, int amount);

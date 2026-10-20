@@ -30,3 +30,8 @@ void PointLight::SetUniformsTest(Shader& shader)
 	shader.SetUniformFloat((prefix + "linear").c_str(), this->linear);
 	shader.SetUniformFloat((prefix + "quadratic").c_str(), this->quadratic);
 }
+
+eLightType PointLight::GetLightType()
+{
+	return this->type;
+}

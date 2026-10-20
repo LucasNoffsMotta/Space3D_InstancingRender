@@ -33,6 +33,11 @@ void DirectionalLight::SetUniformsTest(Shader& shader)
 	shader.SetUniform3fv((prefix + "direction").c_str(), this->direction);
 }
 
+eLightType DirectionalLight::GetLightType()
+{
+	return this->type;
+}
+
 void DirectionalLight::DrawDirectionalLight(Shader& shader, Texture& texture, Renderer& renderer)
 {
 	BaseLight::Draw(shader, texture, renderer);
