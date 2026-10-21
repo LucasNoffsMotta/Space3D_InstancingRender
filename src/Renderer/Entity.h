@@ -27,7 +27,7 @@ private:
 	eHierarchyLevel HIERARCHY_LEVEL = eHierarchyLevel::NO_STENCIL_TEST;
 
 	//Spring Arm: Distance from the object, relative position from the object
-	Camera* attachedCamera;
+
 	float cameraDistance;
 	glm::vec3 cameraDirection;
 
@@ -37,6 +37,7 @@ private:
 
 
 public:
+	Camera* attachedCamera;
 	glm::mat4 modelMatrix = glm::mat4(1);
 	void SetIsTranslucid(bool isTranslucid);
 	bool GetIsTranslucid();

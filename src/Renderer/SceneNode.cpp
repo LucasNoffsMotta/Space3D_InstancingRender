@@ -99,7 +99,6 @@ void SceneNode::RenderNode()
 		RenderOutlineMask(stencilMaskShader);
 	}
 
-
 	if (children.size() > 0) {
 		for (int i = 0; i < children.size(); i++)
 		{
@@ -139,6 +138,8 @@ void SceneNode::RenderRegularObjectsNoStencilTest(Shader* shader)
 			shader->Activate();
 			SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
 		}
+
+		entity->Update(Controller);
 	}
 }
 
@@ -164,6 +165,9 @@ void SceneNode::RenderTranslucidObjectsNoStenciltest(Shader* shader)
 			shader->Activate();
 			SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
 		}
+
+
+		entity->Update(Controller);
 	}
 }
 
@@ -189,6 +193,8 @@ void SceneNode::RenderStencilTestOn(Shader* shader)
 			shader->Activate();
 			SetModelMatrixAndCallDraw(entity, shader, glm::vec3(1));
 		}
+
+		entity->Update(Controller);
 	}
 }
 

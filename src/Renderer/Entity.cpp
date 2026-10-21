@@ -30,7 +30,12 @@ void Entity::Update(InputManager* controller)
 
     if (controller->Inputs[eInput::RotatePitch])
     {
-        this->model->RotatePitch(400);
+        this->model->RotatePitch(1);
+    }
+
+    if (controller->Inputs[eInput::RotateYaw])
+    {
+        this->model->RotateYaw(1);
     }
 
     if (controller->Inputs[eInput::Arrow_Up])

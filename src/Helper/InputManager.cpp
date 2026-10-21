@@ -7,77 +7,70 @@ InputManager::InputManager()
 
 void InputManager::GetInput()
 {
-	canChangeInput = framesSinceLastInput >= framesThreshold;
 
-	if (canChangeInput)
+	if (glfwGetKey(windowReference, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		if (glfwGetKey(windowReference, GLFW_KEY_W) == GLFW_PRESS)
-		{
-			Inputs[eInput::Arrow_Up] = true;
-			Inputs[eInput::None] = false;
-		}
-		if (glfwGetKey(windowReference, GLFW_KEY_D) == GLFW_PRESS)
-		{
-			Inputs[eInput::Arrow_Right] = true;
-			Inputs[eInput::None] = false;
-		}
-		if (glfwGetKey(windowReference, GLFW_KEY_A) == GLFW_PRESS)
-		{
-			Inputs[eInput::Arrow_Left] = true;
-			Inputs[eInput::None] = false;
-		}
-		if (glfwGetKey(windowReference, GLFW_KEY_S) == GLFW_PRESS)
-		{
-			Inputs[eInput::Arrow_Down] = true;
-			Inputs[eInput::None] = false;
-		}
-		if (glfwGetKey(windowReference, GLFW_KEY_UP) == GLFW_PRESS)
-		{
-			Inputs[eInput::Arrow_Up] = true;
-			Inputs[eInput::None] = false;
-		}
-		if (glfwGetKey(windowReference, GLFW_KEY_DOWN) == GLFW_PRESS)
-		{
-			Inputs[eInput::Arrow_Down] = true;
-			Inputs[eInput::None] = false;
-		}
-		if (glfwGetKey(windowReference, GLFW_KEY_LEFT) == GLFW_PRESS)
-		{
-			Inputs[eInput::Arrow_Left] = true;
-			Inputs[eInput::None] = false;
-		}
-		if (glfwGetKey(windowReference, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		{
-			Inputs[eInput::Arrow_Right] = true;
-			Inputs[eInput::None] = false;
-		}
-		if (glfwGetKey(windowReference, GLFW_KEY_SPACE) == GLFW_PRESS)
-		{
-			Inputs[eInput::Space_Bar] = true;
-			Inputs[eInput::None] = false;
-		}
-
-		if (glfwGetKey(windowReference, GLFW_KEY_P) == GLFW_PRESS)
-		{
-			Inputs[eInput::RotatePitch] = true;
-			Inputs[eInput::None] = false;
-		}
-
-		if (glfwGetKey(windowReference, GLFW_KEY_Y) == GLFW_PRESS)
-		{
-			Inputs[eInput::RotateYaw] = true;
-			Inputs[eInput::None] = false;
-		}
-
-		if (glfwGetKey(windowReference, GLFW_KEY_R) == GLFW_PRESS)
-		{
-			Inputs[eInput::RotateRoll] = true;
-			Inputs[eInput::None] = false;
-		}
+		Inputs[eInput::Arrow_Up] = true;
+		Inputs[eInput::None] = false;
+	}
+	if (glfwGetKey(windowReference, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		Inputs[eInput::Arrow_Right] = true;
+		Inputs[eInput::None] = false;
+	}
+	if (glfwGetKey(windowReference, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		Inputs[eInput::Arrow_Left] = true;
+		Inputs[eInput::None] = false;
+	}
+	if (glfwGetKey(windowReference, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		Inputs[eInput::Arrow_Down] = true;
+		Inputs[eInput::None] = false;
+	}
+	if (glfwGetKey(windowReference, GLFW_KEY_UP) == GLFW_PRESS)
+	{
+		Inputs[eInput::Arrow_Up] = true;
+		Inputs[eInput::None] = false;
+	}
+	if (glfwGetKey(windowReference, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		Inputs[eInput::Arrow_Down] = true;
+		Inputs[eInput::None] = false;
+	}
+	if (glfwGetKey(windowReference, GLFW_KEY_LEFT) == GLFW_PRESS)
+	{
+		Inputs[eInput::Arrow_Left] = true;
+		Inputs[eInput::None] = false;
+	}
+	if (glfwGetKey(windowReference, GLFW_KEY_RIGHT) == GLFW_PRESS)
+	{
+		Inputs[eInput::Arrow_Right] = true;
+		Inputs[eInput::None] = false;
+	}
+	if (glfwGetKey(windowReference, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		Inputs[eInput::Space_Bar] = true;
+		Inputs[eInput::None] = false;
 	}
 
-	TimeHelper::CountFrames(!canChangeInput, framesSinceLastInput);	
+	if (glfwGetKey(windowReference, GLFW_KEY_P) == GLFW_PRESS)
+	{
+		Inputs[eInput::RotatePitch] = true;
+		Inputs[eInput::None] = false;
+	}
 
+	if (glfwGetKey(windowReference, GLFW_KEY_Y) == GLFW_PRESS)
+	{
+		Inputs[eInput::RotateYaw] = true;
+		Inputs[eInput::None] = false;
+	}
+
+	if (glfwGetKey(windowReference, GLFW_KEY_R) == GLFW_PRESS)
+	{
+		Inputs[eInput::RotateRoll] = true;
+		Inputs[eInput::None] = false;
+	}
 
 	ReleasedKey(GLFW_KEY_SPACE);
 	ReleasedKey(GLFW_KEY_RIGHT);
@@ -89,15 +82,13 @@ void InputManager::GetInput()
 	ReleasedKey(GLFW_KEY_D);
 	ReleasedKey(GLFW_KEY_W);
 	ReleasedKey(GLFW_KEY_P);
-
+	ReleasedKey(GLFW_KEY_Y);
 }
 
 void InputManager::ReleasedKey(int key)
 {
 	if (glfwGetKey(windowReference, key) == GLFW_RELEASE && Inputs[InputGlfwKeyToEnum(key)] == true)
 	{
-		canChangeInput = true;
-		framesSinceLastInput = framesThreshold;
 		Inputs[eInput::None] = true;
 		Inputs[InputGlfwKeyToEnum(key)] = false;
 	}
@@ -148,7 +139,11 @@ eInput InputManager::InputGlfwKeyToEnum(int key)
 	case GLFW_KEY_P:
 		return eInput::RotatePitch;
 		break;
+	case GLFW_KEY_Y:
+		return eInput::RotateYaw;
+		break;
 	}
+	
 	return eInput::None;
 }
 

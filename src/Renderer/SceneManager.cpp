@@ -251,11 +251,9 @@ void SceneManager::RenderScene(Window& window)
     glEnable(GL_DEPTH_TEST);
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
 
+
     //Draw Scene nodes recursively:
     RootNode->UpdateNode();
-
-    //Doinng here only for testing!
-    ControlledEntity->Update(ContentManager::Controllers["main"]);
 
     //Second pass 
     renderer.UnbindFramebuffer();
