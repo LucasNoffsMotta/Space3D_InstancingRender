@@ -83,6 +83,7 @@ void InputManager::GetInput()
 	ReleasedKey(GLFW_KEY_W);
 	ReleasedKey(GLFW_KEY_P);
 	ReleasedKey(GLFW_KEY_Y);
+	ReleasedKey(GLFW_KEY_R);
 }
 
 void InputManager::ReleasedKey(int key)
@@ -141,6 +142,9 @@ eInput InputManager::InputGlfwKeyToEnum(int key)
 		break;
 	case GLFW_KEY_Y:
 		return eInput::RotateYaw;
+		break;
+	case GLFW_KEY_R:
+		return eInput::RotateRoll;
 		break;
 	}
 	

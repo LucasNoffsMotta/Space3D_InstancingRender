@@ -58,6 +58,7 @@ public:
 
     void RotatePitch(float offSet);
     void RotateYaw(float offSet);
+    void RotateRoll(float offSet);
 
 
     //Instancing:

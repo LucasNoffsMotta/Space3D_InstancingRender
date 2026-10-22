@@ -305,13 +305,19 @@ void Model::CreateInstancedModelMatrices(int amount)
 void Model::RotatePitch(float offSet)
 {
     Pitch += offSet;
-    if (Pitch >= 360) Pitch = 360;
+    if (Pitch >= 360) Pitch = 0;
 }
 
 void Model::RotateYaw(float offSet)
 {
     Yaw += offSet;
-    if (Yaw >= 360) Yaw = 360;
+    if (Yaw >= 360) Yaw = 0;
+}
+
+void Model::RotateRoll(float offSet)
+{
+    Roll += offSet;
+    if (Roll >= 360) Roll = 0;
 }
 
 

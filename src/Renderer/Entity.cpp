@@ -38,35 +38,34 @@ void Entity::Update(InputManager* controller)
         this->model->RotateYaw(1);
     }
 
+    if (controller->Inputs[eInput::RotateRoll])
+    {
+        this->model->RotateRoll(1);
+    }
+
     if (controller->Inputs[eInput::Arrow_Up])
     {
-        worldPosition.z -= 10 * TimeHelper::GetDeltaTime();
-        attachedCamera->CameraPos.z -= 10 * TimeHelper::GetDeltaTime();
+        worldPosition += (Front * 10.f) * TimeHelper::GetDeltaTime();
+        attachedCamera->CameraPos += (Front * 10.f) * TimeHelper::GetDeltaTime();
     }
 
     if (controller->Inputs[eInput::Arrow_Down])
     {
-        worldPosition.z += 10 * TimeHelper::GetDeltaTime();
-        attachedCamera->CameraPos.z += 10 * TimeHelper::GetDeltaTime();
+        worldPosition -= (Front * 10.f) * TimeHelper::GetDeltaTime();
+        attachedCamera->CameraPos -= (Front * 10.f) * TimeHelper::GetDeltaTime();
     }
 
     if (controller->Inputs[eInput::Arrow_Left])
     {
-        worldPosition.x -= 10 * TimeHelper::GetDeltaTime();
-        attachedCamera->CameraPos.x -= 10 * TimeHelper::GetDeltaTime();
+        this->model->RotateYaw((100 * TimeHelper::GetDeltaTime()) * -1.f);
     }
 
     if (controller->Inputs[eInput::Arrow_Right])
     {
-        worldPosition.x += 10 * TimeHelper::GetDeltaTime();
-        attachedCamera->CameraPos.x += 10 * TimeHelper::GetDeltaTime();
+        this->model->RotateYaw(100 * TimeHelper::GetDeltaTime());
     }
 }
 
-void Entity::SetRotationAngle(float angle)
-{
-    rotationAngle = angle;
-}
 
 void Entity::SetModel(Model* model)
 {
@@ -81,15 +80,24 @@ Model* Entity::GetModel()
 glm::mat4 Entity::RotateMatrix(glm::mat4& modelMatrix)
 {
     float pitch = glm::radians(this->model->Pitch);
-    std::cout << "PITCH VALUE: " << this->model->Pitch << std::endl;
-
     float yaw = glm::radians(this->model->Yaw);
     float roll = glm::radians(this->model->Roll);
 
+    Front.x = cos(yaw * cos(pitch));
+    Front.y = sin(pitch);
+    Front.z = sin(yaw * cos(pitch));
+    Front = glm::normalize(-Front);
 
-    glm::mat4 yawRotated = glm::rotate(modelMatrix, yaw, YawAxis);
-    glm::mat4 pitchRotated = glm::rotate(yawRotated, pitch, PitchAxis);
-    return glm::rotate(pitchRotated, roll, RollAxis);
+    modelMatrix = glm::rotate(modelMatrix, yaw, -YawAxis);
+    modelMatrix = glm::rotate(modelMatrix, pitch, PitchAxis);
+    modelMatrix = glm::rotate(modelMatrix, roll, RollAxis);
+    return modelMatrix;
+}
+
+glm::vec3 Entity::GetDirection()
+{
+
+    return glm::vec3();
 }
 
 int Entity::GetID()

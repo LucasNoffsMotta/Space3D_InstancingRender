@@ -19,9 +19,13 @@ private:
 	Model* model;
 	glm::vec3 worldPosition;
 	glm::vec3 scale;
-	glm::vec3 PitchAxis = glm::vec3(1, 0, 0);
+	//If rotate Yaw, the front vector should rotate as well
+	//The Roll Axis should rotate around the front axis
+	glm::vec3 Front = glm::vec3(1, 0, 0);
+	glm::vec3 Up = glm::vec3(0, 1, 0);
+	glm::vec3 PitchAxis = glm::vec3(0, 0, 1);
 	glm::vec3 YawAxis = glm::vec3(0, 1, 0);
-	glm::vec3 RollAxis = glm::vec3(0, 0, 1);
+	glm::vec3 RollAxis = glm::vec3(1, 0, 0);
 
 	int Index;
 	eHierarchyLevel HIERARCHY_LEVEL = eHierarchyLevel::NO_STENCIL_TEST;
@@ -41,18 +45,16 @@ public:
 	glm::mat4 modelMatrix = glm::mat4(1);
 	void SetIsTranslucid(bool isTranslucid);
 	bool GetIsTranslucid();
-	float rotationAngle = 0;
 	glm::vec3 rotationAxis = glm::vec3(0, 1, 0);
 	bool outline = false;
 	Entity(Model* model, eHierarchyLevel level);
 	Entity();
 	void AttatchCamera(Camera* cam, float distance);
 	void Update(InputManager* controller);
-	void SetRotationAngle(float angle);
 	void SetModel(Model* model);
 	Model* GetModel();
-	glm::mat4  RotateMatrix(glm::mat4& modelMatrix);
-
+	glm::mat4 RotateMatrix(glm::mat4& modelMatrix);
+	glm::vec3 GetDirection();
 
 
 	void SetWorldPosition(glm::vec3& newPos);

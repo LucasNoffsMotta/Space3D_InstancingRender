@@ -59,12 +59,12 @@ void Camera::SetMoveSpeed(float newSpeed)
 
 void Camera::HandleKeybordInput(InputManager* controller)
 {
-	if (controller->Inputs[eInput::None] == true || mode == eCameraMode::Attached)
+	if (controller->Inputs[eInput::None] == true || mode == eCameraMode::TopDown)
 	{
 		return;
 	}
 
-	/*if (controller->Inputs[eInput::Arrow_Up])
+	if (controller->Inputs[eInput::Arrow_Up])
 	{
 		if (mode == eCameraMode::Free) CameraPos += (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
 		else if (mode == eCameraMode::TopDown) CameraPos.z -= (MoveSpeed * TimeHelper::GetDeltaTime());
@@ -85,7 +85,7 @@ void Camera::HandleKeybordInput(InputManager* controller)
 	{
 
 		CameraPos += (glm::normalize(glm::cross(CameraFront, CameraUp)) * MoveSpeed) * TimeHelper::GetDeltaTime();
-	}*/
+	}
 
 	if (controller->Inputs[eInput::Space_Bar])
 	{
