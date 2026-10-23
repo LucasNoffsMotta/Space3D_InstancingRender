@@ -64,8 +64,8 @@ void SceneManager::LoadModelsAndSetPositions()
 
 
     ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false, false);
-    ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 0, false, false);
-    ContentManager::CreateEntity(NO_STENCIL_TEST, hollowModel, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false, false);
+    ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, hollowModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 90, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false, false);
     //ContentManager::CreateEntity(STENCIL_TEST, soldierModel, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(1), 0, false, false);
     //ContentManager::CreateEntity(NO_STENCIL_TEST, treesAndBrushes, sceneOrigin, glm::vec3(1), 0, false);
@@ -74,8 +74,6 @@ void SceneManager::LoadModelsAndSetPositions()
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, cube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
     ContentManager::CreateEntity(NO_STENCIL_TEST, fbTest, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, false);
-
-
     ControlledEntity->AttatchCamera(BaseCamera, 10);
 
 

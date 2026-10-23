@@ -21,10 +21,6 @@ private:
     std::vector<Mesh> meshes;
     std::string directory;
     std::vector<Texture> textures_loaded;
-
-
-
-
     void loadModel(std::string path);
     void processNode(aiNode* node, const aiScene* scene);
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);
@@ -38,7 +34,7 @@ private:
 
 public:
     float Pitch = 0.f;
-    float Yaw = 0.f;
+    float Yaw = 270.f;
     float Roll = 0.f;
 
     Model(const char* path)
@@ -59,7 +55,6 @@ public:
     void RotatePitch(float offSet);
     void RotateYaw(float offSet);
     void RotateRoll(float offSet);
-
 
     //Instancing:
     glm::mat4* modelMatrices;  //Large object array 

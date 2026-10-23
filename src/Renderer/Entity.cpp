@@ -80,18 +80,33 @@ Model* Entity::GetModel()
 glm::mat4 Entity::RotateMatrix(glm::mat4& modelMatrix)
 {
     float pitch = glm::radians(this->model->Pitch);
-    float yaw = glm::radians(this->model->Yaw);
+    float yaw = glm::radians(this->model->Yaw) - glm::radians(90.f); //Apply offset to model rotation
     float roll = glm::radians(this->model->Roll);
 
     Front.x = cos(yaw * cos(pitch));
     Front.y = sin(pitch);
     Front.z = sin(yaw * cos(pitch));
-    Front = glm::normalize(-Front);
+    Front = glm::normalize(Front);
+
+    std::cout << "//Front x: " << Front.x << "// Front y: " << Front.y << "// Front z:  " << Front.z << std::endl;
 
     modelMatrix = glm::rotate(modelMatrix, yaw, -YawAxis);
     modelMatrix = glm::rotate(modelMatrix, pitch, PitchAxis);
     modelMatrix = glm::rotate(modelMatrix, roll, RollAxis);
     return modelMatrix;
+}
+
+void Entity::FixModelRotationOnLoad(glm::vec3 axis, float offSet)
+{
+    this->model->RotateYaw(offSet);
+
+    float pitch = glm::radians(this->model->Pitch);
+    float yaw = glm::radians(this->model->Yaw);
+    float roll = glm::radians(this->model->Roll);
+
+    modelMatrix = glm::rotate(modelMatrix, yaw, -YawAxis);
+    modelMatrix = glm::rotate(modelMatrix, pitch, PitchAxis);
+    modelMatrix = glm::rotate(modelMatrix, roll, RollAxis);
 }
 
 glm::vec3 Entity::GetDirection()

@@ -21,7 +21,7 @@ private:
 	glm::vec3 scale;
 	//If rotate Yaw, the front vector should rotate as well
 	//The Roll Axis should rotate around the front axis
-	glm::vec3 Front = glm::vec3(1, 0, 0);
+	glm::vec3 Front = glm::vec3(0, 0, 1);
 	glm::vec3 Up = glm::vec3(0, 1, 0);
 	glm::vec3 PitchAxis = glm::vec3(0, 0, 1);
 	glm::vec3 YawAxis = glm::vec3(0, 1, 0);
@@ -36,9 +36,6 @@ private:
 	glm::vec3 cameraDirection;
 
 	bool isTranslucid;
-
-
-
 
 public:
 	Camera* attachedCamera;
@@ -55,6 +52,8 @@ public:
 	Model* GetModel();
 	glm::mat4 RotateMatrix(glm::mat4& modelMatrix);
 	glm::vec3 GetDirection();
+
+	void FixModelRotationOnLoad(glm::vec3 axis, float offeset);
 
 
 	void SetWorldPosition(glm::vec3& newPos);
