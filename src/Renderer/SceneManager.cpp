@@ -40,10 +40,11 @@ void SceneManager::LoadModelsAndSetPositions()
 {
     int objID = 0;
     Model* carModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "car");
-    Model* terrainModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/WorldFloor/Untitled.obj", "terrain");
+    Model* terrainModel = ContentManager::LoadModel("/Floor/Floor.obj", "terrain");
     Model* hollowModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/HollowKnight/HollowKnightRig.obj", "hollow");
+    Model* pumpkin = ContentManager::LoadModel("/Pumpkin/HalloweenPumpkin.obj", "pumpkin");
     //Model* soldierModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj","soldier");
-    Model* grassModel = new Model();
+   // Model* grassModel = new Model();
     Model* transparentWindow = new Model();
     Model* frameBufferTestModel = new Model();
 
@@ -55,16 +56,17 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* pointLightModel = new Model(); 
     pointLightModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/PointLight.png");
 
-    transparentWindow->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/blending_transparent_window.png");
-    grassModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/grass.png");
-    grassModel->SetUseInstanced(1000);
+    //transparentWindow->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/blending_transparent_window.png");
+    transparentWindow->Load2DQuadTextureMesh("C:/Users/lnoff/Desktop/Programming/Projetos/C++/3DAssets/Textures/blending_transparent_window.png");
+   // grassModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/grass.png");
+    //grassModel->SetUseInstanced(1000);
 
     Model* fbTest = new Model();
     fbTest->Load2DQuadTextureMesh(renderer.GetFramebufferTexture());
 
 
-    ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false, false);
-    ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, hollowModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 90, false, false);
+    //ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false, false);
+    //ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, hollowModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 90, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false, false);
     //ContentManager::CreateEntity(STENCIL_TEST, soldierModel, glm::vec3(0, 1.0, 8), glm::vec3(0.02), 270, true, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(1), 0, false, false);
@@ -74,6 +76,7 @@ void SceneManager::LoadModelsAndSetPositions()
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, cube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
     ContentManager::CreateEntity(NO_STENCIL_TEST, fbTest, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, false);
+    ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
     ControlledEntity->AttatchCamera(BaseCamera, 10);
 
 
@@ -88,8 +91,9 @@ void SceneManager::LoadModelsAndSetPositions()
 
 void SceneManager::LoadGlobalLigths()
 {
-    glm::vec3 pointPos = glm::vec3(0, 15, 3);
+    glm::vec3 pointPos = glm::vec3(0, 6.5, 0);
     glm::vec3 pointColor = glm::vec3(0.8117, 0.3960f, 0.8784);
+    //glm::vec3 pointColor = glm::vec3(0.08117, 1.f, 0.08784);
 
     //glm::vec3 pointColor = glm::vec3(0.01, 0.01, 0.01);
 

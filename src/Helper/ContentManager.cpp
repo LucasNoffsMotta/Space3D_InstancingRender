@@ -13,6 +13,7 @@ std::map<std::string, Model*>                                     ContentManager
 std::map<std::string, InputManager*>                              ContentManager::Controllers;
 GLFWwindow*                                                       ContentManager::mainWindow;
 std::map<eHierarchyLevel, std::vector<Entity*>>                   ContentManager::Entities;
+
 int ContentManager::FRAMEBUFFER_SCREEN_SIZE_X = 0;
 int ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y = 0;
 eRenderMode ContentManager::GlobalRenderMode;
@@ -31,9 +32,10 @@ Texture* ContentManager::LoadTexture(const char* texturePath, std::string name)
     return Textures[name];
 }
 
-Model* ContentManager::LoadModel(const char* modelPath, std::string name)
+Model* ContentManager::LoadModel(std::string modelpath, std::string name)
 {
-    Models[name] = new Model(modelPath);
+    std::string fullPath = "res/models" + modelpath;
+    Models[name] = new Model(fullPath.c_str());
     return Models[name];
 }
 

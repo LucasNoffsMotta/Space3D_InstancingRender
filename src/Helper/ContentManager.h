@@ -47,7 +47,7 @@ public:
 
 	static Shader* LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName);
 	static Texture* LoadTexture(const char* texturePath, std::string name);
-	static Model* LoadModel(const char* modelPath, std::string name);
+	static Model* LoadModel(std::string path, std::string name);
 
 	static glm::vec3 GetColor(std::string color);
 	static void InsertColor(std::string name, glm::vec3 rgb);
