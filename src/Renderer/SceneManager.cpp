@@ -61,8 +61,9 @@ void SceneManager::LoadModelsAndSetPositions()
     //Will remove thast shit later
     std::vector<std::string> faces
     {
-        "res/textures/skybox/left.jpg",
+
         "res/textures/skybox/right.jpg",
+        "res/textures/skybox/left.jpg",
         "res/textures/skybox/top.jpg",
         "res/textures/skybox/bottom.jpg",
         "res/textures/skybox/front.jpg",
