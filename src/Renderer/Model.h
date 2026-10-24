@@ -27,6 +27,9 @@ private:
     void SetUpMeshesInstancedVao(int amount);
     void InitInstancesTranslations();
     std::vector<Vertex> LoadCustomPrimitiveMesh(ePrimitive primitive);
+    void Load3DCubeVertices(Texture& texture);
+
+    
 
 
     std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, eTextureType eType);
@@ -45,6 +48,8 @@ public:
     Model();
     void Load2DQuadTextureMesh(std::string filePath);
     void Load2DQuadTextureMesh(Texture& texture);
+ 
+
     void SetNewTexturelForSingleMesh(int meshIndex, int textureIndex, std::string filePath);
     //void SetFramebufferTexture(Texture& texture);
     bool useInstanced;

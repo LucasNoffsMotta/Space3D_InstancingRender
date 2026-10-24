@@ -34,10 +34,19 @@ void SceneManager::LoadShaderSingletons()
         "src/Shader/3DVertex.glsl",
         "src/Shader/PostProcessFragment.glsl",
         "PostProcessingOnModelShader");
+
+
+    RootShaderMap[eRenderMode::SkyBox] = ContentManager::LoadShader(
+        "src/Shader/SkyBoxVertex.glsl",
+        "src/Shader/SkyBoxFragment.glsl",
+        "SkyBoxShader");
 }
 
 void SceneManager::LoadModelsAndSetPositions()
 {
+    /*
+    *  MODELS
+    */
     int objID = 0;
     Model* carModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/LancerEvo/evo_blendswap.obj", "car");
     Model* terrainModel = ContentManager::LoadModel("/Floor/Floor.obj", "terrain");
@@ -47,6 +56,7 @@ void SceneManager::LoadModelsAndSetPositions()
    // Model* grassModel = new Model();
     Model* transparentWindow = new Model();
     Model* frameBufferTestModel = new Model();
+    Model* skyBoxCube = new Model();
 
     //Model* treesAndBrushes = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/FoliageTwo/Trees_Bushes.obj", "trees");
     
@@ -63,6 +73,11 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* fbTest = new Model();
     fbTest->Load2DQuadTextureMesh(renderer.GetFramebufferTexture());
 
+
+
+    /*
+    *  ENTITIES
+    */
 
     //ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, sceneOrigin, glm::vec3(1), 0, false, false);
     //ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, hollowModel, glm::vec3(0, 2.5, 0), glm::vec3(1), 90, false, false);

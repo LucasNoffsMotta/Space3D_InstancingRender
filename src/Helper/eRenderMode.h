@@ -2,6 +2,7 @@
 #include <cstdint>
 
 enum eRenderMode :uint8_t {
+	SkyBox,
 	NoLights,
 	NoLights_NoTextures,
 	DepthTestMode,

@@ -2,7 +2,7 @@
 #include "Model.h"
 #include "../Helper/ContentManager.h"
 
-void Mesh::setupMesh()
+void Mesh::setupMesh(int layouts)
 {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -17,17 +17,36 @@ void Mesh::setupMesh()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int),
 		&indices[0], GL_STATIC_DRAW);
 
+
 	// vertex positions
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+
+	if (layouts == 1)
+	{
+		glBindVertexArray(0);
+		return;
+	}
+
 	// vertex normals
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+
+	if (layouts == 2)
+	{
+		glBindVertexArray(0);
+		return;
+	}
+
 	// vertex texture coords
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
-	glBindVertexArray(0);
+	if (layouts == 3)
+	{
+		glBindVertexArray(0);
+		return;
+	}
 }
 
 int Mesh::GetVAO()
@@ -35,7 +54,7 @@ int Mesh::GetVAO()
 	return VAO;
 }
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures, glm::vec4& color, float shininess)
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures, glm::vec4& color, float shininess, int layouts)
 {
 	this->vertices = vertices;
 	this->indices = indices;

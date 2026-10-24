@@ -24,6 +24,7 @@ private:
 	VAO aimDotVao;
 	unsigned int rbo;
 	unsigned int fbo;
+	unsigned int skyBoxVao;
 	unsigned int frameBufferVao;
 	Texture frameBufferTexture;
 
@@ -50,6 +51,8 @@ public:
 	void InitFramebufferTexture();
 	void RenderFramebuffer(Shader& shader);
 	Texture& GetFramebufferTexture();
+
+	void InitSkyBoxRenderData();
 
 	glm::mat4 projection;
 	glm::mat4 view;
