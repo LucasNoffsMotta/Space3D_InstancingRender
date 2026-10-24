@@ -4,5 +4,6 @@
 
 enum eTextureType : uint8_t {
 	Diffuse,
-	Specular
+	Specular,
+	Diffuse_CubeMap
 };

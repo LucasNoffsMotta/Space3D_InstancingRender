@@ -59,7 +59,7 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, st
 	this->vertices = vertices;
 	this->indices = indices;
 	this->material = Material(textures, color, shininess);
-	setupMesh();
+	setupMesh(layouts);
 }
 
 
@@ -76,10 +76,12 @@ void Mesh::Draw(Shader& shader)
 
 	for (unsigned int i = 0; i < material.textures.size(); i++)
 	{
+
+		bool isDiffuse = material.textures[i].type == eTextureType::Diffuse || material.textures[i].type == eTextureType::Diffuse_CubeMap;
+
 		material.textures[i].ActiveTextureUnit(i);
 		material.textures[i].BindTexture();
 
-		bool isDiffuse = material.textures[i].type == eTextureType::Diffuse;
 
 		std::string number;
 		std::string name = isDiffuse ? "texture_diffuse" : "texture_specular";

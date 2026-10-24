@@ -224,10 +224,8 @@ void Model::Load3DCubeVertices(Texture& texture)
 }
 
 //TODO: NEED TO FIX THE TEXTURE COORS ON A UNTEXTURED MODEL FROM BLENDER
-void Model::SetNewTexturelForSingleMesh(int meshIndex, int textureIndex, std::string filePath)
+void Model::SetNewTexturelForSingleMesh(int meshIndex, int textureIndex, Texture& newTexture)
 {
-    Texture newTexture = Texture(filePath.c_str(), false, false);
-
     if (meshes.at(meshIndex).material.textures.size() <= textureIndex)
     {
         meshes.at(meshIndex).material.textures.push_back(newTexture);

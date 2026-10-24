@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\GraphicsProgramming\glad.c" />
+    <ClCompile Include="..\GraphicsProgramming\glad.c" />
     <ClCompile Include="src\Helper\ContentManager.cpp" />
     <ClCompile Include="src\Helper\InputManager.cpp" />
     <ClCompile Include="src\Helper\TimeHelper.cpp" />
@@ -141,8 +141,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\lnoff\Desktop\Programming\GraphicsProgramming\OpenGLLibaries\Include;D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\lnoff\Desktop\Programming\GraphicsProgramming\OpenGLLibaries\Libs;D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\Libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\Libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\lnoff\Desktop\Programming\GraphicsProgramming\OpenGLLibaries\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>

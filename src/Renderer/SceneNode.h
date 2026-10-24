@@ -29,6 +29,7 @@ private:
 	void RenderTranslucidObjectsNoStenciltest(Shader* shader);
 	void RenderWired(Shader* shader);
 	void RenderStencilTestOn(Shader* shader);
+	void RenderSkyBox(Shader* shader);
 	void SetViewMatrix();
 	void SetUpNodeLightsUniforms(Shader* shader);
 	void SetRenderModeOnMainShader(eRenderMode mode, Shader* mainShader);

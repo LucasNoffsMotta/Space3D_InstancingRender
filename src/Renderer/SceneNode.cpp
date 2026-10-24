@@ -73,6 +73,11 @@ void SceneNode::AttatchController(InputManager* controller)
 
 void SceneNode::RenderNode()
 {
+	if (level == eHierarchyLevel::SKY_BOX)
+	{
+		Shader* skyBoxShader = shaderMap[eRenderMode::SkyBox];
+		RenderSkyBox(skyBoxShader);
+	}
 	if (level == eHierarchyLevel::TRANSLUCID)
 	{
 		Shader* mainShader = shaderMap[eRenderMode::FullRender];
@@ -198,6 +203,20 @@ void SceneNode::RenderStencilTestOn(Shader* shader)
 	}
 }
 
+void SceneNode::RenderSkyBox(Shader* shader)
+{
+	glDepthMask(GL_FALSE);
+	shader->Activate();
+
+	for (int i = 0; i < Entities.size(); i++)
+	{
+		Entity* entity = Entities[i];
+		entity->Draw(shader);
+	}
+
+	glDepthMask(GL_TRUE);
+}
+
 void SceneNode::RenderOutlineMask(Shader* shader)
 {
 	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
@@ -225,9 +244,11 @@ void SceneNode::RenderWired(Shader* shader)
 void SceneNode::SetViewMatrix()
 {
 	glm::mat4 view = Cameras.back()->Update(Controller);
+
 	Shader* mainShader = shaderMap[eRenderMode::FullRender];
 	Shader* stencilMaskShader = shaderMap[eRenderMode::Outline];
 	Shader* instanced = shaderMap[eRenderMode::FullRender_Instanced];
+	Shader* skyBox = shaderMap[eRenderMode::SkyBox];
 
 	mainShader->Activate();
 	mainShader->SetUniformMatrix4fv("view", view);
@@ -237,6 +258,9 @@ void SceneNode::SetViewMatrix()
 
 	instanced->Activate();
 	instanced->SetUniformMatrix4fv("view", view);
+
+	skyBox->Activate();
+	skyBox->SetUniformMatrix4fv("view", glm::mat4(glm::mat3(view)));	
 }
 
 void SceneNode::SetProjectionMatrix(glm::mat4& projection)
@@ -282,8 +306,8 @@ void SceneNode::UpdateController()
 
 void SceneNode::UpdateNode()
 {
-	RenderNode();
 	UpdateController();
 	SetViewMatrix();
+	RenderNode();
 }
 

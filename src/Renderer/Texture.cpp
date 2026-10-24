@@ -36,6 +36,12 @@ void Texture::SetTextureType(eTextureType type)
 
 void Texture::BindTexture()
 {
+	if (type == eTextureType::Diffuse_CubeMap)
+	{
+		glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+		return;
+	}
+
 	glBindTexture(GL_TEXTURE_2D, texture);
 }
 
@@ -70,14 +76,14 @@ void Texture::GenerateTexture(GLenum format, int width, int height, bool repeat,
 void Texture::GenerateCubemapTexture(std::vector<std::string> texture_faces)
 {
 	int width, height, nrChannels;
-	unsigned char* data;
+
 
 	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
 
 	for (int i = 0; i < texture_faces.size(); i++)
 	{
-		data = stbi_load(texture_faces.at(i).c_str(), &width, &height, &nrChannels, 0);
+		unsigned char* data = stbi_load(texture_faces.at(i).c_str(), &width, &height, &nrChannels, 0);
 
 		if (data)
 		{
@@ -89,9 +95,9 @@ void Texture::GenerateCubemapTexture(std::vector<std::string> texture_faces)
 
 		else
 		{
-			std::cout << "Cubemap tex failed to load at path: " << *texture_faces << std::endl;
-			stbi_image_free(data);
+			std::cout << "Cubemap tex failed to load at path: " << texture_faces.at(i) << std::endl;
 		}
+		stbi_image_free(data);
 	}
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
