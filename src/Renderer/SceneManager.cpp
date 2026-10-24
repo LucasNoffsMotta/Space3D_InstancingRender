@@ -48,7 +48,6 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* transparentWindow = new Model();
     Model* frameBufferTestModel = new Model();
 
-
     //Model* treesAndBrushes = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/FoliageTwo/Trees_Bushes.obj", "trees");
     
     //TODO: make possible to copy vertex data from one obj to another
@@ -57,7 +56,7 @@ void SceneManager::LoadModelsAndSetPositions()
     pointLightModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/PointLight.png");
 
     //transparentWindow->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/blending_transparent_window.png");
-    transparentWindow->Load2DQuadTextureMesh("C:/Users/lnoff/Desktop/Programming/Projetos/C++/3DAssets/Textures/blending_transparent_window.png");
+    transparentWindow->Load2DQuadTextureMesh("res/textures/blending_transparent_window.png");
    // grassModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/grass.png");
     //grassModel->SetUseInstanced(1000);
 
@@ -278,6 +277,7 @@ void SceneManager::LoadViewAndProjectionMatrices()
 
 void SceneManager::InitHierarchyStructs()
 {
+    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::SKY_BOX));
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::NO_STENCIL_TEST));
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::TRANSLUCID));
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::STENCIL_TEST));

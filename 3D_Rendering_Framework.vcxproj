@@ -84,6 +84,8 @@
     <None Include="src\Shader\3DVertex.glsl" />
     <None Include="src\Shader\OutLineColor.glsl" />
     <None Include="src\Shader\NoLightsNoTexture_Frag.glsl" />
+    <None Include="src\Shader\SkyBoxFragment.glsl" />
+    <None Include="src\Shader\SkyBoxVertex.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

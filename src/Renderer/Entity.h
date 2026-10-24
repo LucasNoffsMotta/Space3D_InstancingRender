@@ -5,6 +5,7 @@
 
 enum eHierarchyLevel : int
 {
+	SKY_BOX,
 	TRANSLUCID,
 	NO_STENCIL_TEST,
 	STENCIL_TEST,

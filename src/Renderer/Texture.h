@@ -5,6 +5,7 @@
 #include<GLFW/glfw3.h>
 #include <string>
 #include "../Helper/eTextureType.h"
+#include <vector>
 
 
 
@@ -28,7 +29,11 @@ public:
 	eTextureType type;
 	void BindTexture();
 	void InitializeTexture(const char* filename, bool repeat = false, bool flip = false);
+
+
 	void GenerateTexture(GLenum format, int width, int height, bool repeat, unsigned char* data = nullptr);
+	void GenerateCubemapTexture(std::vector<std::string> texture_faces);
+
 	void GenerateFramebufferTexture(GLenum format, int width, int height, bool repeat);
 	Texture(const char* filename, bool repeat = false, bool flip = false);
 	Texture();
