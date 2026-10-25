@@ -54,11 +54,11 @@ int Mesh::GetVAO()
 	return VAO;
 }
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures, glm::vec4& color, float shininess, int layouts)
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures, glm::vec4& color, float shininess, float ior, int layouts)
 {
 	this->vertices = vertices;
 	this->indices = indices;
-	this->material = Material(textures, color, shininess);
+	this->material = Material(textures, color, shininess, ior);
 	setupMesh(layouts);
 }
 
@@ -97,6 +97,14 @@ void Mesh::Draw(Shader& shader)
 		{
 			shader.SetUniformInt(("material." + name).c_str(), i);
 			hasReflection = 1;
+
+			//If mesh has only 1 texture, and it is the skybox texture, the shader will use mtl color to calculate frag color
+			//Otherwise, can use the diffuse
+			if (material.textures.size() == 1)
+			{
+				shader.SetUniformInt("material.useColor", 1);
+			}
+
 			continue;
 		}
 
@@ -105,6 +113,7 @@ void Mesh::Draw(Shader& shader)
 
 	shader.SetUniformInt("HasReflectionTexture", hasReflection);
 	shader.SetUniform4fv("material.color", material.color);
+	shader.SetUniformFloat("material.ior", material.IndiceOfReflection);
 	shader.SetUniformFloat("material.shininess", material.shininess);
 
 	glBindVertexArray(VAO);
@@ -113,6 +122,7 @@ void Mesh::Draw(Shader& shader)
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
 void Mesh::DrawInstanced(Shader& shader, int amount)

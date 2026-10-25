@@ -4,6 +4,7 @@
 
 struct Material {
     float shininess;
+	float ior;
 	sampler2D texture_diffuse1;
     sampler2D texture_diffuse2;
 	sampler2D texture_diffuse3;
@@ -11,6 +12,7 @@ struct Material {
 	sampler2D texture_specular2;
 	samplerCube skybox; 
 	vec4 color;
+	bool useColor;
 }; 
   
 uniform Material material;
@@ -62,6 +64,7 @@ uniform int DebugMode;
 uniform int DepthTestMode;
 uniform int HasReflectionTexture;
 
+
 in vec3 FragPos;
 in vec3 position;
 in vec3 Normal;
@@ -91,7 +94,7 @@ vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir, vec4 diffuseColor, v
 	vec3 reflectDir = reflect(-lightDir, Normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
-	if (hasTexture == 1) {
+	if (!material.useColor) {
 
 		ambient = light.ambient * diffuseColor.xyz; 
 		diffuse = light.diffuse * diff *  diffuseColor.xyz;
@@ -100,7 +103,7 @@ vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir, vec4 diffuseColor, v
 
 	else {
 		
-		ambient = light.ambient *  material.color.rgb; 
+		ambient = light.ambient * material.color.rgb; 
 		diffuse = light.diffuse * diff *  material.color.rgb;
 		specular = light.specular * spec * material.color.rgb;
 	}
@@ -123,7 +126,7 @@ vec3 GetPointLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir, ve
 	float dist = length(light.position - FragPos);
 	float atenuation = 1.0 / (light.constant + light.linear * dist +  light.quadratic * (dist * dist)); 
 
-	if (hasTexture == 1) {
+	if (!material.useColor) {
 		
 		ambient = light.ambient * diffuseColor.xyz;
 		diffuse = light.diffuse * diff * diffuseColor.xyz;
@@ -163,7 +166,7 @@ vec3 GetSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir,  vec
 	float epsilon = light.innerCutoff - light.outerCutoff;
 	float intensity = clamp((theta - light.outerCutoff) / epsilon, 0.0, 1.0);
 
-	if (hasTexture == 1) {
+	if (!material.useColor) {
 		ambient = light.ambient * diffuseColor.xyz;
 		diffuse = light.diffuse * diff * diffuseColor.xyz;
 		specular = light.specular * spec * specularColor;
@@ -246,7 +249,6 @@ void main()
 		return;
 	}
 
-
 	//TODO:
 	//The lights calculation only uses diffuse if material has texture, so it shouldnt be necessary to pass as a parameter always
 	//Implement Indice Of Reflection and pass the reflextion texture to light claculations
@@ -256,7 +258,7 @@ void main()
 		vec3 I = normalize(position - viewPos);
 		vec3 R = reflect(I, normalize(Normal));
 		vec4 reflectionColor =  vec4(texture(material.skybox, R).rgb, 1.0);
-		FragColor = vec4(GetFullLitColorResult(reflectionColor), GetFinalAlphaValue(diffuseColor, material));
+		FragColor = mix(vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material)), reflectionColor, material.ior);
 		return;
 	}
 

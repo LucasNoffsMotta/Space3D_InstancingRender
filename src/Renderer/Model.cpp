@@ -73,6 +73,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     std::vector<Texture> textures;
     glm::vec4 meshColor = glm::vec4(0);
     float shininess;
+    float ior = 0.f;
 
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
@@ -128,6 +129,11 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
             meshColor.z = color.b;
         }
 
+        if (AI_SUCCESS == material->Get(AI_MATKEY_REFRACTI, ior))
+        {
+            ior = 1 / ior;
+        }
+
         if (AI_SUCCESS == material->Get(AI_MATKEY_OPACITY, opacity))
         {
             meshColor.a = opacity;
@@ -143,7 +149,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     }
 
     return Mesh
-    (vertices, indices, textures, meshColor, shininess);
+    (vertices, indices, textures, meshColor, shininess, ior);
 }
 
 void Model::Load2DQuadTextureMesh(std::string filePath)
@@ -152,16 +158,18 @@ void Model::Load2DQuadTextureMesh(std::string filePath)
     std::vector<Texture> textures;
 
     textures.push_back(Texture(filePath.c_str(), false, true));
+    textures[0].SetTextureType(eTextureType::Diffuse);
 
     glm::vec4 color = glm::vec4(0);
     float shininess = 10.f;
+    float ior = 0;
 
     std::vector<unsigned int> indices =  {  
     0, 1, 3,   
     1, 2, 3   
     };
 
-    Mesh mesh = Mesh(vertices, indices, textures, color, shininess);
+    Mesh mesh = Mesh(vertices, indices, textures, color, shininess, ior);
     meshes.push_back(mesh);
 }
 
@@ -174,13 +182,14 @@ void Model::Load2DQuadTextureMesh(Texture& texture)
 
     glm::vec4 color = glm::vec4(0);
     float shininess = 10.f;
+    float ior = 0;
 
     std::vector<unsigned int> indices = {
     0, 1, 3,
     1, 2, 3
     };
 
-    Mesh mesh = Mesh(vertices, indices, textures, color, shininess);
+    Mesh mesh = Mesh(vertices, indices, textures, color, shininess, ior);
     meshes.push_back(mesh);
 }
 

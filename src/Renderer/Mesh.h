@@ -29,7 +29,7 @@ public:
     std::vector<Vertex>       vertices;
     std::vector<unsigned int> indices;
     Material material;
-    Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures, glm::vec4& color, float shininess, int layouts=3);
+    Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures, glm::vec4& color, float shininess, float ior, int layouts = 3);
     void Draw(Shader& shader);
     void DrawInstanced(Shader& shader, int amount);
 };
