@@ -30,6 +30,8 @@ public:
 	void BindTexture();
 	void InitializeTexture(const char* filename, bool repeat = false, bool flip = false);
 
+	std::string TextureTypeToUniform(eTextureType type);
+
 
 	void GenerateTexture(GLenum format, int width, int height, bool repeat, unsigned char* data = nullptr);
 	void GenerateCubemapTexture(std::vector<std::string> texture_faces);

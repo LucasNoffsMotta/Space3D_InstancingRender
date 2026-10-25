@@ -50,6 +50,25 @@ void Texture::InitializeTexture(const char* filename, bool repeat, bool flip)
 	LoadImageDataFromFile(filename, repeat, flip);
 }
 
+std::string Texture::TextureTypeToUniform(eTextureType type)
+{
+	switch (type)
+	{
+	case Diffuse:
+		return "texture_diffuse";
+		break;
+	case Specular:
+		return "texture_specular";
+		break;
+	case Diffuse_CubeMap:
+		return "skybox";
+		break;
+	default:
+		return "none";
+		break;
+	}
+}
+
 void Texture::GenerateTexture(GLenum format, int width, int height, bool repeat, unsigned char* data)
 {
 	glGenTextures(1, &texture);
@@ -76,8 +95,6 @@ void Texture::GenerateTexture(GLenum format, int width, int height, bool repeat,
 void Texture::GenerateCubemapTexture(std::vector<std::string> texture_faces)
 {
 	int width, height, nrChannels;
-
-
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
 

@@ -29,6 +29,7 @@ private:
     std::vector<Vertex> LoadCustomPrimitiveMesh(ePrimitive primitive);
 
 
+
     
 
 
@@ -49,8 +50,9 @@ public:
     void Load2DQuadTextureMesh(std::string filePath);
     void Load2DQuadTextureMesh(Texture& texture);
  
-
+    Texture& CreateSkyBox(std::string cubemapFolder);
     void SetNewTexturelForSingleMesh(int meshIndex, int textureIndex, Texture& newTexture);
+    void PushNewTexture(Texture& newTexture);
     //void SetFramebufferTexture(Texture& texture);
     bool useInstanced;
     void Draw(Shader& shader);

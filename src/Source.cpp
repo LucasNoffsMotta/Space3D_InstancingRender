@@ -86,7 +86,9 @@ int main()
         scene.RenderScene(window);
 
         //Important:
-        //For the framebuffer work properly, it is necessary to set get the screen size in pixels and pass it on the gl calls (texture, generate framebuffer, viewport and projection matrix), otherwise the logic size will be different of the actual framebuffer size
+        //For the framebuffer work properly, it is necessary to set get the screen size in pixels and pass it on the gl calls
+        // (texture, generate framebuffer, viewport and projection matrix), 
+        // otherwise the logic size will be different of the actual framebuffer size
 
         window.Update();
     }

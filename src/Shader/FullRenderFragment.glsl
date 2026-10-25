@@ -9,6 +9,7 @@ struct Material {
 	sampler2D texture_diffuse3;
     sampler2D texture_specular1;
 	sampler2D texture_specular2;
+	samplerCube skybox; 
 	vec4 color;
 }; 
   
@@ -59,6 +60,7 @@ uniform int hasTexture;
 uniform int LightsOn;
 uniform int DebugMode;
 uniform int DepthTestMode;
+uniform int HasReflectionTexture;
 
 in vec3 FragPos;
 in vec3 position;
@@ -245,6 +247,29 @@ void main()
 	}
 
 
+	//TODO:
+	//The lights calculation only uses diffuse if material has texture, so it shouldnt be necessary to pass as a parameter always
+	//Implement Indice Of Reflection and pass the reflextion texture to light claculations
 
-	FragColor = vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material));
+
+	//Fix that: The texture type is not working, so the HasReflection uniform doesnt ever get here (check the Mesh class -> Draw)
+	vec3 I = normalize(position - viewPos);
+	vec3 R = reflect(I, normalize(Normal));
+	vec4 reflectionColor =  vec4(texture(material.skybox, R).rgb, 1.0);
+	FragColor = vec4(GetFullLitColorResult(reflectionColor), GetFinalAlphaValue(diffuseColor, material));
+	return;
+
+	if (HasReflectionTexture == 1)
+	{
+		vec3 I = normalize(position - viewPos);
+		vec3 R = reflect(I, normalize(Normal));
+		vec4 reflectionColor =  vec4(texture(material.skybox, R).rgb, 1.0);
+		FragColor = vec4(GetFullLitColorResult(reflectionColor), GetFinalAlphaValue(diffuseColor, material));
+		return;
+	}
+
+	else if (HasReflectionTexture == 0)
+	{	
+		FragColor = vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material));
+	}
 }

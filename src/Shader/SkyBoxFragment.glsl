@@ -5,7 +5,7 @@ in vec3 TexCoords;
 
 struct Material
 {
-    samplerCube texture_diffuse1;
+    samplerCube skybox;
 };
 
 uniform Material material;
@@ -13,5 +13,5 @@ uniform Material material;
 void main()
 {    
     //FragColor = vec4(1,0,0,1);
-    FragColor = texture(material.texture_diffuse1, TexCoords);
+    FragColor = texture(material.skybox, TexCoords);
 }

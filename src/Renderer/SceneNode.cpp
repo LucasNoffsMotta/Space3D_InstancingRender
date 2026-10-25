@@ -86,7 +86,7 @@ void SceneNode::RenderNode()
 		RenderTranslucidObjectsNoStenciltest(mainShader);
 	}
 
-	else if (level == eHierarchyLevel::NO_STENCIL_TEST)
+	if (level == eHierarchyLevel::NO_STENCIL_TEST)
 	{
 		Shader* mainShader = shaderMap[eRenderMode::FullRender];
 		mainShader->Activate();
@@ -94,7 +94,7 @@ void SceneNode::RenderNode()
 		RenderRegularObjectsNoStencilTest(mainShader);
 	}
 
-	else if (level == eHierarchyLevel::STENCIL_TEST)
+	if (level == eHierarchyLevel::STENCIL_TEST)
 	{
 		Shader* mainShader = shaderMap[eRenderMode::FullRender];
 		Shader* stencilMaskShader = shaderMap[eRenderMode::Outline];
@@ -205,7 +205,7 @@ void SceneNode::RenderStencilTestOn(Shader* shader)
 
 void SceneNode::RenderSkyBox(Shader* shader)
 {
-	glDepthMask(GL_FALSE);
+	glDepthFunc(GL_LEQUAL);
 	shader->Activate();
 
 	for (int i = 0; i < Entities.size(); i++)
@@ -214,7 +214,7 @@ void SceneNode::RenderSkyBox(Shader* shader)
 		entity->Draw(shader);
 	}
 
-	glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LESS);
 }
 
 void SceneNode::RenderOutlineMask(Shader* shader)

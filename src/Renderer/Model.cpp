@@ -215,6 +215,7 @@ void Model::Load3DCubeVertices(Texture& texture)
     };
 
     std::vector<Texture> textures;
+    textures.push_back(texture);
     glm::vec4 color = glm::vec4(0);
     float s = 1.f;
 
@@ -232,6 +233,14 @@ void Model::SetNewTexturelForSingleMesh(int meshIndex, int textureIndex, Texture
         return;
     }
     meshes.at(meshIndex).material.textures[textureIndex] = newTexture;
+}
+
+void Model::PushNewTexture(Texture& newTexture)
+{
+    for (auto& mesh : meshes)
+    {
+        mesh.material.textures.push_back(newTexture);
+    }
 }
 
 void Model::SetUpMeshesInstancedVao(int amount)
@@ -364,6 +373,26 @@ std::vector<Vertex> Model::LoadCustomPrimitiveMesh(ePrimitive primitive)
     }
 
      return vertices;
+}
+
+Texture& Model::CreateSkyBox(std::string cubemapFolder)
+{
+    //Will remove thast shit later
+    std::vector<std::string> faces
+    {
+        cubemapFolder + "/right.jpg",
+        cubemapFolder + "/left.jpg",
+        cubemapFolder + "/top.jpg",
+        cubemapFolder + "/bottom.jpg",
+        cubemapFolder + "/front.jpg",
+        cubemapFolder + "/back.jpg"
+    };
+
+    Texture cubeMap = Texture();
+    cubeMap.GenerateCubemapTexture(faces);
+    cubeMap.SetTextureType(eTextureType::Diffuse_CubeMap);
+    Load3DCubeVertices(cubeMap);
+    return cubeMap;
 }
 
 

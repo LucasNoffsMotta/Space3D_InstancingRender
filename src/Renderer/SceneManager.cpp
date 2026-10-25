@@ -52,42 +52,22 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* terrainModel = ContentManager::LoadModel("/Floor/Floor.obj", "terrain");
     Model* hollowModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/HollowKnight/HollowKnightRig.obj", "hollow");
     Model* pumpkin = ContentManager::LoadModel("/Pumpkin/HalloweenPumpkin.obj", "pumpkin");
-    //Model* soldierModel = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/Soldier/WW2Panzergrenadier.obj","soldier");
-   // Model* grassModel = new Model();
+    Model* grassModel = new Model();
     Model* transparentWindow = new Model();
     Model* frameBufferTestModel = new Model();
     Model* skyBoxCube = new Model();
+    Texture skybox = skyBoxCube->CreateSkyBox("res/textures/skybox");
 
-    //Will remove thast shit later
-    std::vector<std::string> faces
-    {
+    //Pushing the skybox texture to create reflection effect (used as a texture on those models, shader use this texture to sample values from)
+    pumpkin->PushNewTexture(skybox);
+    terrainModel->PushNewTexture(skybox);
 
-        "res/textures/skybox/right.jpg",
-        "res/textures/skybox/left.jpg",
-        "res/textures/skybox/top.jpg",
-        "res/textures/skybox/bottom.jpg",
-        "res/textures/skybox/front.jpg",
-        "res/textures/skybox/back.jpg"
-    };
-
-    Texture cubeMap = Texture();
-    cubeMap.GenerateCubemapTexture(faces);
-    cubeMap.SetTextureType(eTextureType::Diffuse_CubeMap);
-    skyBoxCube->Load3DCubeVertices(cubeMap);
-    skyBoxCube->SetNewTexturelForSingleMesh(0, 0, cubeMap);
-    
-
-    //Model* treesAndBrushes = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/FoliageTwo/Trees_Bushes.obj", "trees");
-    
-    //TODO: make possible to copy vertex data from one obj to another
     Model* cube = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "cube");
     Model* pointLightModel = new Model(); 
     pointLightModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/PointLight.png");
-
-    //transparentWindow->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/blending_transparent_window.png");
     transparentWindow->Load2DQuadTextureMesh("res/textures/blending_transparent_window.png");
-    //grassModel->Load2DQuadTextureMesh("res/textures/grass.png");
-    //grassModel->SetUseInstanced(1000);
+    grassModel->Load2DQuadTextureMesh("res/textures/grass.png");
+    grassModel->SetUseInstanced(1000);
 
     Model* fbTest = new Model();
     fbTest->Load2DQuadTextureMesh(renderer.GetFramebufferTexture());
@@ -96,13 +76,13 @@ void SceneManager::LoadModelsAndSetPositions()
     /*
     *  ENTITIES
     */
-    ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false, false);
+    //ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 1.0, 1), glm::vec3(1), 270, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, cube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
-    ContentManager::CreateEntity(NO_STENCIL_TEST, fbTest, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, false);
+    //ContentManager::CreateEntity(NO_STENCIL_TEST, fbTest, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, false);
     ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(SKY_BOX, skyBoxCube, sceneOrigin, glm::vec3(1), 0, false, false);
     //ControlledEntity->AttatchCamera(BaseCamera, 10);
@@ -118,7 +98,7 @@ void SceneManager::LoadModelsAndSetPositions()
 
 void SceneManager::LoadGlobalLigths()
 {
-    glm::vec3 pointPos = glm::vec3(0, 6.5, 0);
+    glm::vec3 pointPos = glm::vec3(0, 8, 0);
     glm::vec3 pointColor = glm::vec3(0.8117, 0.3960f, 0.8784);
     //glm::vec3 pointColor = glm::vec3(0.08117, 1.f, 0.08784);
 
@@ -264,10 +244,8 @@ void SceneManager::SetUpSceneProjection(glm::mat4& projection)
     RootShaderMap[eRenderMode::FullRender]->Activate();
     RootShaderMap[eRenderMode::FullRender]->SetUniformMatrix4fv("projection", projection);
 
-
     RootShaderMap[eRenderMode::Outline]->Activate();
     RootShaderMap[eRenderMode::Outline]->SetUniformMatrix4fv("projection", projection);
-
 
     RootShaderMap[eRenderMode::FullRender_Instanced]->Activate();
     RootShaderMap[eRenderMode::FullRender_Instanced]->SetUniformMatrix4fv("projection", projection);
@@ -296,6 +274,7 @@ void SceneManager::RenderScene(Window& window)
 
     glDisable(GL_DEPTH_TEST);
 
+    //Draw post processing texture
     renderer.RenderFramebuffer(*ContentManager::Shaders["frameBufferShader"]);
 }
 
@@ -308,8 +287,8 @@ void SceneManager::LoadViewAndProjectionMatrices()
 
 void SceneManager::InitHierarchyStructs()
 {
-    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::SKY_BOX));
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::NO_STENCIL_TEST));
+    hierarchy.push_back(HierarchyLevel(eHierarchyLevel::SKY_BOX));
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::TRANSLUCID));
     hierarchy.push_back(HierarchyLevel(eHierarchyLevel::STENCIL_TEST));
 }
