@@ -96,7 +96,7 @@ void Mesh::Draw(Shader& shader)
 		else if (material.textures[i].type == eTextureType::Diffuse_CubeMap)
 		{
 			shader.SetUniformInt(("material." + name).c_str(), i);
-			int hasReflection = 1;
+			hasReflection = 1;
 			continue;
 		}
 

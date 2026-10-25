@@ -251,14 +251,6 @@ void main()
 	//The lights calculation only uses diffuse if material has texture, so it shouldnt be necessary to pass as a parameter always
 	//Implement Indice Of Reflection and pass the reflextion texture to light claculations
 
-
-	//Fix that: The texture type is not working, so the HasReflection uniform doesnt ever get here (check the Mesh class -> Draw)
-	vec3 I = normalize(position - viewPos);
-	vec3 R = reflect(I, normalize(Normal));
-	vec4 reflectionColor =  vec4(texture(material.skybox, R).rgb, 1.0);
-	FragColor = vec4(GetFullLitColorResult(reflectionColor), GetFinalAlphaValue(diffuseColor, material));
-	return;
-
 	if (HasReflectionTexture == 1)
 	{
 		vec3 I = normalize(position - viewPos);

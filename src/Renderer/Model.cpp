@@ -390,7 +390,6 @@ Texture& Model::CreateSkyBox(std::string cubemapFolder)
 
     Texture cubeMap = Texture();
     cubeMap.GenerateCubemapTexture(faces);
-    cubeMap.SetTextureType(eTextureType::Diffuse_CubeMap);
     Load3DCubeVertices(cubeMap);
     return cubeMap;
 }

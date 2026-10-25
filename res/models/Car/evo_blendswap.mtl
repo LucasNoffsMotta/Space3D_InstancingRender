@@ -1,0 +1,42 @@
+# Blender 5.2.2 LTS MTL File: 'evo_blendswap.blend'
+# www.blender.org
+
+newmtl Szyba_Final
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.000217 0.000000 0.060201
+Ks 0.200000 0.200000 0.200000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.826923
+illum 9
+
+newmtl body_realtime
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd body_red.png
+map_Ks body_spec.png
+
+newmtl interior_realtime
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.150000 0.150000 0.150000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd interior_diffuse.png
+
+newmtl wheel_realtime
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd wheel_diffuse.png
+map_Ks wheel_spec.png
