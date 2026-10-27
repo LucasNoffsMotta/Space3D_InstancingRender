@@ -19,6 +19,7 @@ private:
 
 public:
 	 InputManager();
+	 std::vector<eInput> InputList;
 	 double mouseX;
 	 GLFWwindow* windowReference;
 	 double mouseY;

@@ -11,5 +11,9 @@ enum eInput : uint8_t
 	Space_Bar,
 	RotatePitch,
 	RotateYaw,
-	RotateRoll
+	RotateRoll,
+	RenderMode_LightsOff,
+	RenderMode_Debug,
+	RenderMode_DepthTest,
+	RenderMode_LitAndReflection
 };

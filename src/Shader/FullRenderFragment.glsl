@@ -1,6 +1,14 @@
 #version 330 core
 
 
+struct RenderMode {
+     int DebugMode;
+	 int DepthTestMode;
+	 int LightsOff;
+	 int Full_LightsAndReflection;
+};
+
+uniform RenderMode rm;
 
 struct Material {
     float shininess;
@@ -59,9 +67,6 @@ uniform SpotLight spotLight[MAX_POINTLIGHTS];
 uniform DirLight dirLight[MAX_POINTLIGHTS];
 uniform vec3 viewPos;
 uniform int hasTexture;
-uniform int LightsOn;
-uniform int DebugMode;
-uniform int DepthTestMode;
 uniform int HasReflectionTexture;
 
 
@@ -220,14 +225,14 @@ vec3 GetFullLitColorResult(vec4 diffuseColor)
 void main()
 {
 	//Turn On Debug Mode
-	if (DebugMode == 1)
+	if (rm.DebugMode == 1)
 	{
 		FragColor =  vec4(texCoord, 0.0, 1.0);
 		return;
 	}
 
 	//Turn On Depth Test Mode
-	if (DepthTestMode == 1)
+	if (rm.DepthTestMode == 1)
 	{
 		float depth = LinearizeDepth(gl_FragCoord.z) / far; 
 		FragColor = vec4(vec3(depth), 1.0);
@@ -243,26 +248,29 @@ void main()
 	}
 
 	//Turn Off lit mode
-	if (LightsOn == 0)
+	if (rm.LightsOff == 1)
 	{
-		FragColor =  vec4(texture(material.texture_diffuse1, texCoord));
+		if (!material.useColor) {
+			FragColor =  vec4(texture(material.texture_diffuse1, texCoord));
+		}
+
+		else
+		{
+			FragColor =  vec4(material.color);
+		}
+
 		return;
 	}
 
-	//TODO:
-	//The lights calculation only uses diffuse if material has texture, so it shouldnt be necessary to pass as a parameter always
-	//Implement Indice Of Reflection and pass the reflextion texture to light claculations
-
-	if (HasReflectionTexture == 1)
-	{
+	if (rm.Full_LightsAndReflection == 1 && HasReflectionTexture == 1) {
 		vec3 I = normalize(position - viewPos);
 		vec3 R = reflect(I, normalize(Normal));
 		vec4 reflectionColor =  vec4(texture(material.skybox, R).rgb, 1.0);
-		FragColor = mix(vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material)), reflectionColor, material.ior);
+		FragColor = mix(vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material)), reflectionColor, 0.5);
 		return;
 	}
 
-	else if (HasReflectionTexture == 0)
+	else if (rm.Full_LightsAndReflection == 1 && HasReflectionTexture == 0)
 	{	
 		FragColor = vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material));
 	}

@@ -46,7 +46,7 @@ int main()
 
     window.SetViewPort(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
 
-    ContentManager::SetGlobalRenderMode(eRenderMode::FullRender);
+    ContentManager::SetGlobalRenderMode(eRenderMode::NoLights);
     ContentManager::SetPostProcessEffect(ePostProcessEffect::NightVision);
 
 

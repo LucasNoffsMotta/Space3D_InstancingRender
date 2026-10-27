@@ -79,6 +79,7 @@ void Mesh::Draw(Shader& shader)
 	{
 		material.textures[i].ActiveTextureUnit(i);
 		material.textures[i].BindTexture();
+		shader.SetUniformInt("material.useColor", 0);
 
 		std::string number;
 		std::string name = material.textures[i].TextureTypeToUniform(material.textures[i].type);
@@ -113,16 +114,20 @@ void Mesh::Draw(Shader& shader)
 
 	shader.SetUniformInt("HasReflectionTexture", hasReflection);
 	shader.SetUniform4fv("material.color", material.color);
-	shader.SetUniformFloat("material.ior", material.IndiceOfReflection);
+	shader.SetUniformFloat("material.ior", 0.5f); 	// material.IndiceOfReflection
 	shader.SetUniformFloat("material.shininess", material.shininess);
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
+
+	//Very important: Had a anoying bug with textures not being rendered due to that. It is important to reset the shader uniform flag to default after changing it inside a conditional clausule. 
+	//The objects share the same shader program, so if a shader uniform flag is changed between frames, the next object can receive a "dirt" shader
+	shader.SetUniformInt("material.useColor", 0);
+	shader.SetUniformInt("HasReflectionTexture", 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	//glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
 void Mesh::DrawInstanced(Shader& shader, int amount)

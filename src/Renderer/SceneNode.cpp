@@ -13,22 +13,45 @@ void SceneNode::SetUpNodeLightsUniforms(Shader* shader)
 	}
 }
 
+/*
+*      int DebugMode;
+	 int DepthTestMode;
+	 int LightsOff;
+	 int Full_LightsAndReflection;
+*/
 void SceneNode::SetRenderModeOnMainShader(eRenderMode mode, Shader* mainShader)
 {
 	if (mode == eRenderMode::FullRender)
 	{
-		mainShader->SetUniformInt("LightsOn", 1);
+		mainShader->SetUniformInt("rm.Full_LightsAndReflection", 1);
+		mainShader->SetUniformInt("rm.DebugMode", 0);
+		mainShader->SetUniformInt("rm.DepthTestMode", 0);
+		mainShader->SetUniformInt("rm.LightsOff", 0);
 		SetUpNodeLightsUniforms(mainShader);
 	}
 
-	else if (mode == eRenderMode::NoLights_NoTextures)
+	else if (mode == eRenderMode::DebugMode)
 	{
-		mainShader->SetUniformInt("DebugMode", 1);
+		mainShader->SetUniformInt("rm.Full_LightsAndReflection", 0);
+		mainShader->SetUniformInt("rm.DebugMode", 1);
+		mainShader->SetUniformInt("rm.DepthTestMode", 0);
+		mainShader->SetUniformInt("rm.LightsOff", 0);
 	}
 
 	else if (mode == eRenderMode::DepthTestMode)
 	{
-		mainShader->SetUniformInt("DepthTestMode", 1);
+		mainShader->SetUniformInt("rm.Full_LightsAndReflection", 0);
+		mainShader->SetUniformInt("rm.DebugMode", 0);
+		mainShader->SetUniformInt("rm.DepthTestMode", 1);
+		mainShader->SetUniformInt("rm.LightsOff", 0);
+	}
+
+	else if (mode == eRenderMode::NoLights)
+	{
+		mainShader->SetUniformInt("rm.Full_LightsAndReflection", 0);
+		mainShader->SetUniformInt("rm.DebugMode", 0);
+		mainShader->SetUniformInt("rm.DepthTestMode", 0);
+		mainShader->SetUniformInt("rm.LightsOff", 1);
 	}
 }
 
@@ -78,6 +101,7 @@ void SceneNode::RenderNode()
 		Shader* skyBoxShader = shaderMap[eRenderMode::SkyBox];
 		RenderSkyBox(skyBoxShader);
 	}
+
 	if (level == eHierarchyLevel::TRANSLUCID)
 	{
 		Shader* mainShader = shaderMap[eRenderMode::FullRender];
@@ -243,7 +267,7 @@ void SceneNode::RenderWired(Shader* shader)
 
 void SceneNode::SetViewMatrix()
 {
-	glm::mat4 view = Cameras.back()->Update(Controller);
+	glm::mat4 view = Cameras.back()->Update(ContentManager::Controllers["main"]);
 
 	Shader* mainShader = shaderMap[eRenderMode::FullRender];
 	Shader* stencilMaskShader = shaderMap[eRenderMode::Outline];
@@ -306,7 +330,6 @@ void SceneNode::UpdateController()
 
 void SceneNode::UpdateNode()
 {
-	UpdateController();
 	SetViewMatrix();
 	RenderNode();
 }

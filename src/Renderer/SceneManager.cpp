@@ -47,6 +47,7 @@ void SceneManager::LoadModelsAndSetPositions()
     /*
     *  MODELS
     */
+
     int objID = 0;
     Model* carModel = ContentManager::LoadModel("/Car/evo_blendswap.obj", "car");
     Model* terrainModel = ContentManager::LoadModel("/Floor/Floor.obj", "terrain");
@@ -62,7 +63,7 @@ void SceneManager::LoadModelsAndSetPositions()
     //Pushing the skybox texture to create reflection effect (used as a texture on those models, shader use this texture to sample values from)
     pumpkin->PushNewTexture(skybox);
 
-    carModel->PushNewTexture(skybox);
+    //carModel->PushNewTexture(skybox);
 
     Model* cube = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "cube");
     Model* pointLightModel = new Model(); 
@@ -79,15 +80,14 @@ void SceneManager::LoadModelsAndSetPositions()
     *  ENTITIES
     */
 
-
+    ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
-    //ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, cube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
     //ContentManager::CreateEntity(NO_STENCIL_TEST, fbTest, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, false);
-    //ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
+    ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(SKY_BOX, skyBoxCube, sceneOrigin, glm::vec3(1), 0, false, false);
     //ControlledEntity->AttatchCamera(BaseCamera, 10);
 
@@ -199,10 +199,8 @@ void SceneManager::AddNode(SceneNode* node, int level)
 void SceneManager::FillSceneTree(SceneNode* node)
 {
     ContentManager::AddController("main");
-    InputManager* rootController = ContentManager::Controllers["main"];
-    rootController->windowReference = ContentManager::mainWindow;
+    ContentManager::Controllers["main"]->windowReference = ContentManager::mainWindow;
     node->AttatchController(ContentManager::Controllers["main"]);
-
     node->AttatchCamera(BaseCamera);
 
     for (int i = 0; i < GlobalLights.size(); i++)
@@ -261,6 +259,10 @@ void SceneManager::SetUpSceneProjection(glm::mat4& projection)
 
 void SceneManager::RenderScene(Window& window)
 {
+    ContentManager::GetGlobalRenderMode(ContentManager::Controllers["main"]);
+    ContentManager::Controllers["main"]->GetMouseScreenPos();
+    ContentManager::Controllers["main"]->GetInput();
+
     //First pass
     renderer.BindFrameBuffer();
     glEnable(GL_DEPTH_TEST);

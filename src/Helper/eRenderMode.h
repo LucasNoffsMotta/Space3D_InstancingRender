@@ -4,7 +4,7 @@
 enum eRenderMode :uint8_t {
 	SkyBox,
 	NoLights,
-	NoLights_NoTextures,
+	DebugMode,
 	DepthTestMode,
 	FullRender, //Lit, texture, etc
 	FullRender_Instanced,

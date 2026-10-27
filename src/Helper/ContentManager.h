@@ -62,6 +62,7 @@ public:
 	static void SetMainWindow(GLFWwindow* window);
 	static void SetGlobalRenderMode(eRenderMode mode);
 	static void SetPostProcessEffect(ePostProcessEffect effect);
+	static void GetGlobalRenderMode(InputManager* controller);
 };
 
 

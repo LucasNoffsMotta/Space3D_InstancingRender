@@ -3,6 +3,11 @@
 InputManager::InputManager()
 {
 	Inputs[eInput::None] = true;
+	InputList.push_back(eInput::Arrow_Up);
+	InputList.push_back(eInput::RenderMode_Debug);
+	InputList.push_back(eInput::RenderMode_DepthTest);
+	InputList.push_back(eInput::RenderMode_LightsOff);
+	InputList.push_back(eInput::RenderMode_LitAndReflection);
 }
 
 void InputManager::GetInput()
@@ -72,6 +77,30 @@ void InputManager::GetInput()
 		Inputs[eInput::None] = false;
 	}
 
+	if (glfwGetKey(windowReference, GLFW_KEY_1) == GLFW_PRESS)
+	{
+		Inputs[eInput::RenderMode_LightsOff] = true;
+		Inputs[eInput::None] = false;
+	}
+
+	if (glfwGetKey(windowReference, GLFW_KEY_2) == GLFW_PRESS)
+	{
+		Inputs[eInput::RenderMode_LitAndReflection] = true;
+		Inputs[eInput::None] = false;
+	}
+
+	if (glfwGetKey(windowReference, GLFW_KEY_3) == GLFW_PRESS)
+	{
+		Inputs[eInput::RenderMode_Debug] = true;
+		Inputs[eInput::None] = false;
+	}
+
+	if (glfwGetKey(windowReference, GLFW_KEY_4) == GLFW_PRESS)
+	{
+		Inputs[eInput::RenderMode_DepthTest] = true;
+		Inputs[eInput::None] = false;
+	}
+
 	ReleasedKey(GLFW_KEY_SPACE);
 	ReleasedKey(GLFW_KEY_RIGHT);
 	ReleasedKey(GLFW_KEY_LEFT);
@@ -84,6 +113,11 @@ void InputManager::GetInput()
 	ReleasedKey(GLFW_KEY_P);
 	ReleasedKey(GLFW_KEY_Y);
 	ReleasedKey(GLFW_KEY_R);
+
+	ReleasedKey(GLFW_KEY_1);
+	ReleasedKey(GLFW_KEY_2);
+	ReleasedKey(GLFW_KEY_3);
+	ReleasedKey(GLFW_KEY_4);
 }
 
 void InputManager::ReleasedKey(int key)
@@ -145,6 +179,17 @@ eInput InputManager::InputGlfwKeyToEnum(int key)
 		break;
 	case GLFW_KEY_R:
 		return eInput::RotateRoll;
+	case GLFW_KEY_1:
+		return eInput::RenderMode_LightsOff;
+		break;
+	case GLFW_KEY_2:
+		return eInput::RenderMode_LitAndReflection;
+		break;
+	case GLFW_KEY_3:
+		return eInput::RenderMode_Debug;
+		break;
+	case GLFW_KEY_4:
+		return eInput::RenderMode_DepthTest;
 		break;
 	}
 	

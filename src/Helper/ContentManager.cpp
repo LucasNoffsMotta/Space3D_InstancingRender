@@ -123,3 +123,26 @@ void ContentManager::SetPostProcessEffect(ePostProcessEffect effect)
     ContentManager::GlobalPostProcessMode = effect;
 }
 
+void ContentManager::GetGlobalRenderMode(InputManager* controller)
+{
+    if (controller->Inputs[eInput::RenderMode_Debug])
+    {
+        ContentManager::GlobalRenderMode = eRenderMode::DebugMode;
+    }
+
+    if (controller->Inputs[eInput::RenderMode_DepthTest])
+    {
+        ContentManager::GlobalRenderMode = eRenderMode::DepthTestMode;
+    }
+
+    if (controller->Inputs[eInput::RenderMode_LightsOff])
+    {
+        ContentManager::GlobalRenderMode = eRenderMode::NoLights;
+    }
+
+    if (controller->Inputs[eInput::RenderMode_LitAndReflection])
+    {
+        ContentManager::GlobalRenderMode = eRenderMode::FullRender;
+    }
+}
+
