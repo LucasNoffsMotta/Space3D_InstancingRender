@@ -102,8 +102,8 @@ void SceneManager::LoadModelsAndSetPositions()
 
 void SceneManager::LoadGlobalLigths()
 {
-    glm::vec3 pointPos = glm::vec3(0, 8, 0);
-    glm::vec3 pointColor = glm::vec3(0.8117, 0.3960f, 0.8784);
+    glm::vec3 pointPos = glm::vec3(0, 7, 0);
+    glm::vec3 pointColor = glm::vec3(0.4117, 0.1960f, 0.3784);
     //glm::vec3 pointColor = glm::vec3(0.08117, 1.f, 0.08784);
 
     //glm::vec3 pointColor = glm::vec3(0.01, 0.01, 0.01);
