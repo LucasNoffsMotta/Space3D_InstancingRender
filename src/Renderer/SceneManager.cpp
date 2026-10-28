@@ -61,9 +61,8 @@ void SceneManager::LoadModelsAndSetPositions()
     skybox.SetTextureType(eTextureType::Diffuse_CubeMap);
 
     //Pushing the skybox texture to create reflection effect (used as a texture on those models, shader use this texture to sample values from)
-    pumpkin->PushNewTexture(skybox);
-
-    //carModel->PushNewTexture(skybox);
+     pumpkin->PushNewTexture(skybox);
+     //carModel->PushNewTexture(skybox);
 
     Model* cube = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "cube");
     Model* pointLightModel = new Model(); 
@@ -80,12 +79,12 @@ void SceneManager::LoadModelsAndSetPositions()
     *  ENTITIES
     */
 
-    ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(1), 0, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(100, 1, 100), 0, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
-    ContentManager::CreateEntity(TRANSLUCID, cube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
+    //ContentManager::CreateEntity(TRANSLUCID, cube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
     //ContentManager::CreateEntity(NO_STENCIL_TEST, fbTest, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, false);
     ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(SKY_BOX, skyBoxCube, sceneOrigin, glm::vec3(1), 0, false, false);

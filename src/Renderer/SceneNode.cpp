@@ -98,8 +98,13 @@ void SceneNode::RenderNode()
 {
 	if (level == eHierarchyLevel::SKY_BOX)
 	{
+		//TODO: Passing all lights to this shader, should pass only the Dir Light uniform
+		//TODO: Should increase the ambient light on the skybox, it will always be darker than the scene objects
 		Shader* skyBoxShader = shaderMap[eRenderMode::SkyBox];
+		skyBoxShader->Activate();
+		SetUpNodeLightsUniforms(skyBoxShader); 
 		RenderSkyBox(skyBoxShader);
+
 	}
 
 	if (level == eHierarchyLevel::TRANSLUCID)
@@ -230,7 +235,7 @@ void SceneNode::RenderStencilTestOn(Shader* shader)
 void SceneNode::RenderSkyBox(Shader* shader)
 {
 	glDepthFunc(GL_LEQUAL);
-	shader->Activate();
+
 
 	for (int i = 0; i < Entities.size(); i++)
 	{

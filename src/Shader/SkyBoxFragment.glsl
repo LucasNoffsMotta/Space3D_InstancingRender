@@ -3,6 +3,16 @@ out vec4 FragColor;
 
 in vec3 TexCoords;
 
+struct DirLight
+{
+	vec3 direction;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+uniform DirLight dirLight[1];
+
 struct Material
 {
     samplerCube skybox;
@@ -10,8 +20,14 @@ struct Material
 
 uniform Material material;
 
+
+vec4 GetDirLight(DirLight light, vec4 diffuseColor)
+{
+	return vec4(light.ambient * diffuseColor.xyz, 1.f); 
+}
+
 void main()
 {    
-    //FragColor = vec4(1,0,0,1);
-    FragColor = texture(material.skybox, TexCoords);
+    vec4 diffColor = texture(material.skybox, TexCoords);
+    FragColor = GetDirLight(dirLight[0], diffColor);
 }

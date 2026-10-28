@@ -2,7 +2,7 @@
 
 DirectionalLight::DirectionalLight(int index, eLightType type)
 {
-	color = glm::vec3(0.001f, 0.001f, 0.0001f);
+	color = glm::vec3(0.1f, 0.1f, 0.1f);
 	this->lightIndex = index;
 	this->type = type;
 }

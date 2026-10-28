@@ -74,12 +74,14 @@ void Mesh::Draw(Shader& shader)
 	int hasReflection = 0;
 	shader.Activate();
 	shader.SetUniformInt("hasTexture", hasTexture);
+	shader.SetUniformInt("material.useColor", 1); //Use color by default
+
 
 	for (unsigned int i = 0; i < material.textures.size(); i++)
 	{
 		material.textures[i].ActiveTextureUnit(i);
 		material.textures[i].BindTexture();
-		shader.SetUniformInt("material.useColor", 0);
+		shader.SetUniformInt("material.useColor", 0); //USE TEXTURE IF HAS TEXTURE!
 
 		std::string number;
 		std::string name = material.textures[i].TextureTypeToUniform(material.textures[i].type);
@@ -103,7 +105,7 @@ void Mesh::Draw(Shader& shader)
 			//Otherwise, can use the diffuse
 			if (material.textures.size() == 1)
 			{
-				shader.SetUniformInt("material.useColor", 1);
+				shader.SetUniformInt("material.useColor", 1); //USE COLOR IF THE ONLY TEXTURE IS FOR REFLECTION (IT WILL MIX THE COLOR AND REFLECTION INSIDE THE SHADER)!
 			}
 
 			continue;
@@ -124,7 +126,6 @@ void Mesh::Draw(Shader& shader)
 
 	//Very important: Had a anoying bug with textures not being rendered due to that. It is important to reset the shader uniform flag to default after changing it inside a conditional clausule. 
 	//The objects share the same shader program, so if a shader uniform flag is changed between frames, the next object can receive a "dirt" shader
-	shader.SetUniformInt("material.useColor", 0);
 	shader.SetUniformInt("HasReflectionTexture", 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);

@@ -171,6 +171,7 @@ vec3 GetSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir,  vec
 	float epsilon = light.innerCutoff - light.outerCutoff;
 	float intensity = clamp((theta - light.outerCutoff) / epsilon, 0.0, 1.0);
 
+
 	if (!material.useColor) {
 		ambient = light.ambient * diffuseColor.xyz;
 		diffuse = light.diffuse * diff * diffuseColor.xyz;
@@ -263,6 +264,7 @@ void main()
 	}
 
 	if (rm.Full_LightsAndReflection == 1 && HasReflectionTexture == 1) {
+
 		vec3 I = normalize(position - viewPos);
 		vec3 R = reflect(I, normalize(Normal));
 		vec4 reflectionColor =  vec4(texture(material.skybox, R).rgb, 1.0);
