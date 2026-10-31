@@ -26,10 +26,7 @@ private:
 	glm::vec3 sceneOrigin = glm::vec3(0.f);
 	glm::vec3 baseScale = glm::vec3(1);
 	glm::mat4 Projection;
-	glm::mat4 View;
-	Camera* BaseCamera;
 	std::vector<BaseLight*> GlobalLights;
-	Renderer renderer;
 
 	//ROTATION TEST
 	Entity* ControlledEntity;
@@ -41,8 +38,7 @@ private:
 	void LoadGlobalLigths();
 	void LoadCamera();
 	void FillSceneTree(SceneNode* node);
-	void SetUpSceneProjection(glm::mat4& projection);
-	void LoadViewAndProjectionMatrices();
+	void LoadProjectionMatrix();
 	void InitHierarchyStructs();
 	void LoadEmptyTreeBasedOnLevels();
 	void AddNode(SceneNode* node, int level);

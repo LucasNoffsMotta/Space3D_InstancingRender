@@ -20,7 +20,7 @@
 static class ContentManager
 {
 public:
-	static std::map<std::string, Shader*>  Shaders;
+	static std::map<eRenderMode, Shader*>  Shaders;
 	static std::map<std::string, glm::vec3> Colors;
 	static std::map<std::string, Camera*> Cameras;
 	static std::map<std::string, Texture*> Textures;
@@ -28,12 +28,13 @@ public:
 	static std::map<std::string, std::unique_ptr<PointLight>> PointLights;
 	static std::map<std::string, std::unique_ptr<SpotLight>> SpotLights;
 	static std::map<std::string, Model*> Models;
+	
 
 	static std::map<eHierarchyLevel, std::vector<Entity*>> Entities;
 
 	static eRenderMode GlobalRenderMode;
 	static ePostProcessEffect GlobalPostProcessMode;
-	
+	static Renderer* GlobalRenderer;
 
 	static std::map<std::string, InputManager*> Controllers;
 	static GLFWwindow* mainWindow;
@@ -45,13 +46,13 @@ public:
 
 	static const int MAX_POINT_LIGHTS = 10;
 
-	static Shader* LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName);
+	static Shader* LoadShader(const char* vertexSource, const char* fragmentSource, eRenderMode renderMode);
 	static Texture* LoadTexture(const char* texturePath, std::string name);
 	static Model* LoadModel(std::string path, std::string name);
 
 	static glm::vec3 GetColor(std::string color);
 	static void InsertColor(std::string name, glm::vec3 rgb);
-	static Shader* GetShader(std::string shader);
+	static Shader* GetShader(eRenderMode shader);
 	static void InitColors();
 	static Entity* CreateEntity(eHierarchyLevel level, Model* model, glm::vec3 pos, glm::vec3 scale, float rotation, bool outline, bool isTranslucid);
 	static void AddCamera(Camera* cam, std::string name);

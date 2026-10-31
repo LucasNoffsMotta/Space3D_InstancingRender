@@ -11,7 +11,9 @@
 
 
 
-
+/// <summary>
+/// This class is responsible for managing the buffer creations and manage the OPEN GL states.
+/// </summary>
 class Renderer
 {
 private:
@@ -26,6 +28,7 @@ private:
 	unsigned int fbo;
 	unsigned int skyBoxVao;
 	unsigned int frameBufferVao;
+	unsigned int uboMatrices; //Update the buffer data here and all the shader programs will be updated!
 	Texture frameBufferTexture;
 
 public:
@@ -38,6 +41,12 @@ public:
 	Renderer();
 	void InitFrameBuffer();
 	void InitRenderBuffer(int frameBufferSizeX, int frameBufferSizeY);
+
+	//Uniform buffers
+	void InitUniformBufferObjects();
+	void SetShadersBindingPointToUseUniformBuffer();
+	void FillUboMatricesProjection(glm::mat4 projection);
+	void FillUboMatricesView(glm::mat4 view);
 
 	void SetModelMatrices(glm::vec3* translations, int ammount);
 	void SetInstancesBuffers(int amount);

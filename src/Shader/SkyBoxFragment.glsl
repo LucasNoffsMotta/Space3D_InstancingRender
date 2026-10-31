@@ -23,11 +23,13 @@ uniform Material material;
 
 vec4 GetDirLight(DirLight light, vec4 diffuseColor)
 {
-	return vec4(light.ambient * diffuseColor.xyz, 1.f); 
+    vec3 increasedAmbientLight = light.ambient + vec3(0.1, 0.1, 0.1);
+	return vec4(increasedAmbientLight * diffuseColor.xyz, 1.f); 
 }
 
 void main()
 {    
     vec4 diffColor = texture(material.skybox, TexCoords);
     FragColor = GetDirLight(dirLight[0], diffColor);
+    //FragColor = texture(material.skybox, TexCoords);
 }

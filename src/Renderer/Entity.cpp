@@ -88,7 +88,7 @@ glm::mat4 Entity::RotateMatrix(glm::mat4& modelMatrix)
     Front.z = sin(yaw * cos(pitch));
     Front = glm::normalize(Front);
 
-    std::cout << "//Front x: " << Front.x << "// Front y: " << Front.y << "// Front z:  " << Front.z << std::endl;
+    //std::cout << "//Front x: " << Front.x << "// Front y: " << Front.y << "// Front z:  " << Front.z << std::endl;
 
     modelMatrix = glm::rotate(modelMatrix, yaw, -YawAxis);
     modelMatrix = glm::rotate(modelMatrix, pitch, PitchAxis);
@@ -148,7 +148,6 @@ Entity::Entity(Model* model, eHierarchyLevel level)
 
 Entity::Entity()
 {
-
 }
 
 
@@ -156,7 +155,7 @@ Entity::Entity()
 void Entity::AttatchCamera(Camera* cam, float distance)
 {
     attachedCamera = cam;
-    cam->CameraPos = GetWorldPosition() + glm::vec3(0, distance, 10);
+    cam->CameraPos = GetWorldPosition() + glm::vec3(0, distance, 1);
     glm::vec3 direction = GetWorldPosition() - cam->CameraPos;
     cam->CameraFront = glm::normalize(direction);
     cam->mode = eCameraMode::TopDown;

@@ -2,7 +2,7 @@
 #include "../Renderer/Shader.h"
 
 
-std::map<std::string, Shader*>                                    ContentManager::Shaders;
+std::map<eRenderMode, Shader*>                                    ContentManager::Shaders;
 std::map<std::string, glm::vec3>                                  ContentManager::Colors;
 std::map<std::string, Camera*>                                    ContentManager::Cameras;
 std::map<std::string, Texture*>                                   ContentManager::Textures;
@@ -13,6 +13,7 @@ std::map<std::string, Model*>                                     ContentManager
 std::map<std::string, InputManager*>                              ContentManager::Controllers;
 GLFWwindow*                                                       ContentManager::mainWindow;
 std::map<eHierarchyLevel, std::vector<Entity*>>                   ContentManager::Entities;
+Renderer* ContentManager::GlobalRenderer;
 
 int ContentManager::FRAMEBUFFER_SCREEN_SIZE_X = 0;
 int ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y = 0;
@@ -20,10 +21,10 @@ eRenderMode ContentManager::GlobalRenderMode;
 ePostProcessEffect ContentManager::GlobalPostProcessMode;
 
 
-Shader* ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, std::string shaderName)
+Shader* ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, eRenderMode renderMode)
 {
-    Shaders[shaderName] = new Shader(vertexSource, fragmentSource);
-    return Shaders[shaderName];
+    Shaders[renderMode] = new Shader(vertexSource, fragmentSource);
+    return Shaders[renderMode];
 }
 
 Texture* ContentManager::LoadTexture(const char* texturePath, std::string name)
@@ -50,9 +51,9 @@ void ContentManager::InsertColor(std::string name, glm::vec3 rgb)
     Colors[name] = normalizedColor;
 }
 
-Shader* ContentManager::GetShader(std::string shader)
+Shader* ContentManager::GetShader(eRenderMode rendeMode)
 {
-    return Shaders[shader];
+    return Shaders[rendeMode];
 }
 
 void ContentManager::InitColors()

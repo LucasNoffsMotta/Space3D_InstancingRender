@@ -265,8 +265,10 @@ void main()
 
 	if (rm.Full_LightsAndReflection == 1 && HasReflectionTexture == 1) {
 
+		float ratio = 1.0f/1.52;
 		vec3 I = normalize(position - viewPos);
 		vec3 R = reflect(I, normalize(Normal));
+		//vec3 R = refract(I, normalize(Normal), ratio);
 		vec4 reflectionColor =  vec4(texture(material.skybox, R).rgb, 1.0);
 		FragColor = mix(vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material)), reflectionColor, 0.5);
 		return;

@@ -9,37 +9,37 @@ void SceneManager::LoadShaderSingletons()
     RootShaderMap[eRenderMode::FullRender] = ContentManager::LoadShader(
         "src/Shader/3DVertex.glsl",
         "src/Shader/FullRenderFragment.glsl",
-        "fullRender"
+        eRenderMode::FullRender
     );
 
     RootShaderMap[eRenderMode::FullRender_Instanced] = ContentManager::LoadShader(
         "src/Shader/3DVertex_Instancing.glsl",
         "src/Shader/FullRenderFragment.glsl",
-        "fullRender_Instanced"
+        eRenderMode::FullRender_Instanced
     );
 
     RootShaderMap[eRenderMode::Outline] = ContentManager::LoadShader(
         "src/Shader/3DVertex.glsl",
         "src/Shader/OutLineColor.glsl",
-        "outlineShader"
+        eRenderMode::Outline
     );
 
     RootShaderMap[eRenderMode::PostProcessing] = ContentManager::LoadShader(
         "src/Shader/PostProcessVertex.glsl",
         "src/Shader/PostProcessFragment.glsl",
-        "frameBufferShader");
+        eRenderMode::PostProcessing);
 
 
     RootShaderMap[eRenderMode::PostProcessingOnModel] = ContentManager::LoadShader(
         "src/Shader/3DVertex.glsl",
         "src/Shader/PostProcessFragment.glsl",
-        "PostProcessingOnModelShader");
+        eRenderMode::PostProcessingOnModel);
 
 
     RootShaderMap[eRenderMode::SkyBox] = ContentManager::LoadShader(
         "src/Shader/SkyBoxVertex.glsl",
         "src/Shader/SkyBoxFragment.glsl",
-        "SkyBoxShader");
+        eRenderMode::SkyBox);
 }
 
 void SceneManager::LoadModelsAndSetPositions()
@@ -68,11 +68,11 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* pointLightModel = new Model(); 
     pointLightModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/PointLight.png");
     transparentWindow->Load2DQuadTextureMesh("res/textures/blending_transparent_window.png");
-    grassModel->Load2DQuadTextureMesh("res/textures/grass.png");
-    grassModel->SetUseInstanced(1000);
+    //grassModel->Load2DQuadTextureMesh("res/textures/grass.png");
+    //grassModel->SetUseInstanced(1000);
 
-    Model* fbTest = new Model();
-    fbTest->Load2DQuadTextureMesh(renderer.GetFramebufferTexture());
+    //Model* fbTest = new Model();
+    //fbTest->Load2DQuadTextureMesh(renderer.GetFramebufferTexture());
 
 
     /*
@@ -88,7 +88,8 @@ void SceneManager::LoadModelsAndSetPositions()
     //ContentManager::CreateEntity(NO_STENCIL_TEST, fbTest, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, false);
     ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(SKY_BOX, skyBoxCube, sceneOrigin, glm::vec3(1), 0, false, false);
-    //ControlledEntity->AttatchCamera(BaseCamera, 10);
+    ControlledEntity->AttatchCamera(ContentManager::Cameras["second"], 10);
+
 
     for (int i = 0; i < GlobalLights.size(); i++)
     {
@@ -97,7 +98,6 @@ void SceneManager::LoadModelsAndSetPositions()
             ContentManager::CreateEntity(NO_STENCIL_TEST, pointLightModel, GlobalLights[i]->GetWorldPosition(), glm::vec3(0.4), 90, false, false);
         }
     }
-
 }
 
 void SceneManager::LoadGlobalLigths()
@@ -117,7 +117,6 @@ void SceneManager::LoadGlobalLigths()
         pointPos.x +=20;
         GlobalLights.push_back(ContentManager::PointLights[std::to_string(i)].get());
     }
-
 
     //DIR
     glm::vec3 directionalDir = glm::vec3(-0.2f, -1.0f, -0.3f);
@@ -159,9 +158,11 @@ void SceneManager::InitScene()
     LoadShaderSingletons();
     LoadGlobalLigths();
     LoadCamera();
-    LoadViewAndProjectionMatrices();
+    LoadProjectionMatrix();
     InitFramebuffer();
-    SetUpSceneProjection(Projection);
+   // SetUpSceneProjection(Projection);
+    ContentManager::GlobalRenderer->InitUniformBufferObjects();
+    ContentManager::GlobalRenderer->FillUboMatricesProjection(Projection);
     LoadModelsAndSetPositions();
     FillSceneTree(RootNode);
 }
@@ -172,8 +173,10 @@ void SceneManager::LoadCamera()
     glm::vec3 camFront = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-    BaseCamera = new Camera(camPos, camFront, camUp);
+    Camera* BaseCamera = new Camera(camPos, camFront, camUp);
+    Camera* SecondCamera = new Camera(camPos, camFront, camUp);
     ContentManager::AddCamera(BaseCamera, "main");
+    ContentManager::AddCamera(SecondCamera, "second");
 }
 
 void SceneManager::LoadEmptyTreeBasedOnLevels()
@@ -200,7 +203,6 @@ void SceneManager::FillSceneTree(SceneNode* node)
     ContentManager::AddController("main");
     ContentManager::Controllers["main"]->windowReference = ContentManager::mainWindow;
     node->AttatchController(ContentManager::Controllers["main"]);
-    node->AttatchCamera(BaseCamera);
 
     for (int i = 0; i < GlobalLights.size(); i++)
     {
@@ -225,11 +227,11 @@ void SceneManager::FillSceneTree(SceneNode* node)
 
 void SceneManager::InitFramebuffer()
 {
-    renderer = Renderer(); 
-    renderer.InitFrameBuffer();
-    renderer.InitFramebufferTexture();
-    renderer.InitRenderBuffer(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
-    renderer.InitFrameBufferScreenQuad();
+    ContentManager::GlobalRenderer = new Renderer(); 
+    ContentManager::GlobalRenderer->InitFrameBuffer();
+    ContentManager::GlobalRenderer->InitFramebufferTexture();
+    ContentManager::GlobalRenderer->InitRenderBuffer(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
+    ContentManager::GlobalRenderer->InitFrameBufferScreenQuad();
 }
 
 void SceneManager::SetGlobalLightUniforms(Shader& shader)
@@ -240,22 +242,6 @@ void SceneManager::SetGlobalLightUniforms(Shader& shader)
     }
 }
 
-
-void SceneManager::SetUpSceneProjection(glm::mat4& projection)
-{
-    RootShaderMap[eRenderMode::FullRender]->Activate();
-    RootShaderMap[eRenderMode::FullRender]->SetUniformMatrix4fv("projection", projection);
-
-    RootShaderMap[eRenderMode::Outline]->Activate();
-    RootShaderMap[eRenderMode::Outline]->SetUniformMatrix4fv("projection", projection);
-
-    RootShaderMap[eRenderMode::FullRender_Instanced]->Activate();
-    RootShaderMap[eRenderMode::FullRender_Instanced]->SetUniformMatrix4fv("projection", projection);
-
-    RootShaderMap[eRenderMode::SkyBox]->Activate();
-    RootShaderMap[eRenderMode::SkyBox]->SetUniformMatrix4fv("projection", projection);
-}
-
 void SceneManager::RenderScene(Window& window)
 {
     ContentManager::GetGlobalRenderMode(ContentManager::Controllers["main"]);
@@ -263,30 +249,28 @@ void SceneManager::RenderScene(Window& window)
     ContentManager::Controllers["main"]->GetInput();
 
     //First pass
-    renderer.BindFrameBuffer();
+    ContentManager::GlobalRenderer->BindFrameBuffer();
     glEnable(GL_DEPTH_TEST);
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
-
-
-    //Draw Scene nodes recursively:
-    RootNode->UpdateNode();
+        
+    //Draw to framebuffer texture
+    RootNode->UpdateNode(false);
 
     //Second pass 
-    renderer.UnbindFramebuffer();
+    ContentManager::GlobalRenderer->UnbindFramebuffer();
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
 
     //Draw Scene nodes recursively:
-    RootNode->UpdateNode();
+    RootNode->UpdateNode(true);
 
     glDisable(GL_DEPTH_TEST);
 
     //Draw post processing texture
-    renderer.RenderFramebuffer(*ContentManager::Shaders["frameBufferShader"]);
+    ContentManager::GlobalRenderer->RenderFramebuffer(*ContentManager::Shaders[eRenderMode::PostProcessing]);
 }
 
-void SceneManager::LoadViewAndProjectionMatrices()
+void SceneManager::LoadProjectionMatrix()
 {
-    View = glm::mat4(1.0f);
     Projection = glm::mat4(1.0f);
     Projection = glm::perspective(glm::radians(45.0f), (float)ContentManager::FRAMEBUFFER_SCREEN_SIZE_X / ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y, 0.1f, 6000.f);
 }

@@ -13,12 +13,7 @@ void SceneNode::SetUpNodeLightsUniforms(Shader* shader)
 	}
 }
 
-/*
-*      int DebugMode;
-	 int DepthTestMode;
-	 int LightsOff;
-	 int Full_LightsAndReflection;
-*/
+
 void SceneNode::SetRenderModeOnMainShader(eRenderMode mode, Shader* mainShader)
 {
 	if (mode == eRenderMode::FullRender)
@@ -64,11 +59,6 @@ Shader* SceneNode::QueryShader(eRenderMode mode)
 SceneNode::SceneNode(eHierarchyLevel nodeLevel)
 {
 	this->level = nodeLevel;
-}
-
-void SceneNode::AttatchCamera(Camera* camera)
-{
-	Cameras.push_back(camera);
 }
 
 void SceneNode::AttatchLight(BaseLight* light)
@@ -270,26 +260,24 @@ void SceneNode::RenderWired(Shader* shader)
 	//
 }
 
-void SceneNode::SetViewMatrix()
+void SceneNode::SetViewMatrix(bool updateCamera)
 {
-	glm::mat4 view = Cameras.back()->Update(ContentManager::Controllers["main"]);
+	glm::mat4 view = glm::mat4(1);
+	if (updateCamera) 	view = ContentManager::Cameras["main"]->Update(ContentManager::Controllers["main"]);
 
-	Shader* mainShader = shaderMap[eRenderMode::FullRender];
-	Shader* stencilMaskShader = shaderMap[eRenderMode::Outline];
-	Shader* instanced = shaderMap[eRenderMode::FullRender_Instanced];
-	Shader* skyBox = shaderMap[eRenderMode::SkyBox];
+	else
+	{
+		ContentManager::Cameras["second"]->CameraPos.x = ContentManager::Cameras["main"]->CameraPos.x;
+		ContentManager::Cameras["second"]->CameraPos.z = ContentManager::Cameras["main"]->CameraPos.z;
 
-	mainShader->Activate();
-	mainShader->SetUniformMatrix4fv("view", view);
+		ContentManager::Cameras["second"]->CameraPos.x = ContentManager::Cameras["main"]->CameraPos.x;
+		ContentManager::Cameras["second"]->CameraPos.z = ContentManager::Cameras["main"]->CameraPos.z;
 
-	stencilMaskShader->Activate();
-	stencilMaskShader->SetUniformMatrix4fv("view", view);
+		view = ContentManager::Cameras["second"]->CalculateView();
+	}
 
-	instanced->Activate();
-	instanced->SetUniformMatrix4fv("view", view);
-
-	skyBox->Activate();
-	skyBox->SetUniformMatrix4fv("view", glm::mat4(glm::mat3(view)));	
+	
+	ContentManager::GlobalRenderer->FillUboMatricesView(view);
 }
 
 void SceneNode::SetProjectionMatrix(glm::mat4& projection)
@@ -307,7 +295,6 @@ void SceneNode::SetProjectionMatrix(glm::mat4& projection)
 std::map<float, Entity*> SceneNode::GetOrderedTranslucidEntities()
 {
 	std::vector<Entity*> translucidGroup;
-	Camera* cam = Cameras.back();
 	std::map<float, Entity*> orderedMap;
 
 	for (auto entity : Entities)
@@ -320,7 +307,7 @@ std::map<float, Entity*> SceneNode::GetOrderedTranslucidEntities()
 
 	for (int i = 0; i < translucidGroup.size(); i++)
 	{
-		float distance = glm::length(cam->CameraPos - translucidGroup[i]->GetWorldPosition());
+		float distance = glm::length(ContentManager::Cameras["main"]->CameraPos - translucidGroup[i]->GetWorldPosition());
 		orderedMap[distance] = translucidGroup[i];
 	}
 
@@ -333,9 +320,9 @@ void SceneNode::UpdateController()
 	Controller->GetInput();
 }
 
-void SceneNode::UpdateNode()
+void SceneNode::UpdateNode(bool updateCamera)
 {
-	SetViewMatrix();
+	SetViewMatrix(updateCamera);
 	RenderNode();
 }
 

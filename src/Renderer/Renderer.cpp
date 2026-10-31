@@ -404,3 +404,42 @@ void Renderer::InitRenderBuffer(int frameBufferSizeX, int frameBufferSizeY)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 }
+
+void Renderer::InitUniformBufferObjects()
+{
+    glGenBuffers(1, &uboMatrices);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
+    SetShadersBindingPointToUseUniformBuffer();
+}
+
+void Renderer::SetShadersBindingPointToUseUniformBuffer()
+{
+    //Matrices Uniform
+    unsigned int uniformBlockIndexfullRender = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::FullRender]->Id, "Matrices");
+    unsigned int uniformBlockIndexOutline = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::Outline]->Id, "Matrices");
+    unsigned int uniformBlockIndexInstanced = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::FullRender_Instanced]->Id, "Matrices");
+    unsigned int uniformBlockIndexSkyBox = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::SkyBox]->Id, "Matrices");
+
+    glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender]->Id, uniformBlockIndexfullRender, 0);
+    glUniformBlockBinding(ContentManager::Shaders[eRenderMode::Outline]->Id, uniformBlockIndexOutline, 0);
+    glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender_Instanced]->Id, uniformBlockIndexInstanced, 0);
+    glUniformBlockBinding(ContentManager::Shaders[eRenderMode::SkyBox]->Id, uniformBlockIndexSkyBox, 0);
+}
+
+void Renderer::FillUboMatricesProjection(glm::mat4 projection)
+{
+    glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void Renderer::FillUboMatricesView(glm::mat4 view)
+{
+    glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}

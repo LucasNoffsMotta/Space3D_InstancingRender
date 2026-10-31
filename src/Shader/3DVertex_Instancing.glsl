@@ -10,8 +10,19 @@ out vec3 FragPos;
 out vec3 Normal;
 out vec2 texCoord;
 
-uniform mat4 view;
-uniform mat4 projection;
+layout (std140) uniform Matrices
+{
+                       //base alignment          //aligned offset
+    mat4 projection;   //16                      0 
+                       //16                      16
+                       //16                      32
+                       //16                      48
+
+    mat4 view;         //16                      64
+                       //16                      80
+                       //16                      96
+                       //16                      112
+};
 
 
 void main()

@@ -117,12 +117,10 @@ glm::mat4 Camera::CalculateView()
 glm::mat4 Camera::Update(InputManager* controller)
 {
 	if (mode == eCameraMode::Free)
-	//if (true)
 	{
 		HandleMouseInput(controller->mouseX, controller->mouseY);
 	}
 	HandleKeybordInput(controller);
-	//std::cout << "Cam x: " << CameraPos.x << " // Cam y:" << CameraPos.y << " // Cam Z:" << CameraPos.z << std::endl;
 	return CalculateView();
 }
 

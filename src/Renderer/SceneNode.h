@@ -16,7 +16,6 @@ class SceneNode
 private:
 	std::vector<BaseLight*> Lights;
 	std::vector<Entity*> Entities;
-	std::vector<Camera*> Cameras;
 	std::map<eRenderMode, Shader*> shaderMap;
 	InputManager* Controller;
 	int nodeLevel;
@@ -30,7 +29,7 @@ private:
 	void RenderWired(Shader* shader);
 	void RenderStencilTestOn(Shader* shader);
 	void RenderSkyBox(Shader* shader);
-	void SetViewMatrix();
+	void SetViewMatrix(bool updateCamera);
 	void SetUpNodeLightsUniforms(Shader* shader);
 	void SetRenderModeOnMainShader(eRenderMode mode, Shader* mainShader);
 
@@ -41,7 +40,6 @@ public:
 	Shader* QueryShader(eRenderMode mode);
 
 	SceneNode(eHierarchyLevel nodeLevel);
-	void AttatchCamera(Camera* camera);
 	void AttatchLight(BaseLight* light);
 	void AttatchEntity(Entity* entity);
 	void AttatchChildNode(SceneNode* child);
@@ -49,5 +47,5 @@ public:
 	void RenderNode();
 	void SetModelMatrixAndCallDraw(Entity* entity, Shader* shader, glm::vec3 scale);
 	void SetProjectionMatrix(glm::mat4& projection);
-	void UpdateNode();
+	void UpdateNode(bool updateCamera);
 };
