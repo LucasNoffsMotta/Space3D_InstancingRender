@@ -8,6 +8,16 @@ struct RenderMode {
 	 int Full_LightsAndReflection;
 };
 
+layout (std140) uniform DirLight
+{
+	vec3 direction;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+
+
 uniform RenderMode rm;
 
 struct Material {
@@ -40,14 +50,6 @@ struct SpotLight {
     float quadratic;	
 };
 
-struct DirLight
-{
-	vec3 direction;
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-};
-
 struct PointLight
 {
 	vec3 position;		
@@ -64,16 +66,19 @@ struct PointLight
 
 uniform PointLight pointLight[MAX_POINTLIGHTS];
 uniform SpotLight spotLight[MAX_POINTLIGHTS];
-uniform DirLight dirLight[MAX_POINTLIGHTS];
 uniform vec3 viewPos;
 uniform int hasTexture;
 uniform int HasReflectionTexture;
 
+in VS_OUT
+{
+     vec3 position;
+     vec3 FragPos;
+     vec3 Normal;
+     vec2 texCoord;
+} fs_in;
 
-in vec3 FragPos;
-in vec3 position;
-in vec3 Normal;
-in vec2 texCoord;
+
 
 out vec4 FragColor;
 
@@ -87,13 +92,13 @@ float LinearizeDepth(float depth)
 }
 
 
-vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir, vec4 diffuseColor, vec3 specularColor)
+vec3 GetDirLight(vec3 Normal, vec3 viewDir, vec4 diffuseColor, vec3 specularColor)
 {
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
 
-	vec3 lightDir = normalize(-light.direction);
+	vec3 lightDir = normalize(-direction);
 	float diff = max(dot(Normal, lightDir), 0.0);
 
 	vec3 reflectDir = reflect(-lightDir, Normal);
@@ -101,16 +106,16 @@ vec3 GetDirLight(DirLight light, vec3 Normal, vec3 viewDir, vec4 diffuseColor, v
 
 	if (!material.useColor) {
 
-		ambient = light.ambient * diffuseColor.xyz; 
-		diffuse = light.diffuse * diff *  diffuseColor.xyz;
-		specular = light.specular * spec * specularColor;
+		ambient = ambient * diffuseColor.xyz; 
+		diffuse = diffuse * diff *  diffuseColor.xyz;
+		specular = specular * spec * specularColor;
 	}
 
 	else {
 		
-		ambient = light.ambient * material.color.rgb; 
-		diffuse = light.diffuse * diff *  material.color.rgb;
-		specular = light.specular * spec * material.color.rgb;
+		ambient = ambient * material.color.rgb; 
+		diffuse = diffuse * diff *  material.color.rgb;
+		specular = specular * spec * material.color.rgb;
 	}
 
 	return ambient + diffuse + specular;
@@ -122,13 +127,13 @@ vec3 GetPointLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir, ve
 	vec3 diffuse;
 	vec3 specular;
 
-	vec3 lightToFragmentDirection = normalize(light.position - FragPos);
+	vec3 lightToFragmentDirection = normalize(light.position - fs_in.FragPos);
 	float diff = max(dot(Normal, lightToFragmentDirection), 0.0);
 
 	vec3 reflectDir = reflect(-lightToFragmentDirection, Normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
-	float dist = length(light.position - FragPos);
+	float dist = length(light.position - fs_in.FragPos);
 	float atenuation = 1.0 / (light.constant + light.linear * dist +  light.quadratic * (dist * dist)); 
 
 	if (!material.useColor) {
@@ -158,13 +163,13 @@ vec3 GetSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir,  vec
 	vec3 diffuse;
 	vec3 specular;
 
-	vec3 lightToFragmentDirection = normalize(light.position - FragPos);
+	vec3 lightToFragmentDirection = normalize(light.position - fs_in.FragPos);
 	float diff = max(dot(normal, lightToFragmentDirection), 0.0);
 
 	vec3 reflectDir = reflect(-lightToFragmentDirection, normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
-	float dist = length(light.position - FragPos);
+	float dist = length(light.position - fs_in.FragPos);
 	float atenuation = 1.0 / (light.constant + light.linear * dist +  light.quadratic * (dist * dist)); 
 
 	float theta = dot(lightToFragmentDirection, normalize(-light.direction));
@@ -207,16 +212,16 @@ float GetFinalAlphaValue(vec4 diffuseColor, Material material)
 
 vec3 GetFullLitColorResult(vec4 diffuseColor)
 {
-	vec3 normal = normalize(Normal);
-	vec3 viewDir = normalize(viewPos - FragPos);
+	vec3 normal = normalize(fs_in.Normal);
+	vec3 viewDir = normalize(viewPos - fs_in.FragPos);
 	vec3 result = vec3(0);
-	vec3 specularColor = vec3(texture(material.texture_specular1, texCoord));
+	vec3 specularColor = vec3(texture(material.texture_specular1, fs_in.texCoord));
 
 	for (int i = 0; i < MAX_POINTLIGHTS; i++)
 	{
-		result += GetDirLight(dirLight[i], normal, viewDir, diffuseColor, specularColor);
-		result += GetPointLight(pointLight[i], normal, FragPos, viewDir, diffuseColor, specularColor);
-		result += GetSpotLight(spotLight[i], normal, FragPos, viewDir, diffuseColor, specularColor);
+		result += GetDirLight(normal, viewDir, diffuseColor, specularColor);
+		result += GetPointLight(pointLight[i], normal, fs_in.FragPos, viewDir, diffuseColor, specularColor);
+		result += GetSpotLight(spotLight[i], normal, fs_in.FragPos, viewDir, diffuseColor, specularColor);
 	}
 
 	return result;
@@ -228,7 +233,7 @@ void main()
 	//Turn On Debug Mode
 	if (rm.DebugMode == 1)
 	{
-		FragColor =  vec4(texCoord, 0.0, 1.0);
+		FragColor =  vec4(fs_in.texCoord, 0.0, 1.0);
 		return;
 	}
 
@@ -241,7 +246,7 @@ void main()
 	}
 
 	//Discard fragmets
-	vec4 diffuseColor = vec4(texture(material.texture_diffuse1, texCoord));
+	vec4 diffuseColor = vec4(texture(material.texture_diffuse1, fs_in.texCoord));
 
 	if (diffuseColor.a < 0.1)
 	{
@@ -252,7 +257,7 @@ void main()
 	if (rm.LightsOff == 1)
 	{
 		if (!material.useColor) {
-			FragColor =  vec4(texture(material.texture_diffuse1, texCoord));
+			FragColor =  vec4(texture(material.texture_diffuse1, fs_in.texCoord));
 		}
 
 		else
@@ -266,8 +271,8 @@ void main()
 	if (rm.Full_LightsAndReflection == 1 && HasReflectionTexture == 1) {
 
 		float ratio = 1.0f/1.52;
-		vec3 I = normalize(position - viewPos);
-		vec3 R = reflect(I, normalize(Normal));
+		vec3 I = normalize(fs_in.position - viewPos);
+		vec3 R = reflect(I, normalize(fs_in.Normal));
 		//vec3 R = refract(I, normalize(Normal), ratio);
 		vec4 reflectionColor =  vec4(texture(material.skybox, R).rgb, 1.0);
 		FragColor = mix(vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material)), reflectionColor, 0.5);

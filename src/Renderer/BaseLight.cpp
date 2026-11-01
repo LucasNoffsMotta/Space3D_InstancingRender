@@ -30,7 +30,22 @@ void BaseLight::SetAmbient(glm::vec3& ambient)
 	this->ambient = ambient;
 }
 
-std::string BaseLight::SetUniforms(Shader& shader)
+glm::vec3 BaseLight::GetAmbient()
+{
+	return ambient;
+}
+
+glm::vec3 BaseLight::GetDiffuse()
+{
+	return diffuse;
+}
+
+glm::vec3 BaseLight::GetSpecular()
+{
+	return specular;
+}
+
+std::string BaseLight::SetBaseUniforms(Shader& shader)
 {
 	std::string prefix = GetLightStrucUniformName() + "[" + std::to_string(lightIndex) + "].";
 	shader.SetUniform3fv((prefix + "ambient").c_str(), glm::vec3(this->color.x * this->ambient.x, this->color.y * this->ambient.y, this->color.z * this->ambient.z));
@@ -39,13 +54,8 @@ std::string BaseLight::SetUniforms(Shader& shader)
 	return prefix;
 }
 
-void BaseLight::SetUniformsTest(Shader& shader)
+void BaseLight::SetUniforms(Shader& shader)
 {
-}
-
-void BaseLight::Draw(Shader& shader, Texture& texture, Renderer& renderer)
-{
-	renderer.Draw(position, texture, scale, glm::vec3(0), 0.f, color, shader);
 }
 
 std::string BaseLight::GetLightStrucUniformName()

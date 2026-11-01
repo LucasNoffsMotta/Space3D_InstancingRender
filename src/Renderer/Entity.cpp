@@ -109,12 +109,6 @@ void Entity::FixModelRotationOnLoad(glm::vec3 axis, float offSet)
     modelMatrix = glm::rotate(modelMatrix, roll, RollAxis);
 }
 
-glm::vec3 Entity::GetDirection()
-{
-
-    return glm::vec3();
-}
-
 int Entity::GetID()
 {
     return ID;

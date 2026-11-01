@@ -2,6 +2,7 @@
 #include "../Renderer/Shader.h"
 
 
+
 std::map<eRenderMode, Shader*>                                    ContentManager::Shaders;
 std::map<std::string, glm::vec3>                                  ContentManager::Colors;
 std::map<std::string, Camera*>                                    ContentManager::Cameras;

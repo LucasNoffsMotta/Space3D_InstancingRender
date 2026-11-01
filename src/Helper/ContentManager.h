@@ -15,6 +15,7 @@
 #include "../Renderer/Entity.h"
 #include "eRenderMode.h"
 #include "ePostProcessEffect.h"
+#include "../Renderer/Renderer.h"
 
 
 static class ContentManager

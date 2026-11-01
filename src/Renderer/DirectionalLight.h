@@ -12,11 +12,11 @@ private:
 public:
 	DirectionalLight(int index, eLightType type);
 	void SetDirection(glm::vec3& dir);
-	void DrawDirectionalLight(Shader& shader, Texture& texture, Renderer& renderer);
-	void SetUniforms(Shader& shader);
 	void SetAmbient(glm::vec3& ambient);
 	void SetDiffuse(glm::vec3& diff);
 	void SetSpecular(glm::vec3& spec);
-	void SetUniformsTest(Shader& shader) override;
+	glm::vec3 GetDirection();
+
+	void SetUniforms(Shader& shader) override;
 	eLightType GetLightType() override;
 };

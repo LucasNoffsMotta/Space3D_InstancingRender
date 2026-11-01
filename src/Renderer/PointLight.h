@@ -13,8 +13,6 @@ private:
 
 public:
 	PointLight(int index, eLightType type);
-	void SetUniforms(Shader& shader);
-	void DrawPointLight(Shader& shader, Texture& texture, Renderer& renderer);
-	void SetUniformsTest(Shader& shader) override;
+	void SetUniforms(Shader& shader) override;
 	eLightType GetLightType() override;
 };

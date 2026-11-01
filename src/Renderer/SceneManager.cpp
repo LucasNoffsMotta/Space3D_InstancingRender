@@ -104,9 +104,6 @@ void SceneManager::LoadGlobalLigths()
 {
     glm::vec3 pointPos = glm::vec3(0, 7, 0);
     glm::vec3 pointColor = glm::vec3(0.4117, 0.1960f, 0.3784);
-    //glm::vec3 pointColor = glm::vec3(0.08117, 1.f, 0.08784);
-
-    //glm::vec3 pointColor = glm::vec3(0.01, 0.01, 0.01);
 
     //POINT
     for (int i = 0; i < ContentManager::MAX_POINT_LIGHTS; i++)
@@ -160,9 +157,9 @@ void SceneManager::InitScene()
     LoadCamera();
     LoadProjectionMatrix();
     InitFramebuffer();
-   // SetUpSceneProjection(Projection);
     ContentManager::GlobalRenderer->InitUniformBufferObjects();
     ContentManager::GlobalRenderer->FillUboMatricesProjection(Projection);
+    ContentManager::GlobalRenderer->FillUboDirLight(*ContentManager::DirectionalLights["0"]);
     LoadModelsAndSetPositions();
     FillSceneTree(RootNode);
 }
@@ -238,7 +235,7 @@ void SceneManager::SetGlobalLightUniforms(Shader& shader)
 {
     for (int i = 0; i < GlobalLights.size(); i++)
     {
-        GlobalLights[i]->SetUniformsTest(shader);
+        GlobalLights[i]->SetUniforms(shader);
     }
 }
 

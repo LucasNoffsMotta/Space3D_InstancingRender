@@ -18,10 +18,14 @@ layout (std140) uniform Matrices
                        //16                      112
 };
 
-out vec3 position;
-out vec3 FragPos;
-out vec3 Normal;
-out vec2 texCoord;
+out VS_OUT
+{
+     vec3 position;
+     vec3 FragPos;
+     vec3 Normal;
+     vec2 texCoord;
+};
+
 
 
 //uniform mat4 view;

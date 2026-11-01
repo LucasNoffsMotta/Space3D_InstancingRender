@@ -2,7 +2,6 @@
 #include <glm/glm.hpp>
 #include "Shader.h"
 #include "Texture.h"
-#include "Renderer.h"
 
 enum eLightType :uint8_t
 {
@@ -31,9 +30,11 @@ public:
     void SetPosition(glm::vec3& pos);
     void SetColor(glm::vec3& color);
     void SetAmbient(glm::vec3& ambient);
-    std::string SetUniforms(Shader& shader);
-    virtual void SetUniformsTest(Shader& shader);
-    void Draw(Shader& shader, Texture& texture, Renderer& renderer);
+    glm::vec3 GetAmbient();
+    glm::vec3 GetDiffuse();
+    glm::vec3 GetSpecular();
+    std::string SetBaseUniforms(Shader& shader);
+    virtual void SetUniforms(Shader& shader);
     std::string GetLightStrucUniformName();
     virtual eLightType GetLightType();
     glm::vec3 GetWorldPosition();

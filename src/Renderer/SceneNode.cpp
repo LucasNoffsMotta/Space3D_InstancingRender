@@ -9,10 +9,12 @@ void SceneNode::SetUpNodeLightsUniforms(Shader* shader)
 {
 	for (int i = 0; i < Lights.size(); i++)
 	{
-		Lights[i]->SetUniformsTest(*shader);
+		if (Lights[i]->GetLightType() != eLightType::Directional)
+		{
+			Lights[i]->SetUniforms(*shader);
+		}
 	}
 }
-
 
 void SceneNode::SetRenderModeOnMainShader(eRenderMode mode, Shader* mainShader)
 {
@@ -88,16 +90,10 @@ void SceneNode::RenderNode()
 {
 	if (level == eHierarchyLevel::SKY_BOX)
 	{
-		//TODO: Passing all lights to this shader, should pass only the Dir Light uniform
-		//TODO: Should increase the ambient light on the skybox, it will always be darker than the scene objects
-		Shader* skyBoxShader = shaderMap[eRenderMode::SkyBox];
-		skyBoxShader->Activate();
-		SetUpNodeLightsUniforms(skyBoxShader); 
-		RenderSkyBox(skyBoxShader);
-
+		RenderSkyBox(shaderMap[eRenderMode::SkyBox]);
 	}
 
-	if (level == eHierarchyLevel::TRANSLUCID)
+	else if (level == eHierarchyLevel::TRANSLUCID)
 	{
 		Shader* mainShader = shaderMap[eRenderMode::FullRender];
 		mainShader->Activate();
@@ -105,7 +101,7 @@ void SceneNode::RenderNode()
 		RenderTranslucidObjectsNoStenciltest(mainShader);
 	}
 
-	if (level == eHierarchyLevel::NO_STENCIL_TEST)
+	else if (level == eHierarchyLevel::NO_STENCIL_TEST)
 	{
 		Shader* mainShader = shaderMap[eRenderMode::FullRender];
 		mainShader->Activate();
@@ -113,7 +109,7 @@ void SceneNode::RenderNode()
 		RenderRegularObjectsNoStencilTest(mainShader);
 	}
 
-	if (level == eHierarchyLevel::STENCIL_TEST)
+	else if (level == eHierarchyLevel::STENCIL_TEST)
 	{
 		Shader* mainShader = shaderMap[eRenderMode::FullRender];
 		Shader* stencilMaskShader = shaderMap[eRenderMode::Outline];
@@ -123,12 +119,12 @@ void SceneNode::RenderNode()
 		RenderOutlineMask(stencilMaskShader);
 	}
 
-	if (children.size() > 0) {
-		for (int i = 0; i < children.size(); i++)
-		{
-			children[i]->RenderNode();
-		}
+
+	for (int i = 0; i < children.size(); i++)
+	{
+		children[i]->RenderNode();
 	}
+
 }
 
 void SceneNode::SetModelMatrixAndCallDraw(Entity* entity, Shader* shader, glm::vec3 scale)
@@ -276,20 +272,12 @@ void SceneNode::SetViewMatrix(bool updateCamera)
 		view = ContentManager::Cameras["second"]->CalculateView();
 	}
 
-	
 	ContentManager::GlobalRenderer->FillUboMatricesView(view);
 }
 
 void SceneNode::SetProjectionMatrix(glm::mat4& projection)
 {
-	Shader* mainShader = shaderMap[eRenderMode::FullRender];
-	Shader* stencilMaskShader = shaderMap[eRenderMode::Outline];
-
-	mainShader->Activate();
-	mainShader->SetUniformMatrix4fv("projection", projection);
-
-	stencilMaskShader->Activate();
-	stencilMaskShader->SetUniformMatrix4fv("projection", projection);
+	ContentManager::GlobalRenderer->FillUboMatricesProjection(projection);
 }
 
 std::map<float, Entity*> SceneNode::GetOrderedTranslucidEntities()

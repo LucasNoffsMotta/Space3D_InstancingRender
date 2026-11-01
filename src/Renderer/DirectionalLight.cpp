@@ -27,10 +27,9 @@ void DirectionalLight::SetSpecular(glm::vec3& spec)
 	this->specular = spec;
 }
 
-void DirectionalLight::SetUniformsTest(Shader& shader)
+glm::vec3 DirectionalLight::GetDirection()
 {
-	std::string prefix = BaseLight::SetUniforms(shader);
-	shader.SetUniform3fv((prefix + "direction").c_str(), this->direction);
+	return direction;
 }
 
 eLightType DirectionalLight::GetLightType()
@@ -38,13 +37,8 @@ eLightType DirectionalLight::GetLightType()
 	return this->type;
 }
 
-void DirectionalLight::DrawDirectionalLight(Shader& shader, Texture& texture, Renderer& renderer)
+void DirectionalLight::SetUniforms(Shader& shader) 
 {
-	BaseLight::Draw(shader, texture, renderer);
-}
-
-void DirectionalLight::SetUniforms(Shader& shader)
-{
-	std::string prefix = BaseLight::SetUniforms(shader);
+	std::string prefix = BaseLight::SetBaseUniforms(shader);
 	shader.SetUniform3fv((prefix + "direction").c_str(), this->direction);
 }
