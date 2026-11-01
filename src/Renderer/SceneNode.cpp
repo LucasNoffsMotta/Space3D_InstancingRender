@@ -13,6 +13,12 @@ void SceneNode::SetUpNodeLightsUniforms(Shader* shader)
 		{
 			Lights[i]->SetUniforms(*shader);
 		}
+
+		if (Lights[i]->GetLightType() == eLightType::Spot)
+		{
+			Lights[i]->SetPosition(ContentManager::Cameras["main"]->CameraPos);
+			Lights[i]->SetDirection(ContentManager::Cameras["main"]->CameraFront);
+		}
 	}
 }
 

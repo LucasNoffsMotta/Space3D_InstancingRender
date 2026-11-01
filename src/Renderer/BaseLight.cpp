@@ -45,6 +45,10 @@ glm::vec3 BaseLight::GetSpecular()
 	return specular;
 }
 
+void BaseLight::SetDirection(glm::vec3 dir)
+{
+}
+
 std::string BaseLight::SetBaseUniforms(Shader& shader)
 {
 	std::string prefix = GetLightStrucUniformName() + "[" + std::to_string(lightIndex) + "].";

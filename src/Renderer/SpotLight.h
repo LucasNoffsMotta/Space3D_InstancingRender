@@ -7,8 +7,8 @@ class SpotLight : public BaseLight
 private:
 
 	float constant = 1;
-	float linear = 0.7;
-	float quadratic = 1.8;
+	float linear = 0.09;
+	float quadratic = 0.032;
 	float innerCutOff = glm::cos(glm::radians(15.5f));
 	float outerCutoff = glm::cos(glm::radians(35.0f));
 	glm::vec3 direction = glm::vec3(1);
@@ -16,8 +16,8 @@ private:
 public:
 	SpotLight();
 	SpotLight(int index, eLightType type);
-	void SetDirection(glm::vec3& dir);
 	void SetUniforms(Shader& shader) override;
 	eLightType GetLightType() override;
+	void SetDirection(glm::vec3 dir) override;
 };
 

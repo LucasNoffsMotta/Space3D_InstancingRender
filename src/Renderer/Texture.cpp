@@ -14,6 +14,24 @@ Texture::Texture()
 	//
 }
 
+Texture Texture::CreateCubemapTexture(std::string cubemapFolder)
+{
+	//Will remove thast shit later
+	std::vector<std::string> faces
+	{
+		cubemapFolder + "/right.jpg",
+		cubemapFolder + "/left.jpg",
+		cubemapFolder + "/top.jpg",
+		cubemapFolder + "/bottom.jpg",
+		cubemapFolder + "/front.jpg",
+		cubemapFolder + "/back.jpg"
+	};
+
+	Texture cubeMap = Texture();
+	GenerateCubemapTexture(faces);
+	return cubeMap;
+}
+
 void Texture::AttatchToFramebuffer()
 {
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);

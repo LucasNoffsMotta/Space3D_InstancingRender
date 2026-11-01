@@ -52,28 +52,32 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* carModel = ContentManager::LoadModel("/Car/evo_blendswap.obj", "car");
     Model* terrainModel = ContentManager::LoadModel("/Floor/Floor.obj", "terrain");
     Model* pumpkin = ContentManager::LoadModel("/Pumpkin/HalloweenPumpkin.obj", "pumpkin");
+
+    Model* spiderMan = ContentManager::LoadModel("/spiderman/Spiderman.obj", "spider");
+
     Model* grassModel = new Model();
     Model* transparentWindow = new Model();
     Model* frameBufferTestModel = new Model();
     Model* skyBoxCube = new Model();
 
-    Texture skybox = skyBoxCube->CreateSkyBox("res/textures/skybox");
-    skybox.SetTextureType(eTextureType::Diffuse_CubeMap);
+    Texture sky = Texture();
+    sky.CreateCubemapTexture("res/textures/skybox");
+    sky.SetTextureType(eTextureType::Diffuse_CubeMap);
+
+    Texture momoFace = Texture();
+    momoFace.CreateCubemapTexture("res/textures/momoSkyBox");
+    momoFace.SetTextureType(eTextureType::Diffuse_CubeMap);
+
+    skyBoxCube->Load3DCubeVertices(sky);
+
 
     //Pushing the skybox texture to create reflection effect (used as a texture on those models, shader use this texture to sample values from)
-     pumpkin->PushNewTexture(skybox);
-     //carModel->PushNewTexture(skybox);
+    pumpkin->PushNewTexture(momoFace);
+    carModel->PushNewTexture(momoFace);
 
-    Model* cube = ContentManager::LoadModel("D:/Projetos/c++/OpenGL/Assets/PinkCube/PinkCube.obj", "cube");
     Model* pointLightModel = new Model(); 
     pointLightModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/PointLight.png");
     transparentWindow->Load2DQuadTextureMesh("res/textures/blending_transparent_window.png");
-    //grassModel->Load2DQuadTextureMesh("res/textures/grass.png");
-    //grassModel->SetUseInstanced(1000);
-
-    //Model* fbTest = new Model();
-    //fbTest->Load2DQuadTextureMesh(renderer.GetFramebufferTexture());
-
 
     /*
     *  ENTITIES
@@ -84,8 +88,7 @@ void SceneManager::LoadModelsAndSetPositions()
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
-    //ContentManager::CreateEntity(TRANSLUCID, cube, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, true);
-    //ContentManager::CreateEntity(NO_STENCIL_TEST, fbTest, glm::vec3(0, 6.5, 0), glm::vec3(2), 0, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, spiderMan, glm::vec3(12, 2, 1), glm::vec3(1), 90, false, true);
     ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(SKY_BOX, skyBoxCube, sceneOrigin, glm::vec3(1), 0, false, false);
     ControlledEntity->AttatchCamera(ContentManager::Cameras["second"], 10);
@@ -132,18 +135,15 @@ void SceneManager::LoadGlobalLigths()
     }
 
     //SPOT
-    glm::vec3 spotPos = glm::vec3(10, -1000, 0); //Not visible!
-    glm::vec3 direction = glm::vec3(0, -1, 0);
-    glm::vec3 color = glm::vec3(0.3, 0, 0.3);
+    glm::vec3 spotPos = ContentManager::Cameras["main"]->CameraPos; 
+    glm::vec3 direction = ContentManager::Cameras["main"]->CameraFront;
 
-    for (int i = 0; i < ContentManager::MAX_POINT_LIGHTS; i++)
+    for (int i = 0; i < ContentManager::MAX_SPOT_LIGHTS; i++)
     {
         ContentManager::AddSpotLight(i);
-        ContentManager::SpotLights[std::to_string(i)]->SetColor(color);
+        ContentManager::SpotLights[std::to_string(i)]->SetColor(pointColor);
         ContentManager::SpotLights[std::to_string(i)]->SetPosition(spotPos);
-        ContentManager::SpotLights[std::to_string(i)]->SetDirection(directionalDir);
-        spotPos.x -= 30;
-        color.z -= 0.1;
+        ContentManager::SpotLights[std::to_string(i)]->SetDirection(direction);
         GlobalLights.push_back(ContentManager::SpotLights[std::to_string(i)].get());
     }
 }
@@ -153,8 +153,8 @@ void SceneManager::InitScene()
     InitHierarchyStructs();
     LoadEmptyTreeBasedOnLevels();
     LoadShaderSingletons();
-    LoadGlobalLigths();
     LoadCamera();
+    LoadGlobalLigths();
     LoadProjectionMatrix();
     InitFramebuffer();
     ContentManager::GlobalRenderer->InitUniformBufferObjects();

@@ -384,25 +384,6 @@ std::vector<Vertex> Model::LoadCustomPrimitiveMesh(ePrimitive primitive)
      return vertices;
 }
 
-Texture& Model::CreateSkyBox(std::string cubemapFolder)
-{
-    //Will remove thast shit later
-    std::vector<std::string> faces
-    {
-        cubemapFolder + "/right.jpg",
-        cubemapFolder + "/left.jpg",
-        cubemapFolder + "/top.jpg",
-        cubemapFolder + "/bottom.jpg",
-        cubemapFolder + "/front.jpg",
-        cubemapFolder + "/back.jpg"
-    };
-
-    Texture cubeMap = Texture();
-    cubeMap.GenerateCubemapTexture(faces);
-    Load3DCubeVertices(cubeMap);
-    return cubeMap;
-}
-
 
 void Model::CreateInstancedModelMatrices(int amount)
 {

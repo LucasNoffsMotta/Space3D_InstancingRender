@@ -63,9 +63,10 @@ struct PointLight
 };
 
 #define MAX_POINTLIGHTS  10
+#define MAX_SPOTLIGHTS  1
 
 uniform PointLight pointLight[MAX_POINTLIGHTS];
-uniform SpotLight spotLight[MAX_POINTLIGHTS];
+uniform SpotLight spotLight[MAX_SPOTLIGHTS];
 uniform vec3 viewPos;
 uniform int hasTexture;
 uniform int HasReflectionTexture;
@@ -221,6 +222,10 @@ vec3 GetFullLitColorResult(vec4 diffuseColor)
 	{
 		result += GetDirLight(normal, viewDir, diffuseColor, specularColor);
 		result += GetPointLight(pointLight[i], normal, fs_in.FragPos, viewDir, diffuseColor, specularColor);
+	}
+
+	for (int i = 0; i < MAX_SPOTLIGHTS; i++)
+	{
 		result += GetSpotLight(spotLight[i], normal, fs_in.FragPos, viewDir, diffuseColor, specularColor);
 	}
 

@@ -28,8 +28,7 @@ public:
 	static std::map<std::string, std::unique_ptr<DirectionalLight>> DirectionalLights;
 	static std::map<std::string, std::unique_ptr<PointLight>> PointLights;
 	static std::map<std::string, std::unique_ptr<SpotLight>> SpotLights;
-	static std::map<std::string, Model*> Models;
-	
+	static std::map<std::string, Model*> Models;	
 
 	static std::map<eHierarchyLevel, std::vector<Entity*>> Entities;
 
@@ -46,6 +45,7 @@ public:
 	static int FRAMEBUFFER_SCREEN_SIZE_Y;
 
 	static const int MAX_POINT_LIGHTS = 10;
+	static const int MAX_SPOT_LIGHTS = 10;
 
 	static Shader* LoadShader(const char* vertexSource, const char* fragmentSource, eRenderMode renderMode);
 	static Texture* LoadTexture(const char* texturePath, std::string name);

@@ -12,12 +12,6 @@ SpotLight::SpotLight(int index, eLightType type)
 }
 
 
-void SpotLight::SetDirection(glm::vec3& dir)
-{
-	this->direction = dir;
-}
-
-
 void SpotLight::SetUniforms(Shader& shader)
 {
 	std::string prefix = BaseLight::SetBaseUniforms(shader);
@@ -34,5 +28,10 @@ void SpotLight::SetUniforms(Shader& shader)
 eLightType SpotLight::GetLightType()
 {
 	return this->type;
+}
+
+void SpotLight::SetDirection(glm::vec3 dir)
+{
+	this->direction = dir;
 }
 

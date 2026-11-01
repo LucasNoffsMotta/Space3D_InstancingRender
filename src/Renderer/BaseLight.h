@@ -33,6 +33,7 @@ public:
     glm::vec3 GetAmbient();
     glm::vec3 GetDiffuse();
     glm::vec3 GetSpecular();
+    virtual void SetDirection(glm::vec3 dir);
     std::string SetBaseUniforms(Shader& shader);
     virtual void SetUniforms(Shader& shader);
     std::string GetLightStrucUniformName();
