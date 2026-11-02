@@ -2,6 +2,7 @@
 #include <string>
 
 const std::string VERTEX_SHADER_ERROR = "Vertex Shader";
+const std::string GEOMETRY_SHADER_ERROR = "Geometry Shader";
 const std::string FRAGMENT_SHADER_ERROR = "Fragment Shader";
 const std::string PROGRAM_ERROR = "Program";
 
@@ -37,13 +38,21 @@ Shader::Shader()
 
 }
 
-Shader::Shader(const char* vertexFile, const char* fragmentFile)
+Shader::Shader(const char* vertexFile, const char* fragmentFile, const char* geometryFile)
 {
 	std::string vertexShaderString = alternative_get_file_content(vertexFile);
 	std::string fragmentShaderString = alternative_get_file_content(fragmentFile);
+	std::string geometryShaderString;
+
+	if (geometryFile)
+	{
+		geometryShaderString = alternative_get_file_content(geometryFile);
+	}
+
 
 	const char* vertexShaderSource = vertexShaderString.c_str();
 	const char* fragmentShaderSource = fragmentShaderString.c_str();
+	const char* geometryShaderSource = geometryShaderString.c_str();
 
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -55,17 +64,26 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
 	glCompileShader(fragmentShader);
 	CheckShaderCompiling(fragmentShader, "F");
 
+	GLuint geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+	glShaderSource(geometryShader, 1, &geometryShaderSource, NULL);
+	glCompileShader(geometryShader);
+	CheckShaderCompiling(geometryShader, "G");
+
 	Id = glCreateProgram();
 	glAttachShader(Id, vertexShader);
 	glAttachShader(Id, fragmentShader);
+
+	if (geometryFile) 	glAttachShader(Id, geometryShader);
+
 	glLinkProgram(Id);
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-	CheckProgramCompilinhg();
+	glDeleteShader(geometryShader);
+	CheckProgramCompiling();
 }
 
-void Shader::CheckProgramCompilinhg()
+void Shader::CheckProgramCompiling()
 {
 	int  success;
 	char infoLog[512];
@@ -109,6 +127,12 @@ void Shader::CheckShaderCompiling(GLuint shader, std::string type)
 	{
 		glGetShaderInfoLog(shader, 512, NULL, infoLog);
 		std::cout << "ERROR::" << "SHADER::" << VERTEX_SHADER_ERROR << "::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
+	else if (!success && type == "G")
+	{
+		glGetShaderInfoLog(shader, 512, NULL, infoLog);
+		std::cout << "ERROR::" << "SHADER::" << GEOMETRY_SHADER_ERROR << "::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 }
 

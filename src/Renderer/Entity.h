@@ -28,6 +28,7 @@ private:
 	glm::vec3 YawAxis = glm::vec3(0, 1, 0);
 	glm::vec3 RollAxis = glm::vec3(1, 0, 0);
 
+
 	int Index;
 	eHierarchyLevel HIERARCHY_LEVEL = eHierarchyLevel::NO_STENCIL_TEST;
 
@@ -39,6 +40,7 @@ private:
 	bool isTranslucid;
 
 public:
+	bool displayNormals = false;
 	Camera* attachedCamera;
 	glm::mat4 modelMatrix = glm::mat4(1);
 	void SetIsTranslucid(bool isTranslucid);
@@ -53,7 +55,7 @@ public:
 	Model* GetModel();
 	glm::mat4 RotateMatrix(glm::mat4& modelMatrix);
 	glm::vec3 GetDirection();
-
+	void SetDisplayNormalsMode(bool displayNormals);
 	void FixModelRotationOnLoad(glm::vec3 axis, float offeset);
 
 

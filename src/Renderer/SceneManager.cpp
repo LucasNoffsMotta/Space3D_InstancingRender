@@ -6,6 +6,13 @@
 
 void SceneManager::LoadShaderSingletons()
 {
+    RootShaderMap[eRenderMode::RenderNormals_GeometryShader] = ContentManager::LoadShader(
+        "src/Shader/3DVertex.glsl",
+        "src/Shader/RenderNormals_Frag.glsl",
+        eRenderMode::RenderNormals_GeometryShader,
+        "src/Shader/GeometryShader.glsl"
+    );
+
     RootShaderMap[eRenderMode::FullRender] = ContentManager::LoadShader(
         "src/Shader/3DVertex.glsl",
         "src/Shader/FullRenderFragment.glsl",
@@ -28,7 +35,7 @@ void SceneManager::LoadShaderSingletons()
         "src/Shader/PostProcessVertex.glsl",
         "src/Shader/PostProcessFragment.glsl",
         eRenderMode::PostProcessing);
-
+    
 
     RootShaderMap[eRenderMode::PostProcessingOnModel] = ContentManager::LoadShader(
         "src/Shader/3DVertex.glsl",
@@ -50,12 +57,13 @@ void SceneManager::LoadModelsAndSetPositions()
 
     int objID = 0;
     Model* carModel = ContentManager::LoadModel("/Car/evo_blendswap.obj", "car");
+    Model* cube = ContentManager::LoadModel("/Cube/PinkCube.obj", "cube");
     Model* terrainModel = ContentManager::LoadModel("/Floor/Floor.obj", "terrain");
     Model* pumpkin = ContentManager::LoadModel("/Pumpkin/HalloweenPumpkin.obj", "pumpkin");
-
     Model* spiderMan = ContentManager::LoadModel("/spiderman/Spiderman.obj", "spider");
+    Model* tree = ContentManager::LoadModel("/LowPolyTree/LowPolyTree.obj", "tree");
 
-    Model* grassModel = new Model();
+
     Model* transparentWindow = new Model();
     Model* frameBufferTestModel = new Model();
     Model* skyBoxCube = new Model();
@@ -74,24 +82,37 @@ void SceneManager::LoadModelsAndSetPositions()
     //Pushing the skybox texture to create reflection effect (used as a texture on those models, shader use this texture to sample values from)
     pumpkin->PushNewTexture(momoFace);
     carModel->PushNewTexture(momoFace);
-
+    spiderMan->PushNewTexture(momoFace);
     Model* pointLightModel = new Model(); 
     pointLightModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/PointLight.png");
     transparentWindow->Load2DQuadTextureMesh("res/textures/blending_transparent_window.png");
+
+    Model* grassModel = new Model();
+    grassModel->Load2DQuadTextureMesh("res/textures/grass.png");
+    grassModel->SetUseInstanced(100000);
+    tree->SetUseInstanced(1000);
 
     /*
     *  ENTITIES
     */
 
     ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(100, 1, 100), 0, false, false);
-    ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
+    Entity* normalCube = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(7.0, 7.0, 1),glm::vec3(1), 0, false, false);
+    Entity* car = ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, tree, glm::vec3(14, 2.0, 1), glm::vec3(1), 270, false, false);
+
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
+
+
     ContentManager::CreateEntity(NO_STENCIL_TEST, spiderMan, glm::vec3(12, 2, 1), glm::vec3(1), 90, false, true);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, glm::vec3(1, 0.5, 1), glm::vec3(1), 90, false, true);
     ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(SKY_BOX, skyBoxCube, sceneOrigin, glm::vec3(1), 0, false, false);
     ControlledEntity->AttatchCamera(ContentManager::Cameras["second"], 10);
+
+    //Display normals:  Acivate the property show normals on entity
 
 
     for (int i = 0; i < GlobalLights.size(); i++)

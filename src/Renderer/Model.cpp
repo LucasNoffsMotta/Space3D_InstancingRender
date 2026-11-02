@@ -8,14 +8,8 @@ Model::Model()
 
 void Model::Draw(Shader& shader)
 {
-    if (useInstanced)
-    {
-        DrawInstanced(shader, instancesAmmount);
-        return;
-    }
-
 	for (unsigned int i = 0; i < meshes.size(); i++)
-		meshes[i].Draw(shader);
+		meshes[i].Draw(shader, useInstanced, instancesAmmount);
 }
 
 
@@ -289,7 +283,7 @@ void Model::InitInstancesTranslations()
 
     instancesTranslationPtr = new glm::vec3[instancesAmmount];
 
-    glm::vec3 pos = glm::vec3(-20, 1.8, -20);
+    glm::vec3 pos = glm::vec3(1, 0.5, 1);
     int index = 0;
     for (int i = 0; i < instancesAmmount; i++)
     {

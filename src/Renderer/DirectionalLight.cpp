@@ -1,8 +1,9 @@
 #include "DirectionalLight.h"
+#include "Entity.h"
 
 DirectionalLight::DirectionalLight(int index, eLightType type)
 {
-	color = glm::vec3(0.01f, 0.01f, 0.01f);
+	color = glm::vec3(0.0f, 0.f, 0.01f);
 	this->lightIndex = index;
 	this->type = type;
 }
@@ -30,6 +31,11 @@ void DirectionalLight::SetSpecular(glm::vec3& spec)
 glm::vec3 DirectionalLight::GetDirection()
 {
 	return direction;
+}
+
+void Entity::SetDisplayNormalsMode(bool displayNormals)
+{
+	this->displayNormals = displayNormals;
 }
 
 eLightType DirectionalLight::GetLightType()

@@ -14,13 +14,13 @@ class Shader
 {
 public:
 	GLuint Id;
-	Shader(const char* vertexShaderSource, const char* fragmentShaderSource);
+	Shader(const char* vertexShaderSource, const char* fragmentShaderSource, const char* geometryShader=nullptr);
 	Shader();
 	std::string alternative_get_file_content(const char* filename);
 	void Activate();
 	void Desativacte();
 	void CheckShaderCompiling(GLuint shader, std::string type);
-	void CheckProgramCompilinhg();
+	void CheckProgramCompiling();
 	void DeleteShader(GLuint shader);
 	void SetUniformInt(const char* uniformName, GLint i);
 	void SetUniformFloat(const char* uniformName, GLfloat f);

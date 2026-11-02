@@ -63,7 +63,7 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, st
 }
 
 
-void Mesh::Draw(Shader& shader)
+void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 {
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
@@ -120,9 +120,17 @@ void Mesh::Draw(Shader& shader)
 	shader.SetUniformFloat("material.shininess", material.shininess);
 
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+	if (useInstanced)
+	{
+		glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0, instancedAmmount);
+	}
 
+	else
+	{
+		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	}
+
+	glBindVertexArray(0);
 
 	//Very important: Had a anoying bug with textures not being rendered due to that. It is important to reset the shader uniform flag to default after changing it inside a conditional clausule. 
 	//The objects share the same shader program, so if a shader uniform flag is changed between frames, the next object can receive a "dirt" shader

@@ -94,6 +94,8 @@ void SceneNode::AttatchController(InputManager* controller)
 
 void SceneNode::RenderNode()
 {
+
+
 	if (level == eHierarchyLevel::SKY_BOX)
 	{
 		RenderSkyBox(shaderMap[eRenderMode::SkyBox]);
@@ -101,9 +103,20 @@ void SceneNode::RenderNode()
 
 	else if (level == eHierarchyLevel::TRANSLUCID)
 	{
+		//TODO: This is a fucking mess!
+		//Should be a better way of checking if the instancing shader should be activated
+
 		Shader* mainShader = shaderMap[eRenderMode::FullRender];
 		mainShader->Activate();
 		SetRenderModeOnMainShader(ContentManager::GlobalRenderMode, mainShader);
+
+		//Instancing activation:
+		Shader* instancedShader = shaderMap[eRenderMode::FullRender_Instanced];
+		instancedShader->Activate();
+		SetRenderModeOnMainShader(ContentManager::GlobalRenderMode, instancedShader);
+		instancedShader->Desativacte();
+
+		mainShader->Activate();
 		RenderTranslucidObjectsNoStenciltest(mainShader);
 	}
 
@@ -112,6 +125,14 @@ void SceneNode::RenderNode()
 		Shader* mainShader = shaderMap[eRenderMode::FullRender];
 		mainShader->Activate();
 		SetRenderModeOnMainShader(ContentManager::GlobalRenderMode, mainShader);
+
+		//Instancing activation:
+		Shader* instancedShader = shaderMap[eRenderMode::FullRender_Instanced];
+		instancedShader->Activate();
+		SetRenderModeOnMainShader(ContentManager::GlobalRenderMode, instancedShader);
+		instancedShader->Desativacte();
+
+		mainShader->Activate();
 		RenderRegularObjectsNoStencilTest(mainShader);
 	}
 
@@ -141,6 +162,14 @@ void SceneNode::SetModelMatrixAndCallDraw(Entity* entity, Shader* shader, glm::v
 	modelMatrix = glm::scale(modelMatrix, entity->GetScale() * scale);
 	shader->SetUniformMatrix4fv("model", modelMatrix);
 	entity->Draw(shader);
+
+	if (entity->displayNormals)
+	{
+		Shader* normalGeometryShader = ContentManager::Shaders[RenderNormals_GeometryShader];
+		normalGeometryShader->Activate();
+		normalGeometryShader->SetUniformMatrix4fv("model", modelMatrix);
+		entity->Draw(normalGeometryShader);
+	}
 }
 
 

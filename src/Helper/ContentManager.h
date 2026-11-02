@@ -47,7 +47,7 @@ public:
 	static const int MAX_POINT_LIGHTS = 10;
 	static const int MAX_SPOT_LIGHTS = 10;
 
-	static Shader* LoadShader(const char* vertexSource, const char* fragmentSource, eRenderMode renderMode);
+	static Shader* LoadShader(const char* vertexSource, const char* fragmentSource, eRenderMode renderMode, const char* geometrySource = nullptr);
 	static Texture* LoadTexture(const char* texturePath, std::string name);
 	static Model* LoadModel(std::string path, std::string name);
 

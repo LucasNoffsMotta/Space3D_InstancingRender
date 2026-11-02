@@ -22,22 +22,24 @@ out VS_OUT
 {
      vec3 position;
      vec3 FragPos;
-     vec3 Normal;
+     vec3 FragmentShader_Normal;
+     vec4 GeometryShader_normal;
      vec2 texCoord;
-};
+} vs_out;
 
 
-
-//uniform mat4 view;
-//uniform mat4 projection;
 uniform mat4 model;
 
 void main()
 {
-    Normal = mat3(transpose(inverse(model))) * aNormal;  
-    FragPos = vec3(model * vec4(aPos, 1));
-    texCoord = aTexCoord;
+    vs_out.FragmentShader_Normal = mat3(transpose(inverse(model))) * aNormal;
+    vs_out.FragPos = vec3(model * vec4(aPos, 1));
+    vs_out.texCoord = aTexCoord;
+
+    mat4 normalMatrix = mat4(mat3(transpose(inverse(model))));
+    vs_out.GeometryShader_normal = normalize(projection * view * normalMatrix * vec4(aNormal,0.f));
+
     gl_Position = projection * view * model * vec4(aPos , 1.0);
-    position = gl_Position.xyz;
+    vs_out.position = gl_Position.xyz;
     gl_PointSize = gl_Position.z;    
 }  

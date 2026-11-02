@@ -20,6 +20,7 @@ d 1.000000
 illum 2
 map_Kd body_red.png
 map_Ks body_spec.png
+refl body_refl.png
 
 newmtl interior_realtime
 Ns 250.000000

@@ -22,9 +22,9 @@ eRenderMode ContentManager::GlobalRenderMode;
 ePostProcessEffect ContentManager::GlobalPostProcessMode;
 
 
-Shader* ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, eRenderMode renderMode)
+Shader* ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, eRenderMode renderMode, const char* geometrySource)
 {
-    Shaders[renderMode] = new Shader(vertexSource, fragmentSource);
+    Shaders[renderMode] = new Shader(vertexSource, fragmentSource, geometrySource);
     return Shaders[renderMode];
 }
 

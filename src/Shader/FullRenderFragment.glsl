@@ -75,7 +75,8 @@ in VS_OUT
 {
      vec3 position;
      vec3 FragPos;
-     vec3 Normal;
+     vec3 FragmentShader_Normal;
+     vec4 GeometryShader_normal;
      vec2 texCoord;
 } fs_in;
 
@@ -213,7 +214,7 @@ float GetFinalAlphaValue(vec4 diffuseColor, Material material)
 
 vec3 GetFullLitColorResult(vec4 diffuseColor)
 {
-	vec3 normal = normalize(fs_in.Normal);
+	vec3 normal = normalize(fs_in.FragmentShader_Normal);
 	vec3 viewDir = normalize(viewPos - fs_in.FragPos);
 	vec3 result = vec3(0);
 	vec3 specularColor = vec3(texture(material.texture_specular1, fs_in.texCoord));
@@ -277,8 +278,10 @@ void main()
 
 		float ratio = 1.0f/1.52;
 		vec3 I = normalize(fs_in.position - viewPos);
-		vec3 R = reflect(I, normalize(fs_in.Normal));
+		vec3 R = reflect(I, normalize(fs_in.FragmentShader_Normal));
 		//vec3 R = refract(I, normalize(Normal), ratio);
+
+
 		vec4 reflectionColor =  vec4(texture(material.skybox, R).rgb, 1.0);
 		FragColor = mix(vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material)), reflectionColor, 0.5);
 		return;

@@ -110,12 +110,14 @@ void Renderer::SetShadersBindingPointToUseUniformBuffer()
     unsigned int ubo_Outline_Matrices = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::Outline]->Id, "Matrices");
     unsigned int ubo_Instanced_Matrices = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::FullRender_Instanced]->Id, "Matrices");
     unsigned int ubo_SkyBox_Matrices = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::SkyBox]->Id, "Matrices");
+    unsigned int ubo_FullRender_GeometryShader_Matrices = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::RenderNormals_GeometryShader]->Id, "Matrices");
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender]->Id, ubo_FullRender_Matrices, 0);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::Outline]->Id, ubo_Outline_Matrices, 0);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender_Instanced]->Id, ubo_Instanced_Matrices, 0);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::SkyBox]->Id, ubo_SkyBox_Matrices, 0);
+    glUniformBlockBinding(ContentManager::Shaders[eRenderMode::RenderNormals_GeometryShader]->Id, ubo_FullRender_GeometryShader_Matrices, 0);
 
     //Dir Light Uniform
     unsigned int ubo_FullRender_DirLight = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::FullRender]->Id, "DirLight");
@@ -126,7 +128,6 @@ void Renderer::SetShadersBindingPointToUseUniformBuffer()
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender]->Id, ubo_FullRender_DirLight, 1);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::SkyBox]->Id, ubo_SkyBox_DirLight, 1);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender_Instanced]->Id, ubo_Instanced_DirLight, 1);
-
 }
 
 void Renderer::FillUboMatricesProjection(glm::mat4 projection)
