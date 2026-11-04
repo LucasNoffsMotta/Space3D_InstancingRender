@@ -294,6 +294,7 @@ void SceneNode::RenderWired(Shader* shader)
 void SceneNode::SetViewMatrix(bool updateCamera)
 {
 	glm::mat4 view = glm::mat4(1);
+
 	if (updateCamera) 	view = ContentManager::Cameras["main"]->Update(ContentManager::Controllers["main"]);
 
 	else
@@ -303,7 +304,7 @@ void SceneNode::SetViewMatrix(bool updateCamera)
 
 		ContentManager::Cameras["second"]->CameraPos.x = ContentManager::Cameras["main"]->CameraPos.x;
 		ContentManager::Cameras["second"]->CameraPos.z = ContentManager::Cameras["main"]->CameraPos.z;
-
+		ContentManager::Cameras["second"]->CalculateDirectionYawOnly(ContentManager::Cameras["main"]->Yaw);
 		view = ContentManager::Cameras["second"]->CalculateView();
 	}
 

@@ -17,7 +17,7 @@ class SpotLight;
 class Camera
 {
 private:
-	float Yaw = -90.0f;
+
 	float Pitch = 0.0f;
 	float LastX = 650;
 	float LastY = 600;
@@ -30,6 +30,7 @@ private:
 
 
 public:
+	float Yaw = -90.0f;
 	eCameraMode mode = eCameraMode::Free;
 	float cameraLight = 1;
 	void SetSpotLight();
@@ -41,8 +42,13 @@ public:
 	glm::vec3 CameraFront;
 	glm::vec3 CameraUp;
 	glm::mat4 CalculateView();
+
+	void InitTopDownCamera();
 	void HandleMouseInput(double xpos, double ypos, bool costraintOnPitch=true);
+
 	void CalculateDirection(float xoffset, float yoffset, bool constraintOnPitch);
+	void CalculateDirectionYawOnly(float newYaw);
+
 	void SetMoveSpeed(float newSpeed);
 	void HandleKeybordInput(InputManager* controller);
 	void Turn(float degrees);

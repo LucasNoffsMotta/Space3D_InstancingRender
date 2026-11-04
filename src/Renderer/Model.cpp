@@ -19,12 +19,12 @@ void Model::DrawInstanced(Shader& shader, int amount)
         meshes[i].DrawInstanced(shader, amount);
 }
 
-
-
-void Model::SetUseInstanced(int amount)
+void Model::SetUseInstanced(int amount, float offSet)
 {
     useInstanced = true;
     instancesAmmount = amount;
+    InitInstancesTranslations(offSet);
+    CreateInstancedModelMatrices(amount);
     SetUpMeshesInstancedVao(instancesAmmount);
 }
 
@@ -248,9 +248,6 @@ void Model::PushNewTexture(Texture& newTexture)
 
 void Model::SetUpMeshesInstancedVao(int amount)
 {
-    InitInstancesTranslations();
-    CreateInstancedModelMatrices(amount);
-
     unsigned int buffer;
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
@@ -277,24 +274,26 @@ void Model::SetUpMeshesInstancedVao(int amount)
     }
 }
 
-void Model::InitInstancesTranslations()
+void Model::InitInstancesTranslations(float offSet)
 {
     srand(static_cast<unsigned int>(glfwGetTime())); // initialize random seed
 
     instancesTranslationPtr = new glm::vec3[instancesAmmount];
 
-    glm::vec3 pos = glm::vec3(1, 0.5, 1);
+    glm::vec3 pos = glm::vec3(1, 0, 1);
     int index = 0;
     for (int i = 0; i < instancesAmmount; i++)
     {
         instancesTranslationPtr[i] = pos;
-        float displacement = (float)(rand()) / (float)(RAND_MAX);
-        pos.z += (displacement);
+        float displacement_Z = (float)(rand()) / (float)(RAND_MAX) + offSet;
+        float displacement_X = (float)(rand()) / (float)(RAND_MAX) + offSet;
+        pos.z += (displacement_Z);
+        pos.x += (displacement_X);
 
         if (pos.z > 10)
         {
-            pos.z = -20;
-            pos.x += (displacement);
+            pos.z = 1;
+            pos.x += (displacement_X);
         }
     }
 }
@@ -382,8 +381,6 @@ std::vector<Vertex> Model::LoadCustomPrimitiveMesh(ePrimitive primitive)
 void Model::CreateInstancedModelMatrices(int amount)
 {
     modelMatrices = new glm::mat4[amount];
-
-
     for (int i = 0; i < amount; i++)
     {
         glm::vec3 trans = *instancesTranslationPtr;
@@ -440,7 +437,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
         if (!skip)
         {
             std::string path = directory + '/' + std::string(file);
-            Texture text = Texture(path.c_str(), false);
+            Texture text = Texture(path.c_str(), true);
             text.SetTextureType(eType);
             text.path = str.C_Str();
             textures.push_back(text);

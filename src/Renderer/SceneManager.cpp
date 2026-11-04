@@ -89,8 +89,8 @@ void SceneManager::LoadModelsAndSetPositions()
 
     Model* grassModel = new Model();
     grassModel->Load2DQuadTextureMesh("res/textures/grass.png");
-    grassModel->SetUseInstanced(100000);
-    tree->SetUseInstanced(1000);
+    grassModel->SetUseInstanced(100000, 0.5);
+    tree->SetUseInstanced(1000, 4);
 
     /*
     *  ENTITIES
@@ -99,7 +99,7 @@ void SceneManager::LoadModelsAndSetPositions()
     ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(100, 1, 100), 0, false, false);
     Entity* normalCube = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(7.0, 7.0, 1),glm::vec3(1), 0, false, false);
     Entity* car = ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
-    ContentManager::CreateEntity(NO_STENCIL_TEST, tree, glm::vec3(14, 2.0, 1), glm::vec3(1), 270, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, tree, glm::vec3(14, 1.0, 1), glm::vec3(1), 270, false, false);
 
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
@@ -110,7 +110,7 @@ void SceneManager::LoadModelsAndSetPositions()
     ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, glm::vec3(1, 0.5, 1), glm::vec3(1), 90, false, true);
     ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(SKY_BOX, skyBoxCube, sceneOrigin, glm::vec3(1), 0, false, false);
-    ControlledEntity->AttatchCamera(ContentManager::Cameras["second"], 10);
+    //ControlledEntity->AttatchCamera(ContentManager::Cameras["second"], 10);
 
     //Display normals:  Acivate the property show normals on entity
 
@@ -127,7 +127,7 @@ void SceneManager::LoadModelsAndSetPositions()
 void SceneManager::LoadGlobalLigths()
 {
     glm::vec3 pointPos = glm::vec3(0, 7, 0);
-    glm::vec3 pointColor = glm::vec3(0.4117, 0.1960f, 0.3784);
+    glm::vec3 pointColor = glm::vec3(0.01, 0.01, 0.4784);
 
     //POINT
     for (int i = 0; i < ContentManager::MAX_POINT_LIGHTS; i++)
@@ -158,11 +158,12 @@ void SceneManager::LoadGlobalLigths()
     //SPOT
     glm::vec3 spotPos = ContentManager::Cameras["main"]->CameraPos; 
     glm::vec3 direction = ContentManager::Cameras["main"]->CameraFront;
+    glm::vec3 spotColor = glm::vec3(1, 1, 0.1);
 
     for (int i = 0; i < ContentManager::MAX_SPOT_LIGHTS; i++)
     {
         ContentManager::AddSpotLight(i);
-        ContentManager::SpotLights[std::to_string(i)]->SetColor(pointColor);
+        ContentManager::SpotLights[std::to_string(i)]->SetColor(spotColor);
         ContentManager::SpotLights[std::to_string(i)]->SetPosition(spotPos);
         ContentManager::SpotLights[std::to_string(i)]->SetDirection(direction);
         GlobalLights.push_back(ContentManager::SpotLights[std::to_string(i)].get());
@@ -187,12 +188,16 @@ void SceneManager::InitScene()
 
 void SceneManager::LoadCamera()
 {
-    glm::vec3 camPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 camFront = glm::vec3(0.0f, 0.0f, -1.0f);
+    glm::vec3 mainCameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    glm::vec3 mapCameraPos = glm::vec3(0.0f, 50.0f, 3.0f);
+
+    glm::vec3 mainCameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+    glm::vec3 mapCameraFront = glm::vec3(0.0, -1.0f, 0.f);
+
     glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-    Camera* BaseCamera = new Camera(camPos, camFront, camUp);
-    Camera* SecondCamera = new Camera(camPos, camFront, camUp);
+    Camera* BaseCamera = new Camera(mainCameraPos, mainCameraFront, camUp);
+    Camera* SecondCamera = new Camera(mapCameraPos, mapCameraFront, camUp);
     ContentManager::AddCamera(BaseCamera, "main");
     ContentManager::AddCamera(SecondCamera, "second");
 }

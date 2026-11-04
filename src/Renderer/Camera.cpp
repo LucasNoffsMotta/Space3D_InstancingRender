@@ -35,6 +35,8 @@ void Camera::CalculateDirection(float xoffset, float yoffset, bool constraintOnP
 	Yaw += xoffset * TimeHelper::dt;
 	Pitch += yoffset * TimeHelper::dt;
 
+	std::cout << "Pitch looking down:  " << Pitch << std::endl;
+
 	//std::cout << Yaw << std::endl;
 
 	if (constraintOnPitch)
@@ -50,6 +52,14 @@ void Camera::CalculateDirection(float xoffset, float yoffset, bool constraintOnP
 	direction.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
 	CameraFront = glm::normalize(direction);
 	//std::cout << "Dir X: " << direction.x << "/ Dir Y: " << direction.y << "/ Dir Z: " << direction.z << std::endl;
+}
+
+//Calculates the Yaw impact on the camera direction, used to make the minimap rotate using a top down view!
+void Camera::CalculateDirectionYawOnly(float newYaw)
+{
+	CameraFront.z = sin(glm::radians(newYaw)) * cos(glm::radians(-89.f));
+	CameraFront.x = cos(glm::radians(newYaw)) * cos(glm::radians(-89.f));
+	CameraFront = glm::normalize(CameraFront);
 }
 
 void Camera::SetMoveSpeed(float newSpeed)
@@ -122,6 +132,11 @@ glm::mat4 Camera::Update(InputManager* controller)
 	}
 	HandleKeybordInput(controller);
 	return CalculateView();
+}
+
+void Camera::InitTopDownCamera()
+{
+	mode = eCameraMode::TopDown;
 }
 
 void Camera::HandleMouseInput(double xpos, double ypos, bool constraintOnPitch)

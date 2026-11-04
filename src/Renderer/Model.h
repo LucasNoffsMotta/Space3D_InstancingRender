@@ -25,7 +25,7 @@ private:
     void processNode(aiNode* node, const aiScene* scene);
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);
     void SetUpMeshesInstancedVao(int amount);
-    void InitInstancesTranslations();
+    void InitInstancesTranslations(float offSet);
     std::vector<Vertex> LoadCustomPrimitiveMesh(ePrimitive primitive);
 
 
@@ -68,7 +68,7 @@ public:
     int instancesAmmount;
 
 
-    void SetUseInstanced(int amount);
+    void SetUseInstanced(int amount, float offSet);
 
 
 };

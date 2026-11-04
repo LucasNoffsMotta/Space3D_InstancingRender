@@ -22,6 +22,7 @@ private:
 	VAO vao;
 	unsigned int rbo;
 	unsigned int fbo;
+
 	unsigned int frameBufferVao;
 	unsigned int uboMatrices; //Update the buffer data here and all the shader programs will be updated!
 	unsigned int uboDirLight; //Update the buffer data here and all the shader programs will be updated!
