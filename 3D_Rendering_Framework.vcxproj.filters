@@ -241,5 +241,11 @@
     <None Include="src\Shader\RenderNormals_Frag.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="src\Shader\3DFragment_Texture.glsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="src\Shader\3DVertex_DisplayRotatingModel.glsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

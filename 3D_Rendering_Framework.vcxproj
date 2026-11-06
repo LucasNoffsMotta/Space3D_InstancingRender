@@ -77,6 +77,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Shader\2DVertex.vert" />
+    <None Include="src\Shader\3DFragment_Texture.glsl" />
+    <None Include="src\Shader\3DVertex_DisplayRotatingModel.glsl" />
     <None Include="src\Shader\FullRenderFragment.glsl" />
     <None Include="src\Shader\GeometryShader.glsl" />
     <None Include="src\Shader\PostProcessFragment.glsl" />

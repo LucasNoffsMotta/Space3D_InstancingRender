@@ -12,5 +12,6 @@ enum eRenderMode :uint8_t {
 	Outline, //Mask shader
 	WiredOn, //Wire only shader
 	PostProcessing,
-	PostProcessingOnModel
+	PostProcessingOnModel,
+	ModelDisplay
 };

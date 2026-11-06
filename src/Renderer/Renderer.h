@@ -27,9 +27,19 @@ private:
 	unsigned int uboMatrices; //Update the buffer data here and all the shader programs will be updated!
 	unsigned int uboDirLight; //Update the buffer data here and all the shader programs will be updated!
 	Texture frameBufferTexture;
+	std::vector<Model*> DisplayModels;
+	glm::vec3 ModelDisplayPos = glm::vec3(0);
+	glm::vec3 ModelDisplayScale = glm::vec3(0.5);
+	glm::mat4 ModelDisplayView = glm::mat4(1);
+
+	int currentDisplayedModelIndex = 0;
 
 public:
 	Renderer();
+
+	//Display rotating model
+	void RenderDisplayModel(Shader* shader);
+	void GetAllLoadedModels();
 
 	//Uniform buffers
 	void InitUniformBufferObjects();

@@ -68,6 +68,41 @@ Renderer::Renderer()
 {
 }
 
+void Renderer::RenderDisplayModel(Shader* shader)
+{
+    glm::mat4 modelMatrix = glm::mat4(1);
+    modelMatrix = glm::translate(modelMatrix, ModelDisplayPos);
+    modelMatrix = glm::scale(modelMatrix, ModelDisplayScale);
+
+    //FIX HERE TO MAKE THE MODEL ROTATE! MAY CREATE AN ENTITY
+
+    //DisplayModels[currentDisplayedModelIndex]->RotateYaw(offSet);
+
+    //float pitch = glm::radians(DisplayModels[currentDisplayedModelIndex]->Pitch);
+    //float yaw = glm::radians(DisplayModels[currentDisplayedModelIndex]->Yaw);
+    //float roll = glm::radians(DisplayModels[currentDisplayedModelIndex]->Roll);
+
+    //modelMatrix = glm::rotate(modelMatrix, yaw, -YawAxis);
+    //modelMatrix = glm::rotate(modelMatrix, pitch, PitchAxis);
+    //modelMatrix = glm::rotate(modelMatrix, roll, RollAxis);
+    
+    glm::mat4 view = glm::mat4(1);
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+    shader->Activate();
+    shader->SetUniformMatrix4fv("model", modelMatrix);
+    shader->SetUniformMatrix4fv("fixedView", view);
+    DisplayModels[currentDisplayedModelIndex]->Draw(*shader);
+}
+
+void Renderer::GetAllLoadedModels()
+{
+    for (auto const& [key, val] : ContentManager::Models)
+    {
+        DisplayModels.push_back(val);
+    }
+}
+
 void Renderer::InitFrameBuffer()
 {
     glGenFramebuffers(1, &fbo);
@@ -111,6 +146,7 @@ void Renderer::SetShadersBindingPointToUseUniformBuffer()
     unsigned int ubo_Instanced_Matrices = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::FullRender_Instanced]->Id, "Matrices");
     unsigned int ubo_SkyBox_Matrices = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::SkyBox]->Id, "Matrices");
     unsigned int ubo_FullRender_GeometryShader_Matrices = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::RenderNormals_GeometryShader]->Id, "Matrices");
+    unsigned int ubo_DisplayModel_Matrices = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::ModelDisplay]->Id, "Matrices");
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender]->Id, ubo_FullRender_Matrices, 0);
@@ -118,6 +154,7 @@ void Renderer::SetShadersBindingPointToUseUniformBuffer()
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender_Instanced]->Id, ubo_Instanced_Matrices, 0);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::SkyBox]->Id, ubo_SkyBox_Matrices, 0);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::RenderNormals_GeometryShader]->Id, ubo_FullRender_GeometryShader_Matrices, 0);
+    glUniformBlockBinding(ContentManager::Shaders[eRenderMode::ModelDisplay]->Id, ubo_DisplayModel_Matrices, 0);
 
     //Dir Light Uniform
     unsigned int ubo_FullRender_DirLight = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::FullRender]->Id, "DirLight");

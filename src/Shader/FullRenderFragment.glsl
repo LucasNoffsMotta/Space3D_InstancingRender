@@ -16,8 +16,6 @@ layout (std140) uniform DirLight
     vec3 specular;
 };
 
-
-
 uniform RenderMode rm;
 
 struct Material {

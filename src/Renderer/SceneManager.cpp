@@ -47,6 +47,11 @@ void SceneManager::LoadShaderSingletons()
         "src/Shader/SkyBoxVertex.glsl",
         "src/Shader/SkyBoxFragment.glsl",
         eRenderMode::SkyBox);
+
+    RootShaderMap[eRenderMode::ModelDisplay] = ContentManager::LoadShader(
+        "src/Shader/3DVertex_DisplayRotatingModel.glsl",
+        "src/Shader/3DFragment_Texture.glsl",
+        eRenderMode::ModelDisplay);
 }
 
 void SceneManager::LoadModelsAndSetPositions()
@@ -104,7 +109,6 @@ void SceneManager::LoadModelsAndSetPositions()
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
-
 
     ContentManager::CreateEntity(NO_STENCIL_TEST, spiderMan, glm::vec3(12, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, glm::vec3(1, 0.5, 1), glm::vec3(1), 90, false, true);
@@ -183,6 +187,7 @@ void SceneManager::InitScene()
     ContentManager::GlobalRenderer->FillUboMatricesProjection(Projection);
     ContentManager::GlobalRenderer->FillUboDirLight(*ContentManager::DirectionalLights["0"]);
     LoadModelsAndSetPositions();
+    ContentManager::GlobalRenderer->GetAllLoadedModels();
     FillSceneTree(RootNode);
 }
 
@@ -285,6 +290,12 @@ void SceneManager::RenderScene(Window& window)
 
     //Draw Scene nodes recursively:
     RootNode->UpdateNode(true);
+
+
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    //Render rotating model
+    ContentManager::GlobalRenderer->RenderDisplayModel(ContentManager::Shaders[eRenderMode::ModelDisplay]);
 
     glDisable(GL_DEPTH_TEST);
 
