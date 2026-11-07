@@ -275,6 +275,7 @@ void SceneManager::RenderScene(Window& window)
     ContentManager::GetGlobalRenderMode(ContentManager::Controllers["main"]);
     ContentManager::Controllers["main"]->GetMouseScreenPos();
     ContentManager::Controllers["main"]->GetInput();
+    ContentManager::GlobalRenderer->GetInput();
 
     //First pass
     ContentManager::GlobalRenderer->BindFrameBuffer();

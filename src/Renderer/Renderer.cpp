@@ -74,18 +74,10 @@ void Renderer::RenderDisplayModel(Shader* shader)
     modelMatrix = glm::translate(modelMatrix, ModelDisplayPos);
     modelMatrix = glm::scale(modelMatrix, ModelDisplayScale);
 
-    //FIX HERE TO MAKE THE MODEL ROTATE! MAY CREATE AN ENTITY
+    ModelDisplayRotationOffset+=0.01f;
+    if (ModelDisplayRotationOffset >= 360) ModelDisplayRotationOffset = 0;
 
-    //DisplayModels[currentDisplayedModelIndex]->RotateYaw(offSet);
-
-    //float pitch = glm::radians(DisplayModels[currentDisplayedModelIndex]->Pitch);
-    //float yaw = glm::radians(DisplayModels[currentDisplayedModelIndex]->Yaw);
-    //float roll = glm::radians(DisplayModels[currentDisplayedModelIndex]->Roll);
-
-    //modelMatrix = glm::rotate(modelMatrix, yaw, -YawAxis);
-    //modelMatrix = glm::rotate(modelMatrix, pitch, PitchAxis);
-    //modelMatrix = glm::rotate(modelMatrix, roll, RollAxis);
-    
+    modelMatrix = glm::rotate(modelMatrix, ModelDisplayRotationOffset, glm::vec3(0,1,0));
     glm::mat4 view = glm::mat4(1);
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
@@ -95,11 +87,25 @@ void Renderer::RenderDisplayModel(Shader* shader)
     DisplayModels[currentDisplayedModelIndex]->Draw(*shader);
 }
 
+
 void Renderer::GetAllLoadedModels()
 {
     for (auto const& [key, val] : ContentManager::Models)
     {
         DisplayModels.push_back(val);
+    }
+}
+
+void Renderer::GetInput()
+{
+    if (ContentManager::Controllers["main"]->Inputs[eInput::Arrow_Left])
+    {
+        if (currentDisplayedModelIndex + 1 >= DisplayModels.size()) currentDisplayedModelIndex = 0;
+
+        else
+        {
+            currentDisplayedModelIndex += 1;
+        }   
     }
 }
 
