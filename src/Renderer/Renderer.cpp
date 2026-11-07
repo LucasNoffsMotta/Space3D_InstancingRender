@@ -12,7 +12,9 @@ void Renderer::BindFrameBuffer()
 
 void Renderer::UnbindFramebuffer()
 {
+    glClearBufferiv(GL_FRAMEBUFFER, fbo, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 }
 
 
@@ -45,23 +47,38 @@ void Renderer::InitFrameBufferScreenQuad()
 
 void Renderer::InitFramebufferTexture()
 {
-    frameBufferTexture = Texture();
-    frameBufferTexture.GenerateFramebufferTexture(GL_RGB, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y, false);
-    frameBufferTexture.AttatchToFramebuffer();
+    frameBufferTexture = new Texture();
+    frameBufferTexture->GenerateFramebufferTexture(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
+}
+
+void Renderer::InitEnviromentMapTexture()
+{
+    enviromentMapTexture = new Texture();
+    enviromentMapTexture->GenerateEnviromentMapTexture(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
 }
 
 void Renderer::RenderFramebuffer(Shader& shader)
 {
-    frameBufferTexture.BindTexture();
+    frameBufferTexture->BindTexture();
     shader.Activate();
     shader.SetUniformInt("postProcessEffect", ContentManager::GlobalPostProcessMode);
     glBindVertexArray(frameBufferVao);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-Texture& Renderer::GetFramebufferTexture()
+Texture* Renderer::GetFramebufferTexture()
 {
     return frameBufferTexture;
+}
+
+void Renderer::AttatchTextureToFramebuffer()
+{
+    frameBufferTexture->AttatchToFramebuffer();
+}
+
+void Renderer::AttatchEnviromentMapToFramebuffer()
+{
+    enviromentMapTexture->AttatchCubemapFaceToFramebuffer();
 }
 
 Renderer::Renderer()
@@ -98,7 +115,7 @@ void Renderer::GetAllLoadedModels()
 
 void Renderer::GetInput()
 {
-    if (ContentManager::Controllers["main"]->Inputs[eInput::Arrow_Left])
+    if (ContentManager::Controllers["main"]->Inputs[eInput::Space_Bar])
     {
         if (currentDisplayedModelIndex + 1 >= DisplayModels.size()) currentDisplayedModelIndex = 0;
 
@@ -106,6 +123,17 @@ void Renderer::GetInput()
         {
             currentDisplayedModelIndex += 1;
         }   
+    }
+
+    if (ContentManager::Controllers["main"]->Inputs[eInput::Enter])
+    {
+        if (DisplayModels.at(currentDisplayedModelIndex))
+        {
+            Model* model = DisplayModels.at(currentDisplayedModelIndex);
+            ContentManager::CreateEntity(eHierarchyLevel::NO_STENCIL_TEST, model, ContentManager::Cameras["main"]->CameraPos, glm::vec3(1), 0, false, false);
+            ContentManager::newEntityAdded = true;
+            return;
+        }
     }
 }
 

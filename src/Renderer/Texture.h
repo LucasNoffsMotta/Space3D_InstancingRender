@@ -14,7 +14,6 @@ class Texture
 {
 private:
 
-
 	void LoadImageDataFromFile(const char* filename, bool repeat, bool flip);
 
 public:
@@ -36,11 +35,17 @@ public:
 	void GenerateTexture(GLenum format, int width, int height, bool repeat=true, unsigned char* data = nullptr);
 	void GenerateCubemapTexture(std::vector<std::string> texture_faces);
 
-	void GenerateFramebufferTexture(GLenum format, int width, int height, bool repeat);
+	void GenerateFramebufferTexture(int width, int height);
+	void GenerateEnviromentMapTexture(int width, int height);
+
+
 	Texture(const char* filename, bool repeat = false, bool flip = false);
 	Texture();
 	Texture CreateCubemapTexture(std::string cubemapFolder);
+
 	void AttatchToFramebuffer();
+	void AttatchCubemapFaceToFramebuffer();
+	void SetCubemapFaceToRenderOn(int face);
 };
 
 

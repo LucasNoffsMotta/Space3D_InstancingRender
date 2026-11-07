@@ -1,6 +1,7 @@
 #ifndef  CONTENT_MANAGER_CLASS_H
 #define CONTENT_MANAGER_CLASS_H
 
+
 #include "../Renderer/Shader.h"
 #include <map>
 #include "../Renderer/Camera.h"
@@ -18,6 +19,7 @@
 #include "../Renderer/Renderer.h"
 
 
+
 static class ContentManager
 {
 public:
@@ -29,8 +31,9 @@ public:
 	static std::map<std::string, std::unique_ptr<PointLight>> PointLights;
 	static std::map<std::string, std::unique_ptr<SpotLight>> SpotLights;
 	static std::map<std::string, Model*> Models;	
-
 	static std::map<eHierarchyLevel, std::vector<Entity*>> Entities;
+
+	static bool newEntityAdded;
 
 	static eRenderMode GlobalRenderMode;
 	static ePostProcessEffect GlobalPostProcessMode;

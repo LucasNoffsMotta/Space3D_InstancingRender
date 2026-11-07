@@ -14,12 +14,14 @@ std::map<std::string, Model*>                                     ContentManager
 std::map<std::string, InputManager*>                              ContentManager::Controllers;
 GLFWwindow*                                                       ContentManager::mainWindow;
 std::map<eHierarchyLevel, std::vector<Entity*>>                   ContentManager::Entities;
-Renderer* ContentManager::GlobalRenderer;
+Renderer*                                                           ContentManager::GlobalRenderer;
 
-int ContentManager::FRAMEBUFFER_SCREEN_SIZE_X = 0;
-int ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y = 0;
-eRenderMode ContentManager::GlobalRenderMode;
-ePostProcessEffect ContentManager::GlobalPostProcessMode;
+int                                                             ContentManager::FRAMEBUFFER_SCREEN_SIZE_X = 0;
+int                                                             ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y = 0;
+eRenderMode                                                     ContentManager::GlobalRenderMode;
+ePostProcessEffect                                              ContentManager::GlobalPostProcessMode;
+bool                                                            ContentManager::newEntityAdded = false;
+
 
 
 Shader* ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, eRenderMode renderMode, const char* geometrySource)

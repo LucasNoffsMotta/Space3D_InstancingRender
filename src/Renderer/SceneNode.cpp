@@ -94,8 +94,6 @@ void SceneNode::AttatchController(InputManager* controller)
 
 void SceneNode::RenderNode()
 {
-
-
 	if (level == eHierarchyLevel::SKY_BOX)
 	{
 		RenderSkyBox(shaderMap[eRenderMode::SkyBox]);
@@ -256,7 +254,7 @@ void SceneNode::RenderStencilTestOn(Shader* shader)
 void SceneNode::RenderSkyBox(Shader* shader)
 {
 	glDepthFunc(GL_LEQUAL);
-
+	glDisable(GL_CULL_FACE);
 
 	for (int i = 0; i < Entities.size(); i++)
 	{
@@ -265,6 +263,7 @@ void SceneNode::RenderSkyBox(Shader* shader)
 	}
 
 	glDepthFunc(GL_LESS);
+	glEnable(GL_CULL_FACE);
 }
 
 void SceneNode::RenderOutlineMask(Shader* shader)
@@ -346,6 +345,15 @@ void SceneNode::UpdateController()
 
 void SceneNode::UpdateNode(bool updateCamera)
 {
+	//Check for newly added entities:
+
+	if (this->level == eHierarchyLevel::NO_STENCIL_TEST && ContentManager::newEntityAdded)
+	{
+		Entity* newEntity = ContentManager::Entities[this->level].back();
+		AttatchEntity(newEntity);
+		ContentManager::newEntityAdded = false;
+	}
+
 	SetViewMatrix(updateCamera);
 	RenderNode();
 }

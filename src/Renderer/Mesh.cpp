@@ -80,6 +80,7 @@ void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 	for (unsigned int i = 0; i < material.textures.size(); i++)
 	{
 		material.textures[i].ActiveTextureUnit(i);
+
 		material.textures[i].BindTexture();
 		shader.SetUniformInt("material.useColor", 0); //USE TEXTURE IF HAS TEXTURE!
 

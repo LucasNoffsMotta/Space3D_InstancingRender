@@ -1,6 +1,7 @@
 #ifndef RENDERER_CLASS_H
 #define RENDERER_CLASS_H
 
+//#include "SceneNode.h"
 #include "Shader.h"
 #include "../OpenGL/VAO.h"
 #include "Texture.h"
@@ -8,6 +9,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "DirectionalLight.h"
+
 
 
 
@@ -26,7 +28,19 @@ private:
 	unsigned int frameBufferVao;
 	unsigned int uboMatrices; //Update the buffer data here and all the shader programs will be updated!
 	unsigned int uboDirLight; //Update the buffer data here and all the shader programs will be updated!
-	Texture frameBufferTexture;
+
+	/// <summary>
+	/// Dont forget to attatch it to the framebuffer.
+	/// </summary>
+	Texture* frameBufferTexture;
+
+
+	Texture* enviromentMapTexture;
+
+
+
+
+
 	std::vector<Model*> DisplayModels;
 	glm::vec3 ModelDisplayPos = glm::vec3(-1.7,-0.7,0);
 	glm::vec3 ModelDisplayScale = glm::vec3(0.1);
@@ -41,6 +55,7 @@ public:
 	//Display rotating model
 	void RenderDisplayModel(Shader* shader);
 	void GetAllLoadedModels();
+	//void GetInput(SceneNode* nodeToAttatch);
 	void GetInput();
 
 	//Uniform buffers
@@ -57,8 +72,13 @@ public:
 	void UnbindFramebuffer();
 	void InitFrameBufferScreenQuad();
 	void InitFramebufferTexture();
+	void InitEnviromentMapTexture();
 	void RenderFramebuffer(Shader& shader);
-	Texture& GetFramebufferTexture();
+	Texture* GetFramebufferTexture();
+	Texture* GetEnviromentMapTexture() { return enviromentMapTexture; };
+
+	void AttatchTextureToFramebuffer();
+	void AttatchEnviromentMapToFramebuffer();
 };
 
 

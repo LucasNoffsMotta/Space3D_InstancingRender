@@ -37,6 +37,20 @@ void Texture::AttatchToFramebuffer()
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
 }
 
+void Texture::AttatchCubemapFaceToFramebuffer()
+{
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture, 0);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture, 0);
+}
+
+void Texture::SetCubemapFaceToRenderOn(int face)
+{
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, texture, 0);
+}
+
 void Texture::ActiveTextureUnit(int unit)
 {
      glActiveTexture(GL_TEXTURE0 + unit);
@@ -142,7 +156,7 @@ void Texture::GenerateCubemapTexture(std::vector<std::string> texture_faces)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 }
 
-void Texture::GenerateFramebufferTexture(GLenum format, int width, int height, bool repeat)
+void Texture::GenerateFramebufferTexture(int width, int height)
 {
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -150,6 +164,27 @@ void Texture::GenerateFramebufferTexture(GLenum format, int width, int height, b
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Texture::GenerateEnviromentMapTexture(int width, int height)
+{
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+
+	for (int i = 0; i < 6; i++)
+	{
+			glTexImage2D(
+				GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL
+			);
+	}
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	this->type = eTextureType::Diffuse_CubeMap;
 }
 
 void Texture::LoadImageDataFromFile(const char* filename, bool repeat, bool flip)

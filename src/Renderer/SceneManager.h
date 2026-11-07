@@ -23,10 +23,14 @@ private:
 	std::vector<Entity*> Entities;
 	std::vector<HierarchyLevel> hierarchy;
 	SceneNode* RootNode;
+
 	glm::vec3 sceneOrigin = glm::vec3(0.f);
 	glm::vec3 baseScale = glm::vec3(1);
 	glm::mat4 Projection;
 	std::vector<BaseLight*> GlobalLights;
+	
+	//FBO Test
+	Entity* FboTestCube;
 
 	//ROTATION TEST
 	Entity* ControlledEntity;

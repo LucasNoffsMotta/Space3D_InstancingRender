@@ -5,11 +5,10 @@
 #include "SpotLight.h"
 #include "DirectionalLight.h"
 #include "Entity.h"
-#include "../Helper/ContentManager.h"
 #include "../Helper/eRenderMode.h"
+#include "../Helper/ContentManager.h"
 
-
-struct HierarchyLevel;
+//struct HierarchyLevel;
 
 class SceneNode
 {

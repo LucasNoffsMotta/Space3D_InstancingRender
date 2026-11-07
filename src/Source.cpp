@@ -59,10 +59,7 @@ int main()
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
-
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
 
     float dt = 0.f;
     float lastFrame = 0.f;
@@ -71,8 +68,6 @@ int main()
 
     SceneManager scene = SceneManager();
     scene.InitScene();
-
-    //renderer.InitScreenQuadVAO();
 
     while (!glfwWindowShouldClose(window.window))
     {

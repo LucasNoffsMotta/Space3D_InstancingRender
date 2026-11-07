@@ -96,20 +96,6 @@ void Camera::HandleKeybordInput(InputManager* controller)
 
 		CameraPos += (glm::normalize(glm::cross(CameraFront, CameraUp)) * MoveSpeed) * TimeHelper::GetDeltaTime();
 	}
-
-	if (controller->Inputs[eInput::Space_Bar])
-	{
-		if (mode == eCameraMode::Free) {
-			CameraPos = topDownPosition;
-			CameraFront = topDownDirection;
-			mode = eCameraMode::TopDown;
-		}
-
-		else
-		{
-			mode = eCameraMode::Free;
-		}
-	}
 }
 
 void Camera::Turn(float degrees)

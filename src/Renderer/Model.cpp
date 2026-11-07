@@ -187,6 +187,7 @@ void Model::Load2DQuadTextureMesh(Texture& texture)
     meshes.push_back(mesh);
 }
 
+//It is working only for cubemap
 void Model::Load3DCubeVertices(Texture& texture)
 {
     std::vector<Vertex> vertices = LoadCustomPrimitiveMesh(ePrimitive::Cube);
