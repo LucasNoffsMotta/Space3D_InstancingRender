@@ -80,6 +80,7 @@ void Renderer::AttatchTextureToFramebuffer()
 void Renderer::AttatchEnviromentMapToFramebuffer()
 {
     enviromentMapTexture->AttatchCubemapFaceToFramebuffer();
+
 }
 
 Renderer::Renderer()
@@ -96,10 +97,9 @@ void Renderer::ScreenShot(const char* filePath, GLFWwindow* window)
     std::vector<char> buffer(bufferSize);
 
     glPixelStorei(GL_PACK_ALIGNMENT, 4);
-
     glReadBuffer(GL_BACK);
     glReadPixels(0, 0, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
-    stbi_flip_vertically_on_write(true);
+    //stbi_flip_vertically_on_write(true);
     stbi_write_png(filePath, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y, nrChannels, buffer.data(), stride);
 }
 
@@ -143,15 +143,20 @@ void Renderer::GetInput()
         }   
     }
 
+
+
     if (ContentManager::Controllers["main"]->Inputs[eInput::Enter])
     {
-        if (DisplayModels.at(currentDisplayedModelIndex))
+        /*if (DisplayModels.at(currentDisplayedModelIndex))
         {
             Model* model = DisplayModels.at(currentDisplayedModelIndex);
             ContentManager::CreateEntity(eHierarchyLevel::NO_STENCIL_TEST, model, ContentManager::Cameras["main"]->CameraPos, glm::vec3(1), 0, false, false);
             ContentManager::newEntityAdded = true;
             return;
-        }
+        }*/
+
+        ScreenShot(("D:/Projetos/c++/OpenGL/VoidEngine/src/print_" + std::to_string(screenShotTaken) + ".png").c_str(), ContentManager::mainWindow);
+        screenShotTaken++;
     }
 }
 

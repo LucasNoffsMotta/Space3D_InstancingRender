@@ -44,7 +44,7 @@ private:
 	glm::mat4 ModelDisplayView = glm::mat4(1);
 	float ModelDisplayRotationOffset = 0.f;
 	int currentDisplayedModelIndex = 0;
-	
+	int screenShotTaken = 0;
 
 
 public:

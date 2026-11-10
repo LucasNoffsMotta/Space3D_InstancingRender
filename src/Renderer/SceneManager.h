@@ -46,8 +46,6 @@ private:
 	void InitHierarchyStructs();
 	void LoadEmptyTreeBasedOnLevels();
 	void AddNode(SceneNode* node, int level);
-	void TakeDebugScreenShot();
-
 	void RenderSceneOnEnviromentMap(glm::vec3 modelOrigin);
 
 

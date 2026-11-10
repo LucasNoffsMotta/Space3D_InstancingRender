@@ -90,10 +90,10 @@ void SceneManager::LoadModelsAndSetPositions()
     //Test: Enviroment map texture 
     //Obs: To render a framebuffer texture to a model, just Push new texture calling GetFramebufferTexture and make sure that the fbo is receiving data on the render pass
     cube->PushNewTexture(*ContentManager::GlobalRenderer->GetEnviromentMapTexture());
-
+    //cube->PushNewTexture(sky);
     
     pumpkin->PushNewTexture(momoFace);
-    spiderMan->PushNewTexture(momoFace);
+    spiderMan->PushNewTexture(sky);
 
     Model* pointLightModel = new Model(); 
     pointLightModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/PointLight.png");
@@ -108,7 +108,7 @@ void SceneManager::LoadModelsAndSetPositions()
     *  ENTITIES
     */
     DynamicReflectiveObject = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(14, 2, 1), glm::vec3(1), 0, false, false);
-    ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(100, 1, 100), 0, false, false);
+    //ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(100, 1, 100), 0, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, tree, glm::vec3(14, 1.0, 1), glm::vec3(1), 270, false, false);
 
@@ -232,18 +232,6 @@ void SceneManager::AddNode(SceneNode* node, int level)
     }
 }
 
-void SceneManager::TakeDebugScreenShot()
-{
-    if (!ContentManager::GlobalRenderer->screnShotTaken)
-    {
-        //Take screenShot on first frame!
-        ContentManager::GlobalRenderer->ScreenShot("D:/Projetos/c++/OpenGL/VoidEngine/src/print.png", ContentManager::mainWindow);
-        ContentManager::GlobalRenderer->screnShotTaken = true;
-    }
-}
-
-
-
 void SceneManager::FillSceneTree(SceneNode* node)
 {
     ContentManager::AddController("main");
@@ -319,10 +307,17 @@ void SceneManager::RenderSceneOnEnviromentMap(glm::vec3 modelOrigin)
         view = glm::lookAt(modelOrigin, modelOrigin + targetVectors[i], upVectors[i]);
 
         ContentManager::GlobalRenderer->GetEnviromentMapTexture()->SetCubemapFaceToRenderOn(i);
-        glClear(GL_DEPTH_BUFFER_BIT);
+        glClearColor(0, 0, 0, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         RootNode->UpdateNode(false, true, view);
+
+        if (!ContentManager::GlobalRenderer->screnShotTaken)
+        {
+            ContentManager::GlobalRenderer->ScreenShot(("D:/Projetos/c++/OpenGL/VoidEngine/src/print_" + std::to_string(i) + ".png").c_str(), ContentManager::mainWindow);
+        }
     }
 
+    ContentManager::GlobalRenderer->screnShotTaken = true;
     glViewport(0, 0, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
 }
 
@@ -362,9 +357,6 @@ void SceneManager::RenderScene(Window& window)
     //Draw Scene nodes recursively:
     RootNode->UpdateNode(true, false);
 
-    //Test! Save the framebuffer to a png file
-    TakeDebugScreenShot();
-
     glClear(GL_DEPTH_BUFFER_BIT);
 
     //Render rotating model
@@ -380,6 +372,8 @@ void SceneManager::LoadProjectionMatrix()
 {
     Projection = glm::mat4(1.0f);
     Projection = glm::perspective(glm::radians(45.0f), (float)ContentManager::FRAMEBUFFER_SCREEN_SIZE_X / ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y, 0.1f, 6000.f);
+    //Cubemap aspect ration and projection: 1:1, 90 radians
+    //Maybe: Try to render using only model / view matrix, without projection!
 }
 
 void SceneManager::InitHierarchyStructs()
