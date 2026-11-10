@@ -107,9 +107,9 @@ void SceneManager::LoadModelsAndSetPositions()
     /*
     *  ENTITIES
     */
-    Entity* normalCube = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(7.0, 7.0, 1), glm::vec3(1), 0, false, false);
+    DynamicReflectiveObject = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(14, 2, 1), glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(100, 1, 100), 0, false, false);
-    Entity* car = ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, tree, glm::vec3(14, 1.0, 1), glm::vec3(1), 270, false, false);
 
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
@@ -118,7 +118,7 @@ void SceneManager::LoadModelsAndSetPositions()
 
     ContentManager::CreateEntity(NO_STENCIL_TEST, spiderMan, glm::vec3(12, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, glm::vec3(1, 0.5, 1), glm::vec3(1), 90, false, true);
-    ControlledEntity = ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(SKY_BOX, skyBoxCube, sceneOrigin, glm::vec3(1), 0, false, false);
 
 
@@ -232,6 +232,18 @@ void SceneManager::AddNode(SceneNode* node, int level)
     }
 }
 
+void SceneManager::TakeDebugScreenShot()
+{
+    if (!ContentManager::GlobalRenderer->screnShotTaken)
+    {
+        //Take screenShot on first frame!
+        ContentManager::GlobalRenderer->ScreenShot("D:/Projetos/c++/OpenGL/VoidEngine/src/print.png", ContentManager::mainWindow);
+        ContentManager::GlobalRenderer->screnShotTaken = true;
+    }
+}
+
+
+
 void SceneManager::FillSceneTree(SceneNode* node)
 {
     ContentManager::AddController("main");
@@ -278,6 +290,42 @@ void SceneManager::SetGlobalLightUniforms(Shader& shader)
     }
 }
 
+
+void SceneManager::RenderSceneOnEnviromentMap(glm::vec3 modelOrigin)
+{
+    glm::vec3 targetVectors[6] = {
+           glm::vec3(1.0f, 0.0f, 0.0f),
+           glm::vec3(-1.0f, 0.0f, 0.0f),
+           glm::vec3(0.0f, 1.0f, 0.0f),
+           glm::vec3(0.0f, -1.0f, 0.0f),
+           glm::vec3(0.0f, 0.0f, 1.0f),
+           glm::vec3(0.0f, 0.0f, -1.0f)
+    };
+
+     glm::vec3 upVectors[6] = {
+           glm::vec3(0.0f, -1.0f, 0.0f),
+           glm::vec3(0.0f, -1.0f, 0.0f),
+           glm::vec3(0.0f, 0.0f, 1.0f),
+           glm::vec3(0.0f, 0.0f, -1.0f),
+           glm::vec3(0.0f, -1.0f, 0.0f),
+           glm::vec3(0.0f, -1.0f, 0.0f)
+    };
+
+    glViewport(0,0, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X);
+
+    for (int i = 0; i < 6; i++)
+    {
+        glm::mat4 view = glm::mat4(1);
+        view = glm::lookAt(modelOrigin, modelOrigin + targetVectors[i], upVectors[i]);
+
+        ContentManager::GlobalRenderer->GetEnviromentMapTexture()->SetCubemapFaceToRenderOn(i);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        RootNode->UpdateNode(false, true, view);
+    }
+
+    glViewport(0, 0, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
+}
+
 void SceneManager::RenderScene(Window& window)
 {
     //Input updates
@@ -292,33 +340,30 @@ void SceneManager::RenderScene(Window& window)
 
     glEnable(GL_DEPTH_TEST);
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
-        
+     
     //Draw to framebuffer texture
-    RootNode->UpdateNode(false);
-    
+    RootNode->UpdateNode(false, false);
+
+
     //Clear and unbind the fbo
     ContentManager::GlobalRenderer->UnbindFramebuffer();
 
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
 
-    //Second pass: Enviroment map - Render the scene 6x
-
-    
+    //Second pass: Enviroment map - Render the scene 6x  
     ContentManager::GlobalRenderer->BindFrameBuffer();
 
-    for (int i = 0; i < 6; i++)
-    {
-        ContentManager::GlobalRenderer->GetEnviromentMapTexture()->SetCubemapFaceToRenderOn(i);
-        glClear(GL_DEPTH_BUFFER_BIT);
-        RootNode->UpdateNode(true);
-    }
+    RenderSceneOnEnviromentMap(DynamicReflectiveObject->GetWorldPosition()); //Render scene 6x
 
     //Clear and unbind the fbo
     ContentManager::GlobalRenderer->UnbindFramebuffer();
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
     
     //Draw Scene nodes recursively:
-    RootNode->UpdateNode(true);
+    RootNode->UpdateNode(true, false);
+
+    //Test! Save the framebuffer to a png file
+    TakeDebugScreenShot();
 
     glClear(GL_DEPTH_BUFFER_BIT);
 

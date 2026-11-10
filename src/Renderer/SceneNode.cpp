@@ -159,6 +159,7 @@ void SceneNode::SetModelMatrixAndCallDraw(Entity* entity, Shader* shader, glm::v
 	modelMatrix = entity->RotateMatrix(modelMatrix);
 	modelMatrix = glm::scale(modelMatrix, entity->GetScale() * scale);
 	shader->SetUniformMatrix4fv("model", modelMatrix);
+	shader->SetUniform3fv("viewPos", ContentManager::Cameras["main"]->CameraPos);
 	entity->Draw(shader);
 
 	if (entity->displayNormals)
@@ -290,7 +291,8 @@ void SceneNode::RenderWired(Shader* shader)
 	//
 }
 
-void SceneNode::SetViewMatrix(bool updateCamera)
+//This is horrible! Need to think a better way of switching cameras
+void SceneNode::SetViewMatrix(bool updateCamera, bool enviromentMap, glm::mat4 modelView)
 {
 	glm::mat4 view = glm::mat4(1);
 
@@ -307,8 +309,15 @@ void SceneNode::SetViewMatrix(bool updateCamera)
 		view = ContentManager::Cameras["second"]->CalculateView();
 	}
 
-	ContentManager::GlobalRenderer->FillUboMatricesView(view);
+	if (!enviromentMap) {
+		ContentManager::GlobalRenderer->FillUboMatricesView(view); 
+		return;
+	}
+
+	ContentManager::GlobalRenderer->FillUboMatricesView(modelView);
 }
+
+
 
 void SceneNode::SetProjectionMatrix(glm::mat4& projection)
 {
@@ -343,10 +352,9 @@ void SceneNode::UpdateController()
 	Controller->GetInput();
 }
 
-void SceneNode::UpdateNode(bool updateCamera)
+void SceneNode::UpdateNode(bool updateCamera, bool enviromentMap, glm::mat4 view)
 {
 	//Check for newly added entities:
-
 	if (this->level == eHierarchyLevel::NO_STENCIL_TEST && ContentManager::newEntityAdded)
 	{
 		Entity* newEntity = ContentManager::Entities[this->level].back();
@@ -354,7 +362,7 @@ void SceneNode::UpdateNode(bool updateCamera)
 		ContentManager::newEntityAdded = false;
 	}
 
-	SetViewMatrix(updateCamera);
+	SetViewMatrix(updateCamera, enviromentMap, view);
 	RenderNode();
 }
 

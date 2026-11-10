@@ -23,6 +23,7 @@ in VS_OUT
      vec3 FragmentShader_Normal;
      vec4 GeometryShader_normal;
      vec2 texCoord;
+     mat4 View;
 } fs_in;
 
 out vec4 FragColor;

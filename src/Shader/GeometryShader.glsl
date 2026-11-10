@@ -8,6 +8,7 @@ in VS_OUT {
      vec3 FragmentShader_Normal;
      vec4 GeometryShader_normal;
      vec2 texCoord;
+         mat4 View;
 } gs_in[];
 
 out vec3 vsColor;

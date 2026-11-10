@@ -76,6 +76,7 @@ in VS_OUT
      vec3 FragmentShader_Normal;
      vec4 GeometryShader_normal;
      vec2 texCoord;
+	     mat4 View;
 } fs_in;
 
 
@@ -273,15 +274,14 @@ void main()
 	}
 
 	if (rm.Full_LightsAndReflection == 1 && HasReflectionTexture == 1) {
-
-		float ratio = 1.0f/1.52;
-		vec3 I = normalize(fs_in.position - viewPos);
-		vec3 R = reflect(I, normalize(fs_in.FragmentShader_Normal));
+		vec3 I = normalize(fs_in.position);
+		vec3 viewR = reflect(I, normalize(fs_in.FragmentShader_Normal));
+		vec3 worldR = inverse(mat3(fs_in.View)) * viewR;
 		//vec3 R = refract(I, normalize(Normal), ratio);
 
 
-		vec4 reflectionColor =  vec4(texture(material.skybox, R).rgb, 1.0);
-		FragColor = mix(vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material)), reflectionColor, 0.5);
+		vec4 reflectionColor =  vec4(texture(material.skybox, worldR).rgb, 1.0);
+		FragColor = mix(vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material)), reflectionColor, 1);
 		return;
 	}
 

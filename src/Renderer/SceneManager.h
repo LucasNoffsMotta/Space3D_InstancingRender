@@ -32,8 +32,8 @@ private:
 	//FBO Test
 	Entity* FboTestCube;
 
-	//ROTATION TEST
-	Entity* ControlledEntity;
+	//REFLECTION TEST
+	Entity* DynamicReflectiveObject;
 
 	void InitFramebuffer();
 	void SetGlobalLightUniforms(Shader& shader);
@@ -46,6 +46,9 @@ private:
 	void InitHierarchyStructs();
 	void LoadEmptyTreeBasedOnLevels();
 	void AddNode(SceneNode* node, int level);
+	void TakeDebugScreenShot();
+
+	void RenderSceneOnEnviromentMap(glm::vec3 modelOrigin);
 
 
 

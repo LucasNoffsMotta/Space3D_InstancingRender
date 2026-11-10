@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include "Model.h"
 #include "Camera.h"
+#include "stb_image_write.h"
 #include "DirectionalLight.h"
 
 
@@ -37,20 +38,22 @@ private:
 
 	Texture* enviromentMapTexture;
 
-
-
-
-
 	std::vector<Model*> DisplayModels;
 	glm::vec3 ModelDisplayPos = glm::vec3(-1.7,-0.7,0);
 	glm::vec3 ModelDisplayScale = glm::vec3(0.1);
 	glm::mat4 ModelDisplayView = glm::mat4(1);
 	float ModelDisplayRotationOffset = 0.f;
-
 	int currentDisplayedModelIndex = 0;
+	
+
 
 public:
 	Renderer();
+
+	//Test: Take screenshot
+	bool screnShotTaken = false;
+
+	void ScreenShot(const char* filePath, GLFWwindow* window);
 
 	//Display rotating model
 	void RenderDisplayModel(Shader* shader);

@@ -28,7 +28,7 @@ private:
 	void RenderWired(Shader* shader);
 	void RenderStencilTestOn(Shader* shader);
 	void RenderSkyBox(Shader* shader);
-	void SetViewMatrix(bool updateCamera);
+	void SetViewMatrix(bool updateCamera, bool enviromentMap, glm::mat4 view);
 	void SetUpNodeLightsUniforms(Shader* shader);
 	void SetRenderModeOnMainShader(eRenderMode mode, Shader* mainShader);
 
@@ -46,5 +46,5 @@ public:
 	void RenderNode();
 	void SetModelMatrixAndCallDraw(Entity* entity, Shader* shader, glm::vec3 scale);
 	void SetProjectionMatrix(glm::mat4& projection);
-	void UpdateNode(bool updateCamera);
+	void UpdateNode(bool updateCamera, bool enviromentMap, glm::mat4 view=glm::mat4(1));
 };

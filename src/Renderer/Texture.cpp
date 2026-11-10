@@ -41,8 +41,6 @@ void Texture::AttatchCubemapFaceToFramebuffer()
 {
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 		GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture, 0);
-
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture, 0);
 }
 
 void Texture::SetCubemapFaceToRenderOn(int face)

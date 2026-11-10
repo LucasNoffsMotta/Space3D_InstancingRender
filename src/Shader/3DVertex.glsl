@@ -25,6 +25,7 @@ out VS_OUT
      vec3 FragmentShader_Normal;
      vec4 GeometryShader_normal;
      vec2 texCoord;
+     mat4 View;
 } vs_out;
 
 
@@ -35,7 +36,7 @@ void main()
     vs_out.FragmentShader_Normal = mat3(transpose(inverse(model))) * aNormal;
     vs_out.FragPos = vec3(model * vec4(aPos, 1));
     vs_out.texCoord = aTexCoord;
-
+    vs_out.View = view;
     mat4 normalMatrix = mat4(mat3(transpose(inverse(model))));
     vs_out.GeometryShader_normal = normalize(projection * view * normalMatrix * vec4(aNormal,0.f));
 

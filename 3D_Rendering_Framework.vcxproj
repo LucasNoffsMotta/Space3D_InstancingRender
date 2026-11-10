@@ -41,6 +41,7 @@
     <ClCompile Include="src\Renderer\Shader.cpp" />
     <ClCompile Include="src\Renderer\SpotLight.cpp" />
     <ClCompile Include="src\Renderer\stb_image.cpp" />
+    <ClCompile Include="src\Renderer\stb_image_write.cpp" />
     <ClCompile Include="src\Renderer\Texture.cpp" />
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
@@ -72,6 +73,7 @@
     <ClInclude Include="src\Renderer\Shader.h" />
     <ClInclude Include="src\Renderer\SpotLight.h" />
     <ClInclude Include="src\Renderer\stb_image.h" />
+    <ClInclude Include="src\Renderer\stb_image_write.h" />
     <ClInclude Include="src\Renderer\Texture.h" />
   </ItemGroup>
   <ItemGroup>

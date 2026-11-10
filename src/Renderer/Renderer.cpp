@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "Renderer.h"
 #include "../OpenGL/VAO.h"
+#include "stb_image.h"
 #include "../Helper/ContentManager.h"
 
 
@@ -54,7 +55,7 @@ void Renderer::InitFramebufferTexture()
 void Renderer::InitEnviromentMapTexture()
 {
     enviromentMapTexture = new Texture();
-    enviromentMapTexture->GenerateEnviromentMapTexture(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
+    enviromentMapTexture->GenerateEnviromentMapTexture(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X); //Got to be a square in order to work!
 }
 
 void Renderer::RenderFramebuffer(Shader& shader)
@@ -83,6 +84,23 @@ void Renderer::AttatchEnviromentMapToFramebuffer()
 
 Renderer::Renderer()
 {
+}
+
+void Renderer::ScreenShot(const char* filePath, GLFWwindow* window)
+{
+    GLsizei nrChannels = 3;
+    GLsizei stride = nrChannels * ContentManager::FRAMEBUFFER_SCREEN_SIZE_X;
+    stride += (stride % 4) ? (4 - stride % 4) : 0;
+
+    GLsizei bufferSize = stride * ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y;
+    std::vector<char> buffer(bufferSize);
+
+    glPixelStorei(GL_PACK_ALIGNMENT, 4);
+
+    glReadBuffer(GL_BACK);
+    glReadPixels(0, 0, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
+    stbi_flip_vertically_on_write(true);
+    stbi_write_png(filePath, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y, nrChannels, buffer.data(), stride);
 }
 
 void Renderer::RenderDisplayModel(Shader* shader)
