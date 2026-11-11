@@ -83,17 +83,14 @@ void SceneManager::LoadModelsAndSetPositions()
     momoFace.SetTextureType(eTextureType::Diffuse_CubeMap);
     skyBoxCube->Load3DCubeVertices(sky);
 
-
-
     //Pushing the skybox texture to create reflection effect (used as a texture on those models, shader use this texture to sample values from)
-
     //Test: Enviroment map texture 
     //Obs: To render a framebuffer texture to a model, just Push new texture calling GetFramebufferTexture and make sure that the fbo is receiving data on the render pass
     cube->PushNewTexture(*ContentManager::GlobalRenderer->GetEnviromentMapTexture());
     //cube->PushNewTexture(sky);
     
     pumpkin->PushNewTexture(momoFace);
-    spiderMan->PushNewTexture(sky);
+    spiderMan->PushNewTexture(momoFace);
 
     Model* pointLightModel = new Model(); 
     pointLightModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/PointLight.png");
@@ -108,6 +105,7 @@ void SceneManager::LoadModelsAndSetPositions()
     *  ENTITIES
     */
     DynamicReflectiveObject = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(14, 2, 1), glm::vec3(1), 0, false, false);
+
     //ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(100, 1, 100), 0, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, tree, glm::vec3(14, 1.0, 1), glm::vec3(1), 270, false, false);
@@ -263,9 +261,13 @@ void SceneManager::InitFramebuffer()
 {
     ContentManager::GlobalRenderer = new Renderer();
     ContentManager::GlobalRenderer->InitFrameBuffer();
-    ContentManager::GlobalRenderer->InitFramebufferTexture();
-    ContentManager::GlobalRenderer->InitEnviromentMapTexture();
     ContentManager::GlobalRenderer->InitRenderBuffer(ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_Y);
+    ContentManager::GlobalRenderer->InitFramebufferTexture();
+
+    ContentManager::GlobalRenderer->InitEnviromentFramebuffer();
+    ContentManager::GlobalRenderer->InitEnviromentRenderbuffer();
+    ContentManager::GlobalRenderer->InitEnviromentMapTexture();
+
     ContentManager::GlobalRenderer->InitFrameBufferScreenQuad();
     ContentManager::GlobalRenderer->AttatchEnviromentMapToFramebuffer();
 }
@@ -282,12 +284,13 @@ void SceneManager::SetGlobalLightUniforms(Shader& shader)
 void SceneManager::RenderSceneOnEnviromentMap(glm::vec3 modelOrigin)
 {
     glm::vec3 targetVectors[6] = {
-           glm::vec3(1.0f, 0.0f, 0.0f),
-           glm::vec3(-1.0f, 0.0f, 0.0f),
-           glm::vec3(0.0f, 1.0f, 0.0f),
-           glm::vec3(0.0f, -1.0f, 0.0f),
-           glm::vec3(0.0f, 0.0f, 1.0f),
-           glm::vec3(0.0f, 0.0f, -1.0f)
+           glm::vec3(1.0f, 0.0f, 0.0f),  //#define GL_TEXTURE_CUBE_MAP_POSITIVE_X 0x8515
+           glm::vec3(-1.0f, 0.0f, 0.0f), //#define GL_TEXTURE_CUBE_MAP_NEGATIVE_X 0x8516
+           glm::vec3(0.0f, 1.0f, 0.0f),  //#define GL_TEXTURE_CUBE_MAP_POSITIVE_Y 0x8517
+           glm::vec3(0.0f, -1.0f, 0.0f), //#define GL_TEXTURE_CUBE_MAP_NEGATIVE_Y 0x8518
+           glm::vec3(0.0f, 0.0f, -1.0f),  //#define GL_TEXTURE_CUBE_MAP_NEGATIVE_Z 0x851A 
+           glm::vec3(0.0f, 0.0f, 1.0f),  //#define GL_TEXTURE_CUBE_MAP_POSITIVE_Z 0x8519
+
     };
 
      glm::vec3 upVectors[6] = {
@@ -295,8 +298,8 @@ void SceneManager::RenderSceneOnEnviromentMap(glm::vec3 modelOrigin)
            glm::vec3(0.0f, -1.0f, 0.0f),
            glm::vec3(0.0f, 0.0f, 1.0f),
            glm::vec3(0.0f, 0.0f, -1.0f),
-           glm::vec3(0.0f, -1.0f, 0.0f),
-           glm::vec3(0.0f, -1.0f, 0.0f)
+           glm::vec3(0.0f, -1.0f, 0.0f),   //#define GL_TEXTURE_CUBE_MAP_NEGATIVE_Z 0x851A 
+           glm::vec3(0.0f, -1.0f, 0.0f),  //#define GL_TEXTURE_CUBE_MAP_POSITIVE_Z 0x8519 
     };
 
     glViewport(0,0, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X);
@@ -313,7 +316,33 @@ void SceneManager::RenderSceneOnEnviromentMap(glm::vec3 modelOrigin)
 
         if (!ContentManager::GlobalRenderer->screnShotTaken)
         {
-            ContentManager::GlobalRenderer->ScreenShot(("D:/Projetos/c++/OpenGL/VoidEngine/src/print_" + std::to_string(i) + ".png").c_str(), ContentManager::mainWindow);
+            std::string filename;
+            switch(i)
+            {
+            case 0:
+                filename = "positive_x";
+                break;
+            case 1:
+                filename = "negative_x";
+                break;
+            case 2:
+                filename = "positive_y";
+                break;
+            case 3:
+                filename = "negative_y";
+                break;
+            case 4:
+                filename = "positive_z";
+                break;
+            case 5:
+                filename = "negative_z";
+                break;
+
+            default:
+                "print";
+                break;
+            }
+            ContentManager::GlobalRenderer->ScreenShot(("D:/Projetos/c++/OpenGL/VoidEngine/src/" + filename + ".png").c_str(), ContentManager::mainWindow);
         }
     }
 
@@ -339,23 +368,23 @@ void SceneManager::RenderScene(Window& window)
     //Draw to framebuffer texture
     RootNode->UpdateNode(false, false);
 
-
     //Clear and unbind the fbo
     ContentManager::GlobalRenderer->UnbindFramebuffer();
 
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
 
     //Second pass: Enviroment map - Render the scene 6x  
-    ContentManager::GlobalRenderer->BindFrameBuffer();
+    ContentManager::GlobalRenderer->BindEnviromentFramebuffer();
 
     RenderSceneOnEnviromentMap(DynamicReflectiveObject->GetWorldPosition()); //Render scene 6x
 
     //Clear and unbind the fbo
-    ContentManager::GlobalRenderer->UnbindFramebuffer();
+    ContentManager::GlobalRenderer->UnbindEnviromentFramebuffer();
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
-    
+
     //Draw Scene nodes recursively:
     RootNode->UpdateNode(true, false);
+
 
     glClear(GL_DEPTH_BUFFER_BIT);
 

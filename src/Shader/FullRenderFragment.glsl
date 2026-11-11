@@ -279,7 +279,6 @@ void main()
 		vec3 worldR = inverse(mat3(fs_in.View)) * viewR;
 		//vec3 R = refract(I, normalize(Normal), ratio);
 
-
 		vec4 reflectionColor =  vec4(texture(material.skybox, worldR).rgb, 1.0);
 		FragColor = mix(vec4(GetFullLitColorResult(diffuseColor), GetFinalAlphaValue(diffuseColor, material)), reflectionColor, 1);
 		return;

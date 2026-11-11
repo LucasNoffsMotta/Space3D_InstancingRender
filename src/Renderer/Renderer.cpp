@@ -18,6 +18,17 @@ void Renderer::UnbindFramebuffer()
 
 }
 
+void Renderer::BindEnviromentFramebuffer()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, enviromnentFrameBuffer);
+}
+
+void Renderer::UnbindEnviromentFramebuffer()
+{
+    glClearBufferiv(GL_FRAMEBUFFER, enviromnentFrameBuffer, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 
 void Renderer::InitFrameBufferScreenQuad()
 {
@@ -80,7 +91,6 @@ void Renderer::AttatchTextureToFramebuffer()
 void Renderer::AttatchEnviromentMapToFramebuffer()
 {
     enviromentMapTexture->AttatchCubemapFaceToFramebuffer();
-
 }
 
 Renderer::Renderer()
@@ -168,15 +178,35 @@ void Renderer::InitFrameBuffer()
 
 void Renderer::InitRenderBuffer(int frameBufferSizeX, int frameBufferSizeY)
 {
+
     glGenRenderbuffers(1, &rbo);
     glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, frameBufferSizeX, frameBufferSizeY);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 
+void Renderer::InitEnviromentFramebuffer()
+{
+    glGenFramebuffers(1, &enviromnentFrameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, enviromnentFrameBuffer);
+}
+
+void Renderer::InitEnviromentRenderbuffer()
+{
+    glGenRenderbuffers(1, &enviromnentRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, enviromnentRenderBuffer);
+
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X, ContentManager::FRAMEBUFFER_SCREEN_SIZE_X);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, enviromnentRenderBuffer);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Renderer::InitUniformBufferObjects()

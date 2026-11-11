@@ -101,11 +101,6 @@ void InputManager::GetInput()
 		Inputs[eInput::None] = false;
 	}
 
-	if (glfwGetKey(windowReference, GLFW_KEY_4) == GLFW_PRESS)
-	{
-		Inputs[eInput::RenderMode_DepthTest] = true;
-		Inputs[eInput::None] = false;
-	}
 
 	if (glfwGetKey(windowReference, GLFW_KEY_ENTER) == GLFW_PRESS)
 	{

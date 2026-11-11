@@ -149,9 +149,9 @@ Entity::Entity()
 void Entity::AttatchCamera(Camera* cam, float distance)
 {
     attachedCamera = cam;
-    cam->CameraPos = GetWorldPosition() + glm::vec3(0, distance, 1);
-    glm::vec3 direction = GetWorldPosition() - cam->CameraPos;
-    cam->CameraFront = glm::normalize(direction);
-    cam->mode = eCameraMode::TopDown;
+    //cam->CameraPos = GetWorldPosition() + glm::vec3(0, distance, 1);
+    //glm::vec3 direction = GetWorldPosition() - cam->CameraPos;
+    //cam->CameraFront = glm::normalize(direction);
+    //cam->mode = eCameraMode::TopDown;
     outline = true;
 }

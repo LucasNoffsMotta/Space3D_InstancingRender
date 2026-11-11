@@ -26,6 +26,9 @@ private:
 	unsigned int rbo;
 	unsigned int fbo;
 
+	unsigned int enviromnentFrameBuffer;
+	unsigned int enviromnentRenderBuffer;
+
 	unsigned int frameBufferVao;
 	unsigned int uboMatrices; //Update the buffer data here and all the shader programs will be updated!
 	unsigned int uboDirLight; //Update the buffer data here and all the shader programs will be updated!
@@ -71,8 +74,16 @@ public:
 	//Framebuffer
 	void InitFrameBuffer();
 	void InitRenderBuffer(int frameBufferSizeX, int frameBufferSizeY);
+
+	void InitEnviromentFramebuffer();
+	void InitEnviromentRenderbuffer();
+
 	void BindFrameBuffer();
 	void UnbindFramebuffer();
+
+	void BindEnviromentFramebuffer();
+	void UnbindEnviromentFramebuffer();
+
 	void InitFrameBufferScreenQuad();
 	void InitFramebufferTexture();
 	void InitEnviromentMapTexture();
