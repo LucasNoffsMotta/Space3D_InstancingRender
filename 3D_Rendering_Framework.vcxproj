@@ -23,6 +23,14 @@
     <ClCompile Include="src\Helper\ContentManager.cpp" />
     <ClCompile Include="src\Helper\InputManager.cpp" />
     <ClCompile Include="src\Helper\TimeHelper.cpp" />
+    <ClCompile Include="src\ImGui\imgui.cpp" />
+    <ClCompile Include="src\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="src\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="src\ImGui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\ImGui\imgui_impl_opengl2.cpp" />
+    <ClCompile Include="src\ImGui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="src\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="src\Misc\Projectile.cpp" />
     <ClCompile Include="src\OpenGL\EBO.cpp" />
     <ClCompile Include="src\OpenGL\VAO.cpp" />
@@ -54,6 +62,16 @@
     <ClInclude Include="src\Helper\eTextureType.h" />
     <ClInclude Include="src\Helper\InputManager.h" />
     <ClInclude Include="src\Helper\TimeHelper.h" />
+    <ClInclude Include="src\ImGui\imconfig.h" />
+    <ClInclude Include="src\ImGui\imgui.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_glfw.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_opengl2.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\ImGui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\ImGui\imgui_internal.h" />
+    <ClInclude Include="src\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="src\ImGui\imstb_textedit.h" />
+    <ClInclude Include="src\ImGui\imstb_truetype.h" />
     <ClInclude Include="src\Misc\Projectile.h" />
     <ClInclude Include="src\OpenGL\EBO.h" />
     <ClInclude Include="src\OpenGL\VAO.h" />
@@ -146,7 +164,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\Include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\imgui-master\backends;D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\imgui-master;D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\Include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\Libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

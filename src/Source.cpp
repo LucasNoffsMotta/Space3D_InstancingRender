@@ -10,6 +10,9 @@
 #include "Helper/TimeHelper.h"
 #include "Misc/Projectile.h"
 #include <vector>
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 #include "Renderer/SceneManager.h"
 
 
@@ -49,6 +52,8 @@ int main()
     ContentManager::SetGlobalRenderMode(eRenderMode::NoLights);
     ContentManager::SetPostProcessEffect(ePostProcessEffect::NightVision);
 
+    ImGui::CreateContext();
+
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -66,6 +71,19 @@ int main()
     float camSpeed = 10.f;
 
 
+    //Dear ImGui init
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplGlfw_InitForOpenGL(window.window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+    ImGui_ImplOpenGL3_Init();
+
+
     SceneManager scene = SceneManager();
     scene.InitScene();
 
@@ -79,8 +97,17 @@ int main()
         dt = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        ImGui::ShowDemoWindow(); // Show demo window! :)
+
       
         scene.RenderScene(window);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         //Important:
         //For the framebuffer work properly, it is necessary to set get the screen size in pixels and pass it on the gl calls
@@ -88,8 +115,14 @@ int main()
         // otherwise the logic size will be different of the actual framebuffer size
 
         window.Update();
+
+                // ...
+
     }
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     glfwTerminate();     
     return 0;
 }

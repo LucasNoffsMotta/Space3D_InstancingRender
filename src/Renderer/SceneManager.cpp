@@ -68,6 +68,8 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* spiderMan = ContentManager::LoadModel("/spiderman/Spiderman.obj", "spider");
     Model* tree = ContentManager::LoadModel("/LowPolyTree/LowPolyTree.obj", "tree");
 
+    Texture grassFloor = Texture("res/textures/grass_floor.jpg");
+    terrainModel->PushNewTexture(grassFloor);
 
     Model* transparentWindow = new Model();
     Model* frameBufferTestModel = new Model();
@@ -106,7 +108,7 @@ void SceneManager::LoadModelsAndSetPositions()
     */
     DynamicReflectiveObject = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(14, 2, 1), glm::vec3(1), 0, false, false);
 
-    //ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(100, 1, 100), 0, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(100, 1, 100), 0, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, tree, glm::vec3(14, 1.0, 1), glm::vec3(1), 270, false, false);
 
