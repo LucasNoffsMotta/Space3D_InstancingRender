@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\GraphicsProgramming\glad.c" />
+    <ClCompile Include="src\Editor\EditorUI.cpp" />
     <ClCompile Include="src\Helper\ContentManager.cpp" />
     <ClCompile Include="src\Helper\InputManager.cpp" />
     <ClCompile Include="src\Helper\TimeHelper.cpp" />
@@ -54,6 +55,7 @@
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Editor\EditorUI.h" />
     <ClInclude Include="src\Helper\ContentManager.h" />
     <ClInclude Include="src\Helper\eCameraMode.h" />
     <ClInclude Include="src\Helper\eInput.h" />

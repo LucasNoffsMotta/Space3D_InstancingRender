@@ -154,7 +154,6 @@ void Renderer::GetInput()
     }
 
 
-
     if (ContentManager::Controllers["main"]->Inputs[eInput::Enter])
     {
         /*if (DisplayModels.at(currentDisplayedModelIndex))

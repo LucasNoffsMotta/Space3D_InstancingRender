@@ -16,5 +16,6 @@ enum eInput : uint8_t
 	RenderMode_LightsOff,
 	RenderMode_Debug,
 	RenderMode_DepthTest,
-	RenderMode_LitAndReflection
+	RenderMode_LitAndReflection,
+	Pause
 };

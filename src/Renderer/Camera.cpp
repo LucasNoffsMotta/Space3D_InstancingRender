@@ -74,6 +74,11 @@ void Camera::HandleKeybordInput(InputManager* controller)
 		return;
 	}
 
+	if (controller->Inputs[eInput::Pause])
+	{
+		mode = eCameraMode::Paused;
+	}
+
 	if (controller->Inputs[eInput::Arrow_Up])
 	{
 		if (mode == eCameraMode::Free) CameraPos += (MoveSpeed * CameraFront) * TimeHelper::GetDeltaTime();
@@ -110,14 +115,33 @@ glm::mat4 Camera::CalculateView()
 	return glm::lookAt(CameraPos, CameraPos + CameraFront, CameraUp);
 }
 
+bool Camera::GetIsPaused()
+{
+	return mode == eCameraMode::Paused;
+}
+
+void Camera::SetIsPaused(bool isPaused)
+{
+	if (isPaused) mode = eCameraMode::Paused;
+	else
+	{
+		mode = eCameraMode::Free;
+	}
+}
+
 glm::mat4 Camera::Update(InputManager* controller)
 {
+	glm::mat4 view = CalculateView();
+
+	if (GetIsPaused()) return view;
+
 	if (mode == eCameraMode::Free)
 	{
 		HandleMouseInput(controller->mouseX, controller->mouseY);
 	}
+
 	HandleKeybordInput(controller);
-	return CalculateView();
+	return view;
 }
 
 void Camera::InitTopDownCamera()

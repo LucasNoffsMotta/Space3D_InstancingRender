@@ -5,5 +5,6 @@ enum eCameraMode :uint8_t
 {
 	Free,
 	TopDown,
-	Attached
+	Attached,
+	Paused
 };

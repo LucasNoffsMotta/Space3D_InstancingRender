@@ -23,11 +23,8 @@ private:
 	float LastY = 600;
 	float MoveSpeed = 10;
 	bool FirstMouseMovement = true;
-
 	glm::vec3 topDownDirection = glm::vec3(-0.00205945, -0.765213 ,-0.643773);
 	glm::vec3 topDownPosition = glm::vec3(0, 10, 0);
-
-
 
 public:
 	float Yaw = -90.0f;
@@ -42,6 +39,9 @@ public:
 	glm::vec3 CameraFront;
 	glm::vec3 CameraUp;
 	glm::mat4 CalculateView();
+
+	bool GetIsPaused();
+	void SetIsPaused(bool isPaused);
 
 	void InitTopDownCamera();
 	void HandleMouseInput(double xpos, double ypos, bool costraintOnPitch=true);

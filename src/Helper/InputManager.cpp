@@ -101,10 +101,15 @@ void InputManager::GetInput()
 		Inputs[eInput::None] = false;
 	}
 
-
 	if (glfwGetKey(windowReference, GLFW_KEY_ENTER) == GLFW_PRESS)
 	{
 		Inputs[eInput::Enter] = true;
+		Inputs[eInput::None] = false;
+	}
+
+	if (glfwGetKey(windowReference, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		Inputs[eInput::Pause] = true;
 		Inputs[eInput::None] = false;
 	}
 
@@ -127,6 +132,8 @@ void InputManager::GetInput()
 	ReleasedKey(GLFW_KEY_4);
 
 	ReleasedKey(GLFW_KEY_ENTER);
+
+	ReleasedKey(GLFW_KEY_ESCAPE);
 }
 
 void InputManager::ReleasedKey(int key)
@@ -203,6 +210,10 @@ eInput InputManager::InputGlfwKeyToEnum(int key)
 
 	case GLFW_KEY_ENTER:
 		return eInput::Enter;
+		break;
+
+	case GLFW_KEY_ESCAPE:
+		return eInput::Pause;
 		break;
 	}
 	
