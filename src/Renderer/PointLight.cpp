@@ -1,6 +1,20 @@
 #include "PointLight.h"
 
 
+float& PointLight::GetConstant()
+{
+	return this->constant;
+}
+
+float& PointLight::GetLinear()
+{
+	return this->linear;
+}
+
+float& PointLight::GetQuadratic()
+{
+	return this->quadratic;
+}
 
 PointLight::PointLight(int index, eLightType type)
 {

@@ -30,17 +30,22 @@ void BaseLight::SetAmbient(glm::vec3& ambient)
 	this->ambient = ambient;
 }
 
-glm::vec3 BaseLight::GetAmbient()
+glm::vec3& BaseLight::GetColor()
+{
+	return this->color;
+}
+
+glm::vec3& BaseLight::GetAmbient()
 {
 	return ambient;
 }
 
-glm::vec3 BaseLight::GetDiffuse()
+glm::vec3& BaseLight::GetDiffuse()
 {
 	return diffuse;
 }
 
-glm::vec3 BaseLight::GetSpecular()
+glm::vec3& BaseLight::GetSpecular()
 {
 	return specular;
 }
@@ -53,8 +58,8 @@ std::string BaseLight::SetBaseUniforms(Shader& shader)
 {
 	std::string prefix = GetLightStrucUniformName() + "[" + std::to_string(lightIndex) + "].";
 	shader.SetUniform3fv((prefix + "ambient").c_str(), glm::vec3(this->color.x * this->ambient.x, this->color.y * this->ambient.y, this->color.z * this->ambient.z));
-	shader.SetUniform3fv((prefix + "diffuse").c_str(), this->color);
-	shader.SetUniform3fv((prefix + "specular").c_str(), this->color);
+	shader.SetUniform3fv((prefix + "diffuse").c_str(), glm::vec3(this->color.x * this->diffuse.x, this->color.y * this->diffuse.y, this->color.z * this->diffuse.z));
+	shader.SetUniform3fv((prefix + "specular").c_str(), glm::vec3(this->color.x * this->specular.x, this->color.y * this->specular.y, this->color.z * this->specular.z));
 	return prefix;
 }
 

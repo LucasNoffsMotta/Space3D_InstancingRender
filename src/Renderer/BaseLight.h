@@ -30,9 +30,10 @@ public:
     void SetPosition(glm::vec3& pos);
     void SetColor(glm::vec3& color);
     void SetAmbient(glm::vec3& ambient);
-    glm::vec3 GetAmbient();
-    glm::vec3 GetDiffuse();
-    glm::vec3 GetSpecular();
+    glm::vec3& GetColor();
+    glm::vec3& GetAmbient();
+    glm::vec3& GetDiffuse();
+    glm::vec3& GetSpecular();
     virtual void SetDirection(glm::vec3 dir);
     std::string SetBaseUniforms(Shader& shader);
     virtual void SetUniforms(Shader& shader);

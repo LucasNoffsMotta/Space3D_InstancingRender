@@ -11,7 +11,9 @@ namespace ImGui { extern IMGUI_API void DemoMarker(const char* file, int line, c
 //Lights
 //Light color
 //Light position
-//Light 
+
+
+//Camera speed
 
 void EditorUI::InitUI()
 {
@@ -54,49 +56,67 @@ void EditorUI::ShowMainMenu()
     if (ImGui::MenuItem("Save As..")) {}
 
     ImGui::Separator();
-    if (ImGui::BeginMenu("Options"))
-    {
-        IMGUI_DEMO_MARKER("Examples/Menu/Options");
-        static bool enabled = true;
-        ImGui::MenuItem("Enabled", "", &enabled);
-        ImGui::BeginChild("child", ImVec2(0, ImGui::GetTextLineHeightWithSpacing() * 5.0f), ImGuiChildFlags_Borders);
-        for (int i = 0; i < 10; i++)
-            ImGui::Text("Scrolling Text %d", i);
-        ImGui::EndChild();
-        static float f = 0.5f;
-        static int n = 0;
-        ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
-        ImGui::InputFloat("Input", &f, 0.1f);
-        ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
-        ImGui::EndMenu();
-    }
 
-    if (ImGui::BeginMenu("Colors"))
+    /*
+    // LIGHT OPTIONS
+    */
+
+    if (ImGui::BeginMenu("Light Options"))
     {
-        IMGUI_DEMO_MARKER("Examples/Menu/Colors");
-        float sz = ImGui::GetTextLineHeight();
-        for (int i = 0; i < ImGuiCol_COUNT; i++)
+        ImGui::BeginChild("child", ImVec2(0, ImGui::GetTextLineHeightWithSpacing() * 20.0f), ImGuiChildFlags_Borders);
+
+        for (int i = 0; i < ContentManager::MAX_POINT_LIGHTS; i++)
         {
-            const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
-            ImVec2 p = ImGui::GetCursorScreenPos();
-            ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
-            ImGui::Dummy(ImVec2(sz, sz));
-            ImGui::SameLine();
-            ImGui::MenuItem(name);
+            std::string id = std::to_string(i);
+            ImGui::Text("Point Light %id", id);
+            ImGui::Text("Color %id", id);
+            EditorUI::CreateLightColorOptions(id);
+            EditorUI::CreateLightDiffuseOptions(id);
+            EditorUI::CreateLightSpecularOptions(id);
+            ImGui::Text("Attenuation %id", id);
+            EditorUI::CreateLightLinearAttenuationOption(id);
+            EditorUI::CreateLightQuadraticAttenuationOption(id);
+            ImGui::Separator();
         }
+
+        ImGui::EndChild();
         ImGui::EndMenu();
     }
 
-    // Here we demonstrate appending again to the "Options" menu (which we already created above)
-    // Of course in this demo it is a little bit silly that this function calls BeginMenu("Options") twice.
-    // In a real code-base using it would make senses to use this feature from very different code locations.
-    if (ImGui::BeginMenu("Options")) // <-- Append!
+    /*
+    //  CAMERA OPTIONS
+    */
+
+    if (ImGui::BeginMenu("Camera Options"))
     {
-        IMGUI_DEMO_MARKER("Examples/Menu/Append to an existing menu");
-        static bool b = true;
-        ImGui::Checkbox("SomeOption", &b);
+        static bool mouseEnabled = true;
+        ImGui::MenuItem("Mouse Enabled", "", &mouseEnabled);
+        ContentManager::IsMouseEnabled = mouseEnabled;
+    
+        static float f = 10.f;
+        static int n = 0;
+        ImGui::SliderFloat("Camera Speed", &f, 0.0f, 10000.0f);
+        ContentManager::Cameras["main"]->SetMoveSpeed(f);
+
+        ImGui::InputFloat("Speed", &f, 0.1f);
         ImGui::EndMenu();
     }
+
+    //if (ImGui::BeginMenu("Colors"))
+    //{
+    //    IMGUI_DEMO_MARKER("Examples/Menu/Colors");
+    //    float sz = ImGui::GetTextLineHeight();
+    //    for (int i = 0; i < ImGuiCol_COUNT; i++)
+    //    {
+    //        const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
+    //        ImVec2 p = ImGui::GetCursorScreenPos();
+    //        ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
+    //        ImGui::Dummy(ImVec2(sz, sz));
+    //        ImGui::SameLine();
+    //        ImGui::MenuItem(name);
+    //    }
+    //    ImGui::EndMenu();
+    //}
 
     if (ImGui::BeginMenu("Disabled", false)) // Disabled
     {
@@ -104,7 +124,11 @@ void EditorUI::ShowMainMenu()
     }
     if (ImGui::MenuItem("Checked", NULL, true)) {}
     ImGui::Separator();
-    if (ImGui::MenuItem("Quit", "Alt+F4")) { ContentManager::Cameras["main"]->SetIsPaused(false); }
+    if (ImGui::MenuItem("Quit", "Alt+F4")) 
+    {
+        ContentManager::Cameras["main"]->SetIsPaused(false);
+        ContentManager::SetMouseInputMode(ContentManager::IsMouseEnabled);;
+    }
 }
 
 void EditorUI::ShowExampleMenuFile()
@@ -152,4 +176,64 @@ void EditorUI::ClearResources()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+}
+
+void EditorUI::CreateLightColorOptions(std::string id)
+{
+    std::string colorId = ("Color R##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetColor().r, 0.0f, 1.f);
+
+    colorId = ("Color G##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetColor().g, 0.0f, 1.f);
+
+    colorId = ("Color B##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetColor().b, 0.0f, 1.f);
+}
+
+void EditorUI::CreateLightDiffuseOptions(std::string id)
+{
+    std::string colorId = ("Diffuse R##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetDiffuse().r, 0.0f, 1.f);
+
+    colorId = ("Diffuse G##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetDiffuse().g, 0.0f, 1.f);
+
+    colorId = ("Diffuse B##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetDiffuse().b, 0.0f, 1.f);
+}
+
+void EditorUI::CreateLightSpecularOptions(std::string id)
+{
+    std::string colorId = ("Specular R##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetSpecular().r, 0.0f, 1.f);
+
+    colorId = ("Specular G##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetSpecular().g, 0.0f, 1.f);
+
+    colorId = ("Specular B##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetSpecular().b, 0.0f, 1.f);
+}
+
+void EditorUI::CreateLightAmbientOptions(std::string id)
+{
+    std::string colorId = ("Ambient R##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetAmbient().r, 0.0f, 1.f);
+
+    colorId = ("Ambient G##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetAmbient().g, 0.0f, 1.f);
+
+    colorId = ("Ambient B##" + id);
+    ImGui::SliderFloat(colorId.c_str(), &ContentManager::PointLights[id]->GetAmbient().b, 0.0f, 1.f);
+}
+
+void EditorUI::CreateLightLinearAttenuationOption(std::string id)
+{
+    std::string LinearID = ("Linear R##" + id);
+    ImGui::InputFloat(LinearID.c_str(), &ContentManager::PointLights[id]->GetLinear(), 0.09f);
+}
+
+void EditorUI::CreateLightQuadraticAttenuationOption(std::string id)
+{
+    std::string LinearID = ("Quadratic R##" + id);
+    ImGui::InputFloat(LinearID.c_str(), &ContentManager::PointLights[id]->GetQuadratic(), 0.032f);
 }

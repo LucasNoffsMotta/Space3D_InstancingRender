@@ -12,6 +12,11 @@ private:
 	float quadratic = 0.032;
 
 public:
+
+	float& GetConstant();
+	float& GetLinear();
+	float& GetQuadratic();
+
 	PointLight(int index, eLightType type);
 	void SetUniforms(Shader& shader) override;
 	eLightType GetLightType() override;

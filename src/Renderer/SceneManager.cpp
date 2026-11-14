@@ -146,7 +146,7 @@ void SceneManager::LoadGlobalLigths()
         ContentManager::PointLights[std::to_string(i)]->SetColor(pointColor);
         ContentManager::PointLights[std::to_string(i)]->SetPosition(pointPos);
         pointPos.x +=20;
-        GlobalLights.push_back(ContentManager::PointLights[std::to_string(i)].get());
+        GlobalLights.push_back(ContentManager::PointLights[std::to_string(i)]);
     }
 
     //DIR

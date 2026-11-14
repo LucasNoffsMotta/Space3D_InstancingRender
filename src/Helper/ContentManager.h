@@ -28,7 +28,7 @@ public:
 	static std::map<std::string, Camera*> Cameras;
 	static std::map<std::string, Texture*> Textures;
 	static std::map<std::string, std::unique_ptr<DirectionalLight>> DirectionalLights;
-	static std::map<std::string, std::unique_ptr<PointLight>> PointLights;
+	static std::map<std::string, PointLight*> PointLights;
 	static std::map<std::string, std::unique_ptr<SpotLight>> SpotLights;
 	static std::map<std::string, Model*> Models;	
 	static std::map<eHierarchyLevel, std::vector<Entity*>> Entities;
@@ -44,11 +44,16 @@ public:
 	static const int SCR_WIDTH = 1800;
 	static const int SCR_HEIGHT = 1800;
 
+	
+
 	static int FRAMEBUFFER_SCREEN_SIZE_X;
 	static int FRAMEBUFFER_SCREEN_SIZE_Y;
 
 	static const int MAX_POINT_LIGHTS = 10;
 	static const int MAX_SPOT_LIGHTS = 10;
+
+	static void SetMouseInputMode(bool isEnabled);
+	static bool IsMouseEnabled;
 
 	static Shader* LoadShader(const char* vertexSource, const char* fragmentSource, eRenderMode renderMode, const char* geometrySource = nullptr);
 	static Texture* LoadTexture(const char* texturePath, std::string name);

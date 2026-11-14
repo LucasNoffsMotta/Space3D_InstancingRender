@@ -18,4 +18,13 @@ public:
 	static void StartUIFrame();
 	static void EndUIFrame();
 	static void ClearResources();
+
+	//Point Light
+	static void CreateLightColorOptions(std::string id);
+	static void CreateLightDiffuseOptions(std::string id);
+	static void CreateLightSpecularOptions(std::string id);
+	static void CreateLightAmbientOptions(std::string id);
+
+	static void CreateLightLinearAttenuationOption(std::string id);
+	static void CreateLightQuadraticAttenuationOption(std::string id);
 };

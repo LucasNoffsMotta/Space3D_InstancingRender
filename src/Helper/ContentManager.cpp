@@ -7,7 +7,7 @@ std::map<eRenderMode, Shader*>                                    ContentManager
 std::map<std::string, glm::vec3>                                  ContentManager::Colors;
 std::map<std::string, Camera*>                                    ContentManager::Cameras;
 std::map<std::string, Texture*>                                   ContentManager::Textures;
-std::map<std::string, std::unique_ptr<PointLight>>                ContentManager::PointLights;
+std::map<std::string, PointLight*>                                ContentManager::PointLights;
 std::map<std::string, std::unique_ptr<SpotLight>>                 ContentManager::SpotLights;
 std::map<std::string, std::unique_ptr<DirectionalLight>>          ContentManager::DirectionalLights;
 std::map<std::string, Model*>                                     ContentManager::Models;
@@ -21,8 +21,15 @@ int                                                             ContentManager::
 eRenderMode                                                     ContentManager::GlobalRenderMode;
 ePostProcessEffect                                              ContentManager::GlobalPostProcessMode;
 bool                                                            ContentManager::newEntityAdded = false;
+bool                                                            ContentManager::IsMouseEnabled = false;
 
 
+
+void ContentManager::SetMouseInputMode(bool isEnabled)
+{
+    if (isEnabled)     glfwSetInputMode(ContentManager::mainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    else               glfwSetInputMode(ContentManager::mainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
 
 Shader* ContentManager::LoadShader(const char* vertexSource, const char* fragmentSource, eRenderMode renderMode, const char* geometrySource)
 {
@@ -94,7 +101,7 @@ void ContentManager::AddCamera(Camera* cam, std::string name)
 
 void ContentManager::AddPointLight(int index)
 {
-    ContentManager::PointLights[std::to_string(index)] = std::make_unique<PointLight>(index, eLightType::Point);
+    ContentManager::PointLights[std::to_string(index)] = new PointLight(index, eLightType::Point);
 }
 
 void ContentManager::AddSpotLight(int index)

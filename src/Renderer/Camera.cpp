@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "../Helper/TimeHelper.h"
+#include "../Helper/ContentManager.h"
 
 
 void Camera::SetSpotLight()
@@ -76,6 +77,7 @@ void Camera::HandleKeybordInput(InputManager* controller)
 
 	if (controller->Inputs[eInput::Pause])
 	{
+		ContentManager::SetMouseInputMode(ContentManager::IsMouseEnabled);
 		mode = eCameraMode::Paused;
 	}
 
