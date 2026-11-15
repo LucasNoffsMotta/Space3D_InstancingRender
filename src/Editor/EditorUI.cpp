@@ -196,49 +196,49 @@ void EditorUI::ClearResources()
 void EditorUI::CreateLightColorOptions(std::string id, glm::vec3& rgb)
 {
     std::string colorId = ("Color R##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.r, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.x, 0.0f, 1.f);
 
     colorId = ("Color G##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.g, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.y, 0.0f, 1.f);
 
     colorId = ("Color B##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.b, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.z, 0.0f, 1.f);
 }
 
 void EditorUI::CreateLightDiffuseOptions(std::string id, glm::vec3& rgb)
 {
     std::string colorId = ("Diffuse R##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.r, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.x, 0.0f, 1.f);
 
     colorId = ("Diffuse G##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.g, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.y, 0.0f, 1.f);
 
     colorId = ("Diffuse B##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.b, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.z, 0.0f, 1.f);
 }
 
 void EditorUI::CreateLightSpecularOptions(std::string id, glm::vec3& rgb)
 {
     std::string colorId = ("Specular R##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.r, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.x, 0.0f, 1.f);
 
     colorId = ("Specular G##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.g, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.y, 0.0f, 1.f);
 
     colorId = ("Specular B##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.b, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.z, 0.0f, 1.f);
 }
 
 void EditorUI::CreateLightAmbientOptions(std::string id, glm::vec3& rgb)
 {
     std::string colorId = ("Ambient R##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.r, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.x, 0.0f, 1.f);
 
     colorId = ("Ambient G##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.g, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.y, 0.0f, 1.f);
 
     colorId = ("Ambient B##" + id);
-    ImGui::SliderFloat(colorId.c_str(), &rgb.b, 0.0f, 1.f);
+    ImGui::SliderFloat(colorId.c_str(), &rgb.z, 0.0f, 1.f);
 }
 
 void EditorUI::CreateLightDirectionOptions(std::string id)

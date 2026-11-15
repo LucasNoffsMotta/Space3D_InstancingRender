@@ -119,7 +119,7 @@ vec3 GetDirLight(vec3 Normal, vec3 viewDir, vec4 diffuseColor, vec3 specularColo
 		localSpecular = specular * spec * material.color.rgb;
 	}
 
-	return ambient + diffuse + specular;
+	return localAmbient + localDiffuse + localSpecular;
 }
 
 vec3 GetPointLight(PointLight light, vec3 Normal, vec3 fragPos, vec3 viewDir, vec4 diffuseColor, vec3 specularColor)
@@ -218,9 +218,10 @@ vec3 GetFullLitColorResult(vec4 diffuseColor)
 	vec3 result = vec3(0);
 	vec3 specularColor = vec3(texture(material.texture_specular1, fs_in.texCoord));
 
+	result += GetDirLight(normal, viewDir, diffuseColor, specularColor);
+
 	for (int i = 0; i < MAX_POINTLIGHTS; i++)
 	{
-		result += GetDirLight(normal, viewDir, diffuseColor, specularColor);
 		result += GetPointLight(pointLight[i], normal, fs_in.FragPos, viewDir, diffuseColor, specularColor);
 	}
 
@@ -235,6 +236,10 @@ vec3 GetFullLitColorResult(vec4 diffuseColor)
 
 void main()
 {
+	//test!
+//	FragColor = vec4(diffuse, 1);
+//	return;
+
 	//Turn On Debug Mode
 	if (rm.DebugMode == 1)
 	{
@@ -272,6 +277,8 @@ void main()
 
 		return;
 	}
+
+
 
 	if (rm.Full_LightsAndReflection == 1 && HasReflectionTexture == 1) {
 		vec3 I = normalize(fs_in.position);

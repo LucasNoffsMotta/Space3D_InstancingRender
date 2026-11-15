@@ -218,7 +218,7 @@ void Renderer::InitUniformBufferObjects()
 
     glGenBuffers(1, &uboDirLight);
     glBindBuffer(GL_UNIFORM_BUFFER, uboDirLight);
-    glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(glm::vec3), NULL, GL_DYNAMIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, 64, NULL, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     SetShadersBindingPointToUseUniformBuffer();
@@ -247,7 +247,7 @@ void Renderer::SetShadersBindingPointToUseUniformBuffer()
     unsigned int ubo_Instanced_DirLight = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::FullRender_Instanced]->Id, "DirLight");
     unsigned int ubo_SkyBox_DirLight = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::SkyBox]->Id, "DirLight");
 
-    glBindBufferRange(GL_UNIFORM_BUFFER, 1, uboDirLight, 0, 4 * sizeof(glm::vec3));
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, uboDirLight, 0, 64);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender]->Id, ubo_FullRender_DirLight, 1);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::SkyBox]->Id, ubo_SkyBox_DirLight, 1);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender_Instanced]->Id, ubo_Instanced_DirLight, 1);
@@ -263,10 +263,19 @@ void Renderer::FillUboMatricesProjection(glm::mat4 projection)
 void Renderer::FillUboDirLight(DirectionalLight& light)
 {
     glBindBuffer(GL_UNIFORM_BUFFER, uboDirLight);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), glm::value_ptr(light.GetDirection()));
-    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(light.GetAmbientColor()));
-    glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(light.GetDiffuse()));
-    glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(light.GetSpecular()));
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
+        glm::value_ptr(light.GetDirection()));
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 16, sizeof(glm::vec3),
+        glm::value_ptr(light.GetAmbientColor()));
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(glm::vec3),
+        glm::value_ptr(light.GetDiffuse()));
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 48, sizeof(glm::vec3),
+        glm::value_ptr(light.GetSpecular()));
+
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
