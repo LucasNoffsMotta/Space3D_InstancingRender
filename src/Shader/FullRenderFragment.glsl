@@ -76,7 +76,7 @@ in VS_OUT
      vec3 FragmentShader_Normal;
      vec4 GeometryShader_normal;
      vec2 texCoord;
-	     mat4 View;
+	 mat4 View;
 } fs_in;
 
 
@@ -95,9 +95,9 @@ float LinearizeDepth(float depth)
 
 vec3 GetDirLight(vec3 Normal, vec3 viewDir, vec4 diffuseColor, vec3 specularColor)
 {
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
+	vec3 localAmbient;
+	vec3 localDiffuse;
+	vec3 localSpecular;
 
 	vec3 lightDir = normalize(-direction);
 	float diff = max(dot(Normal, lightDir), 0.0);
@@ -107,16 +107,16 @@ vec3 GetDirLight(vec3 Normal, vec3 viewDir, vec4 diffuseColor, vec3 specularColo
 
 	if (!material.useColor) {
 
-		ambient = ambient * diffuseColor.xyz; 
-		diffuse = diffuse * diff *  diffuseColor.xyz;
-		specular = specular * spec * specularColor;
+		localAmbient = ambient * diffuseColor.xyz; 
+		localDiffuse = diffuse * diff *  diffuseColor.xyz;
+		localSpecular = specular * spec * specularColor;
 	}
 
 	else {
 		
-		ambient = ambient * material.color.rgb; 
-		diffuse = diffuse * diff *  material.color.rgb;
-		specular = specular * spec * material.color.rgb;
+		localAmbient = ambient * material.color.rgb; 
+		localDiffuse = diffuse * diff *  material.color.rgb;
+		localSpecular = specular * spec * material.color.rgb;
 	}
 
 	return ambient + diffuse + specular;

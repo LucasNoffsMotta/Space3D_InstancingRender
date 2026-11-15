@@ -61,6 +61,7 @@ public:
 	//Display rotating model
 	void RenderDisplayModel(Shader* shader);
 	void GetAllLoadedModels();
+
 	//void GetInput(SceneNode* nodeToAttatch);
 	void GetInput();
 

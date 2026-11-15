@@ -15,7 +15,7 @@ public:
 	void SetAmbient(glm::vec3& ambient);
 	void SetDiffuse(glm::vec3& diff);
 	void SetSpecular(glm::vec3& spec);
-	glm::vec3 GetDirection();
+	glm::vec3& GetDirection() override;
 
 	void SetUniforms(Shader& shader) override;
 	eLightType GetLightType() override;

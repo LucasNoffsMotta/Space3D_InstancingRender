@@ -20,6 +20,9 @@ void SceneNode::SetUpNodeLightsUniforms(Shader* shader)
 			Lights[i]->SetDirection(ContentManager::Cameras["main"]->CameraFront);
 		}
 	}
+
+	//Update Dir Light
+	ContentManager::GlobalRenderer->FillUboDirLight(*ContentManager::DirectionalLights["0"]);
 }
 
 void SceneNode::SetRenderModeOnMainShader(eRenderMode mode, Shader* mainShader)

@@ -63,12 +63,13 @@ void SceneManager::LoadModelsAndSetPositions()
     int objID = 0;
     Model* carModel = ContentManager::LoadModel("/Car/evo_blendswap.obj", "car");
     Model* cube = ContentManager::LoadModel("/Cube/PinkCube.obj", "cube");
+    Model* otherCube = ContentManager::LoadModel("/Cube/PinkCube.obj", "cube");
     Model* terrainModel = ContentManager::LoadModel("/Floor/Floor.obj", "terrain");
     Model* pumpkin = ContentManager::LoadModel("/Pumpkin/HalloweenPumpkin.obj", "pumpkin");
     Model* spiderMan = ContentManager::LoadModel("/spiderman/Spiderman.obj", "spider");
     Model* tree = ContentManager::LoadModel("/LowPolyTree/LowPolyTree.obj", "tree");
 
-    Texture grassFloor = Texture("res/textures/grass_floor.jpg");
+    Texture grassFloor = Texture("res/textures/grass_floor.jpg", true);
     terrainModel->PushNewTexture(grassFloor);
 
     Model* transparentWindow = new Model();
@@ -100,6 +101,8 @@ void SceneManager::LoadModelsAndSetPositions()
 
     Model* grassModel = new Model();
     grassModel->Load2DQuadTextureMesh("res/textures/grass.png");
+
+    //TODO: Create instanced tiles to make ground and create different instanced methods to trees / grass
     grassModel->SetUseInstanced(100000, 0.5);
     tree->SetUseInstanced(1000, 4);
 
@@ -119,6 +122,7 @@ void SceneManager::LoadModelsAndSetPositions()
     ContentManager::CreateEntity(NO_STENCIL_TEST, spiderMan, glm::vec3(12, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, glm::vec3(1, 0.5, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(NO_STENCIL_TEST, pumpkin, glm::vec3(0, 6.5, 0), glm::vec3(1), 0, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, otherCube, glm::vec3(0, 2.5, 0), glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(SKY_BOX, skyBoxCube, sceneOrigin, glm::vec3(1), 0, false, false);
 
 
@@ -151,9 +155,9 @@ void SceneManager::LoadGlobalLigths()
 
     //DIR
     glm::vec3 directionalDir = glm::vec3(-0.2f, -1.0f, -0.3f);
-    glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-    glm::vec3 diff = glm::vec3(0.4f, 0.4f, 0.4f);
-    glm::vec3 spec = glm::vec3(0.5f, 0.5f, 0.5f);
+    glm::vec3 ambient = glm::vec3(0.0f);
+    glm::vec3 diff = glm::vec3(0.0f);
+    glm::vec3 spec = glm::vec3(0.0f);
 
     for (int i = 0; i < 1; i++)
     {

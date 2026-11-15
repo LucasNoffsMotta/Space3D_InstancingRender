@@ -283,6 +283,42 @@ void Model::InitInstancesTranslations(float offSet)
 
     glm::vec3 pos = glm::vec3(1, 0, 1);
     int index = 0;
+    int mapSizeX = std::sqrt(instancesAmmount);
+    int mapSizeZ = std::sqrt(instancesAmmount);
+
+    int min = 4;
+    int max = 10;
+
+    for (int i = 0; i < instancesAmmount; i++)
+    {
+        int num = rand() % (max - min + 1) + min;
+        instancesTranslationPtr[i] = pos;
+        pos.z += num;
+
+        if (pos.z >= 100 - num)
+        {
+            num = rand() % (max - min + 1) + min;
+            pos.z = 0;
+            pos.x += num;
+        }
+    }
+
+    //for (int x = 1; x < mapSizeX; x++)
+    //{
+    //    for (int z = 0; z < mapSizeZ; z++)
+    //    {
+    //        pos.z = 0;
+    //        instancesTranslationPtr[index] = pos;
+    //        pos.z += z * 1.1;
+    //        index++;
+    //    }
+    //    pos.x += x * 1.1;
+    //    index++;
+    //}
+
+  
+
+/*
     for (int i = 0; i < instancesAmmount; i++)
     {
         instancesTranslationPtr[i] = pos;
@@ -297,6 +333,7 @@ void Model::InitInstancesTranslations(float offSet)
             pos.x += (displacement_X);
         }
     }
+  */
 }
 
 std::vector<Vertex> Model::LoadCustomPrimitiveMesh(ePrimitive primitive)

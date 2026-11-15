@@ -28,7 +28,7 @@ void DirectionalLight::SetSpecular(glm::vec3& spec)
 	this->specular = spec;
 }
 
-glm::vec3 DirectionalLight::GetDirection()
+glm::vec3& DirectionalLight::GetDirection()
 {
 	return direction;
 }

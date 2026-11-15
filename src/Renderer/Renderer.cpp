@@ -264,7 +264,7 @@ void Renderer::FillUboDirLight(DirectionalLight& light)
 {
     glBindBuffer(GL_UNIFORM_BUFFER, uboDirLight);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), glm::value_ptr(light.GetDirection()));
-    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(light.GetAmbient()));
+    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(light.GetAmbientColor()));
     glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(light.GetDiffuse()));
     glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(light.GetSpecular()));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
