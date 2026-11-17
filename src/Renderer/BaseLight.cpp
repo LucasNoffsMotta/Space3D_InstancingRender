@@ -56,6 +56,37 @@ glm::vec3& BaseLight::GetSpecular()
 	return specular;
 }
 
+glm::vec4& BaseLight::GetVec4Direction()
+{
+	glm::vec4 vec4Dir = glm::vec4(this->direction.x, this->direction.y, this->direction.z, 1);
+	return vec4Dir;
+}
+
+glm::vec4& BaseLight::GetVec4Ambient()
+{
+	glm::vec3 colorAmbient = glm::vec3(this->color.x * this->ambient.x, this->color.y * this->ambient.y, this->color.z * this->ambient.z);
+	glm::vec4 amb = glm::vec4(colorAmbient, 1);
+	return amb;
+}
+
+glm::vec4& BaseLight::GetVec4AmbientColor()
+{
+	glm::vec4 vec4Color = glm::vec4(color.x, color.y, color.z, 1);
+	return vec4Color;
+}
+
+glm::vec4& BaseLight::GetVec4Diffuse()
+{
+	glm::vec4 vec4Diff = glm::vec4(diffuse.x, diffuse.y, diffuse.z, 1);
+	return vec4Diff;
+}
+
+glm::vec4& BaseLight::GetVec4Specular()
+{
+	glm::vec4 vec4Spec = glm::vec4(specular.x, specular.y, specular.z, 1);
+	return vec4Spec;
+}
+
 void BaseLight::SetDirection(glm::vec3 dir)
 {
 }

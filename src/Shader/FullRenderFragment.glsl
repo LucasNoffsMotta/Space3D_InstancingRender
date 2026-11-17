@@ -10,10 +10,10 @@ struct RenderMode {
 
 layout (std140) uniform DirLight
 {
-	vec3 direction;
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+	vec4 direction;
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
 };
 
 uniform RenderMode rm;
@@ -99,7 +99,7 @@ vec3 GetDirLight(vec3 Normal, vec3 viewDir, vec4 diffuseColor, vec3 specularColo
 	vec3 localDiffuse;
 	vec3 localSpecular;
 
-	vec3 lightDir = normalize(-direction);
+	vec3 lightDir = normalize(-direction.xyz);
 	float diff = max(dot(Normal, lightDir), 0.0);
 
 	vec3 reflectDir = reflect(-lightDir, Normal);
@@ -107,16 +107,16 @@ vec3 GetDirLight(vec3 Normal, vec3 viewDir, vec4 diffuseColor, vec3 specularColo
 
 	if (!material.useColor) {
 
-		localAmbient = ambient * diffuseColor.xyz; 
-		localDiffuse = diffuse * diff *  diffuseColor.xyz;
-		localSpecular = specular * spec * specularColor;
+		localAmbient = ambient.rgb * diffuseColor.xyz; 
+		localDiffuse = diffuse.rgb * diff *  diffuseColor.xyz;
+		localSpecular = specular.rgb * spec * specularColor;
 	}
 
 	else {
 		
-		localAmbient = ambient * material.color.rgb; 
-		localDiffuse = diffuse * diff *  material.color.rgb;
-		localSpecular = specular * spec * material.color.rgb;
+		localAmbient = ambient.rgb * material.color.rgb; 
+		localDiffuse = diffuse.rgb * diff *  material.color.rgb;
+		localSpecular = specular.rgb * spec * material.color.rgb;
 	}
 
 	return localAmbient + localDiffuse + localSpecular;
@@ -236,11 +236,6 @@ vec3 GetFullLitColorResult(vec4 diffuseColor)
 
 void main()
 {
-	//test!
-//	FragColor = vec4(diffuse, 1);
-//	return;
-
-	//Turn On Debug Mode
 	if (rm.DebugMode == 1)
 	{
 		FragColor =  vec4(fs_in.texCoord, 0.0, 1.0);

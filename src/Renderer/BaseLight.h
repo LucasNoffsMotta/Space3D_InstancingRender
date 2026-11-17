@@ -36,6 +36,13 @@ public:
     glm::vec3& GetAmbientColor();
     glm::vec3& GetDiffuse();
     glm::vec3& GetSpecular();
+
+    glm::vec4& GetVec4Direction();
+    glm::vec4& GetVec4Ambient();
+    glm::vec4& GetVec4AmbientColor();
+    glm::vec4& GetVec4Diffuse();
+    glm::vec4& GetVec4Specular();
+
     virtual void SetDirection(glm::vec3 dir);
     virtual glm::vec3& GetDirection();
 

@@ -27,6 +27,7 @@ int main()
 {
 	glfwInit();
 
+
 	Window window = Window(ContentManager::SCR_WIDTH, ContentManager::SCR_HEIGHT, "Void Engine");
     ContentManager::SetMainWindow(window.window);
 

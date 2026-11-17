@@ -264,17 +264,20 @@ void Renderer::FillUboDirLight(DirectionalLight& light)
 {
     glBindBuffer(GL_UNIFORM_BUFFER, uboDirLight);
 
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3),
-        glm::value_ptr(light.GetDirection()));
+    //Ok... so this is working well for one shader, but not for the other
 
-    glBufferSubData(GL_UNIFORM_BUFFER, 16, sizeof(glm::vec3),
-        glm::value_ptr(light.GetAmbientColor()));
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec4),
+        glm::value_ptr(light.GetVec4Direction()));
 
-    glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(glm::vec3),
-        glm::value_ptr(light.GetDiffuse()));
+    glBufferSubData(GL_UNIFORM_BUFFER, 16, sizeof(glm::vec4),
+        glm::value_ptr(light.GetVec4Ambient()));
 
-    glBufferSubData(GL_UNIFORM_BUFFER, 48, sizeof(glm::vec3),
-        glm::value_ptr(light.GetSpecular()));
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(glm::vec4),
+        glm::value_ptr(light.GetVec4Diffuse()));
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 48, sizeof(glm::vec4),
+        glm::value_ptr(light.GetVec4Specular()));
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
