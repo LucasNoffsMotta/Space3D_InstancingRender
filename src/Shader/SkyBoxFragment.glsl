@@ -28,7 +28,8 @@ vec4 GetDirLight(vec4 diffuseColor)
 
 void main()
 {    
+
     vec4 diffColor = texture(material.skybox, TexCoords);
     FragColor = GetDirLight(diffColor);
-    //FragColor = texture(material.skybox, TexCoords);
+    FragColor = texture(material.skybox, TexCoords);
 }

@@ -10,10 +10,10 @@ struct RenderMode {
 
 layout (std140) uniform DirLight
 {
-	vec4 direction;
-    vec4 ambient;
-    vec4 diffuse;
-    vec4 specular;
+	vec3 direction;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
 };
 
 uniform RenderMode rm;

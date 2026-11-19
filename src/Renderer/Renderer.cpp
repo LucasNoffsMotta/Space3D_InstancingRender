@@ -264,20 +264,20 @@ void Renderer::FillUboDirLight(DirectionalLight& light)
 {
     glBindBuffer(GL_UNIFORM_BUFFER, uboDirLight);
 
-    //Ok... so this is working well for one shader, but not for the other
-
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec4),
-        glm::value_ptr(light.GetVec4Direction()));
-
-    glBufferSubData(GL_UNIFORM_BUFFER, 16, sizeof(glm::vec4),
-        glm::value_ptr(light.GetVec4Ambient()));
+    glm::vec4 testcolor = glm::vec4(1, 0, 0, 0);
 
 
-    glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(glm::vec4),
-        glm::value_ptr(light.GetVec4Diffuse()));
+    //Bug: Those values are not reaching the shader
 
-    glBufferSubData(GL_UNIFORM_BUFFER, 48, sizeof(glm::vec4),
-        glm::value_ptr(light.GetVec4Specular()));
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec4), glm::value_ptr(light.GetDirection()));   //Dir
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 16, sizeof(glm::vec4), glm::value_ptr(light.GetAmbientColor()));     //Ambient
+     
+    glm::vec4 debug = light.GetVec4Diffuse();
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(glm::vec4), glm::value_ptr(light.GetDiffuse()));    //Diff
+
+    glBufferSubData(GL_UNIFORM_BUFFER, 48, sizeof(glm::vec4), glm::value_ptr(light.GetSpecular()));   //Spec
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }

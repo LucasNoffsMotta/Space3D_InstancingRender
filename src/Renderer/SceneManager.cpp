@@ -155,8 +155,8 @@ void SceneManager::LoadGlobalLigths()
 
     //DIR
     glm::vec3 directionalDir = glm::vec3(-0.2f, -1.0f, -0.3f);
-    glm::vec3 ambient = glm::vec3(0.0f);
-    glm::vec3 diff = glm::vec3(0.0f);
+    glm::vec3 ambient = glm::vec3(1.0f);
+    glm::vec3 diff = glm::vec3(1.0f);
     glm::vec3 spec = glm::vec3(0.0f);
 
     for (int i = 0; i < 1; i++)
