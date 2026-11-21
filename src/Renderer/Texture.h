@@ -14,7 +14,7 @@ class Texture
 {
 private:
 
-	void LoadImageDataFromFile(const char* filename, bool repeat, bool flip);
+	void LoadImageDataFromFile(const char* filename, bool flip);
 
 public:
 	unsigned char* data;
@@ -24,10 +24,11 @@ public:
 	void SetTextureType(eTextureType type);
 	float width;
 	float height;
+	bool repeat;
 	std::string path;
 	eTextureType type;
 	void BindTexture();
-	void InitializeTexture(const char* filename, bool repeat = false, bool flip = false);
+	void InitializeTexture(const char* filename,  bool flip = false);
 
 	std::string TextureTypeToUniform(eTextureType type);
 

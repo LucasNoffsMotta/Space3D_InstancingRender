@@ -146,9 +146,9 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     (vertices, indices, textures, meshColor, shininess, ior);
 }
 
-void Model::Load2DQuadTextureMesh(std::string filePath)
+void Model::Load2DQuadTextureMesh(std::string filePath, float uvFactor)
 {
-    std::vector<Vertex> vertices = LoadCustomPrimitiveMesh(ePrimitive::Quad);
+    std::vector<Vertex> vertices = LoadCustomPrimitiveMesh(ePrimitive::Quad, uvFactor);
     std::vector<Texture> textures;
 
     textures.push_back(Texture(filePath.c_str(), false, true));
@@ -167,10 +167,10 @@ void Model::Load2DQuadTextureMesh(std::string filePath)
     meshes.push_back(mesh);
 }
 
-void Model::Load2DQuadTextureMesh(Texture& texture)
+void Model::Load2DQuadTextureMesh(Texture& texture, float uvFactor)
 {
     std::vector<Texture> textures;
-    std::vector<Vertex> vertices = LoadCustomPrimitiveMesh(ePrimitive::Quad);
+    std::vector<Vertex> vertices = LoadCustomPrimitiveMesh(ePrimitive::Quad, uvFactor);
 
     textures.push_back(texture);
 
@@ -190,7 +190,7 @@ void Model::Load2DQuadTextureMesh(Texture& texture)
 //It is working only for cubemap
 void Model::Load3DCubeVertices(Texture& texture)
 {
-    std::vector<Vertex> vertices = LoadCustomPrimitiveMesh(ePrimitive::Cube);
+    std::vector<Vertex> vertices = LoadCustomPrimitiveMesh(ePrimitive::Cube, 1);
 
     std::vector<unsigned int> indices = {
         // Back face (-Z)
@@ -281,13 +281,13 @@ void Model::InitInstancesTranslations(float offSet)
 
     instancesTranslationPtr = new glm::vec3[instancesAmmount];
 
-    glm::vec3 pos = glm::vec3(1, 0, 1);
+    glm::vec3 pos = glm::vec3(1, 0.5, 1);
     int index = 0;
     int mapSizeX = std::sqrt(instancesAmmount);
     int mapSizeZ = std::sqrt(instancesAmmount);
 
-    int min = 4;
-    int max = 10;
+    int min = 1;
+    int max = 2;
 
     for (int i = 0; i < instancesAmmount; i++)
     {
@@ -336,7 +336,7 @@ void Model::InitInstancesTranslations(float offSet)
   */
 }
 
-std::vector<Vertex> Model::LoadCustomPrimitiveMesh(ePrimitive primitive)
+std::vector<Vertex> Model::LoadCustomPrimitiveMesh(ePrimitive primitive, float uvFactor)
 {
     std::vector<Vertex> vertices;
 
@@ -348,16 +348,16 @@ std::vector<Vertex> Model::LoadCustomPrimitiveMesh(ePrimitive primitive)
         Vertex vert4;
 
         vert1.Position = glm::vec3(0.5f, 0.5f, 0.0f);
-        vert1.TexCoords = glm::vec2(1.f, 1.0f);
+        vert1.TexCoords = glm::vec2(uvFactor, uvFactor);
 
         vert2.Position = glm::vec3(0.5f, -0.5f, 0.0f);
-        vert2.TexCoords = glm::vec2(1.0f, 0.0f);
+        vert2.TexCoords = glm::vec2(uvFactor, 0.0f);
 
         vert3.Position = glm::vec3(-0.5f, -0.5f, 0.0f);
         vert3.TexCoords = glm::vec2(0.0f, 0.0f);
 
         vert4.Position = glm::vec3(-0.5f, 0.5f, 0.0f);
-        vert4.TexCoords = glm::vec2(0.0f, 1.0f);
+        vert4.TexCoords = glm::vec2(0.0f, uvFactor);
 
 
         vertices.push_back(vert1);

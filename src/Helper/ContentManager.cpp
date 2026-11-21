@@ -87,7 +87,9 @@ Entity* ContentManager::CreateEntity(eHierarchyLevel level, Model* model, glm::v
     Entity* e = new Entity(model, level);
     e->SetWorldPosition(pos);
     e->SetScale(scale);
+    e->Rotate(rotation);
     e->outline = outline;
+    
     e->SetIsTranslucid(isTranslucid);
     Entities[level].push_back(e);
     return e;

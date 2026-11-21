@@ -21,14 +21,6 @@ void SceneNode::SetUpNodeLightsUniforms(Shader* shader)
 		}
 	}
 	
-	//Test!
-	DirectionalLight* l = ContentManager::DirectionalLights["0"].get();
-	ContentManager::Shaders[eRenderMode::FullRender]->SetUniform3fv("direction", l->GetDirection());
-	ContentManager::Shaders[eRenderMode::FullRender]->SetUniform3fv("ambient", l->GetAmbientColor());
-	ContentManager::Shaders[eRenderMode::FullRender]->SetUniform3fv("diffuse", l->GetDiffuse());
-	ContentManager::Shaders[eRenderMode::FullRender]->SetUniform3fv("specular", l->GetSpecular());
-	//Test end
-
 	//Update Dir Light
 	ContentManager::GlobalRenderer->FillUboDirLight(*ContentManager::DirectionalLights["0"]);
 

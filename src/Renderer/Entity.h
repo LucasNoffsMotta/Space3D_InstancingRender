@@ -54,6 +54,9 @@ public:
 	void SetModel(Model* model);
 	Model* GetModel();
 	glm::mat4 RotateMatrix(glm::mat4& modelMatrix);
+
+	void Rotate(float angle);
+
 	glm::vec3 GetDirection();
 	void SetDisplayNormalsMode(bool displayNormals);
 	void FixModelRotationOnLoad(glm::vec3 axis, float offeset);

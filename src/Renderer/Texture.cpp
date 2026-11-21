@@ -6,7 +6,8 @@
 
 Texture::Texture(const char* filename, bool repeat, bool flip)
 {
-	InitializeTexture(filename, repeat, flip);
+	this->repeat = repeat;
+	InitializeTexture(filename, flip);
 }
 
 Texture::Texture()
@@ -75,9 +76,9 @@ void Texture::BindTexture()
 	glBindTexture(GL_TEXTURE_2D, texture);
 }
 
-void Texture::InitializeTexture(const char* filename, bool repeat, bool flip)
+void Texture::InitializeTexture(const char* filename, bool flip)
 {
-	LoadImageDataFromFile(filename, repeat, flip);
+	LoadImageDataFromFile(filename, flip);
 }
 
 std::string Texture::TextureTypeToUniform(eTextureType type)
@@ -185,7 +186,7 @@ void Texture::GenerateEnviromentMapTexture(int width, int height)
 	this->type = eTextureType::Diffuse_CubeMap;
 }
 
-void Texture::LoadImageDataFromFile(const char* filename, bool repeat, bool flip)
+void Texture::LoadImageDataFromFile(const char* filename, bool flip)
 {
 	int width, height, nrChannels;
 
@@ -209,7 +210,7 @@ void Texture::LoadImageDataFromFile(const char* filename, bool repeat, bool flip
 		else if (nrChannels == 4)
 			format = GL_RGBA;
 
-		GenerateTexture(format, width, height, repeat, data);
+		GenerateTexture(format, width, height, this->repeat, data);
 
 		this->width = width;
 		this->height = height;

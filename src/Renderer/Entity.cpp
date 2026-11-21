@@ -80,7 +80,7 @@ Model* Entity::GetModel()
 glm::mat4 Entity::RotateMatrix(glm::mat4& modelMatrix)
 {
     float pitch = glm::radians(this->model->Pitch);
-    float yaw = glm::radians(this->model->Yaw) - glm::radians(90.f); //Apply offset to model rotation
+    float yaw = glm::radians(this->model->Yaw); 
     float roll = glm::radians(this->model->Roll);
 
     Front.x = cos(yaw * cos(pitch));
@@ -95,6 +95,12 @@ glm::mat4 Entity::RotateMatrix(glm::mat4& modelMatrix)
     modelMatrix = glm::rotate(modelMatrix, roll, RollAxis);
     return modelMatrix;
 }
+
+void Entity::Rotate(float angle)
+{
+    this->model->RotateRoll(angle);
+}
+
 
 void Entity::FixModelRotationOnLoad(glm::vec3 axis, float offSet)
 {

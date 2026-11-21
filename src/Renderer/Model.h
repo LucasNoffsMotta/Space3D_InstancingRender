@@ -26,7 +26,7 @@ private:
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);
     void SetUpMeshesInstancedVao(int amount);
     void InitInstancesTranslations(float offSet);
-    std::vector<Vertex> LoadCustomPrimitiveMesh(ePrimitive primitive);
+    std::vector<Vertex> LoadCustomPrimitiveMesh(ePrimitive primitive, float uvFactor);
 
 
 
@@ -47,8 +47,8 @@ public:
     }
     void Load3DCubeVertices(Texture& texture);
     Model();
-    void Load2DQuadTextureMesh(std::string filePath);
-    void Load2DQuadTextureMesh(Texture& texture);
+    void Load2DQuadTextureMesh(std::string filePath, float uvFactor);
+    void Load2DQuadTextureMesh(Texture& texture, float uvFactor);
  
     void SetNewTexturelForSingleMesh(int meshIndex, int textureIndex, Texture& newTexture);
     void PushNewTexture(Texture& newTexture);

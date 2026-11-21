@@ -64,13 +64,18 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* carModel = ContentManager::LoadModel("/Car/evo_blendswap.obj", "car");
     Model* cube = ContentManager::LoadModel("/Cube/PinkCube.obj", "cube");
     Model* otherCube = ContentManager::LoadModel("/Cube/PinkCube.obj", "cube");
-    Model* terrainModel = ContentManager::LoadModel("/Floor/Floor.obj", "terrain");
+ //   Model* terrainModel = ContentManager::LoadModel("/Floor/Floor.obj", "terrain");
     Model* pumpkin = ContentManager::LoadModel("/Pumpkin/HalloweenPumpkin.obj", "pumpkin");
     Model* spiderMan = ContentManager::LoadModel("/spiderman/Spiderman.obj", "spider");
     Model* tree = ContentManager::LoadModel("/LowPolyTree/LowPolyTree.obj", "tree");
 
     Texture grassFloor = Texture("res/textures/grass_floor.jpg", true);
-    terrainModel->PushNewTexture(grassFloor);
+    Model* floor = new Model();
+    floor->Load2DQuadTextureMesh(grassFloor, 500);
+
+
+
+  //  terrainModel->PushNewTexture(grassFloor);
 
     Model* transparentWindow = new Model();
     Model* frameBufferTestModel = new Model();
@@ -96,11 +101,11 @@ void SceneManager::LoadModelsAndSetPositions()
     spiderMan->PushNewTexture(momoFace);
 
     Model* pointLightModel = new Model(); 
-    pointLightModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/PointLight.png");
-    transparentWindow->Load2DQuadTextureMesh("res/textures/blending_transparent_window.png");
+    pointLightModel->Load2DQuadTextureMesh("D:/Projetos/c++/OpenGL/Assets/Textures/PointLight.png", 1);
+    transparentWindow->Load2DQuadTextureMesh("res/textures/blending_transparent_window.png", 1);
 
     Model* grassModel = new Model();
-    grassModel->Load2DQuadTextureMesh("res/textures/grass.png");
+    grassModel->Load2DQuadTextureMesh("res/textures/grass.png", 1);
 
     //TODO: Create instanced tiles to make ground and create different instanced methods to trees / grass
     grassModel->SetUseInstanced(100000, 0.5);
@@ -111,13 +116,13 @@ void SceneManager::LoadModelsAndSetPositions()
     */
     DynamicReflectiveObject = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(14, 2, 1), glm::vec3(1), 0, false, false);
 
-    ContentManager::CreateEntity(NO_STENCIL_TEST, terrainModel, sceneOrigin, glm::vec3(100, 1, 100), 0, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, floor, sceneOrigin, glm::vec3(1000), 90, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, tree, glm::vec3(14, 1.0, 1), glm::vec3(1), 270, false, false);
 
-    ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 90, false, true);
-    ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 90, false, true);
-    ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 90, false, true);
+    ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 0, false, true);
+    ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 0, false, true);
+    ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(15, 2, 1), glm::vec3(1), 0, false, true);
 
     ContentManager::CreateEntity(NO_STENCIL_TEST, spiderMan, glm::vec3(12, 2, 1), glm::vec3(1), 90, false, true);
     ContentManager::CreateEntity(NO_STENCIL_TEST, grassModel, glm::vec3(1, 0.5, 1), glm::vec3(1), 90, false, true);

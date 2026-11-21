@@ -23,7 +23,10 @@ uniform Material material;
 vec4 GetDirLight(vec4 diffuseColor)
 {
     vec3 increasedAmbientLight = diffuse.xyz + vec3(0.1, 0.1, 0.1);
-	return vec4(increasedAmbientLight * diffuseColor.xyz, 1.f); 
+    vec3 localAmbient = ambient.rgb * increasedAmbientLight.xyz; 
+
+
+	return vec4(localAmbient * diffuseColor.xyz, 1.f); 
 }
 
 void main()
