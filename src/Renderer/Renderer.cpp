@@ -242,15 +242,19 @@ void Renderer::SetShadersBindingPointToUseUniformBuffer()
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::RenderNormals_GeometryShader]->Id, ubo_FullRender_GeometryShader_Matrices, 0);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::ModelDisplay]->Id, ubo_DisplayModel_Matrices, 0);
 
+
     //Dir Light Uniform
     unsigned int ubo_FullRender_DirLight = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::FullRender]->Id, "DirLight");
     unsigned int ubo_Instanced_DirLight = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::FullRender_Instanced]->Id, "DirLight");
     unsigned int ubo_SkyBox_DirLight = glGetUniformBlockIndex(ContentManager::Shaders[eRenderMode::SkyBox]->Id, "DirLight");
 
-    glBindBufferRange(GL_UNIFORM_BUFFER, 1, uboDirLight, 0, 64);
+   // glBindBufferRange(GL_UNIFORM_BUFFER, 1, uboDirLight, 0, 64);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboDirLight);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender]->Id, ubo_FullRender_DirLight, 1);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::SkyBox]->Id, ubo_SkyBox_DirLight, 1);
     glUniformBlockBinding(ContentManager::Shaders[eRenderMode::FullRender_Instanced]->Id, ubo_Instanced_DirLight, 1);
+
+
 }
 
 void Renderer::FillUboMatricesProjection(glm::mat4 projection)
@@ -263,22 +267,14 @@ void Renderer::FillUboMatricesProjection(glm::mat4 projection)
 void Renderer::FillUboDirLight(DirectionalLight& light)
 {
     glBindBuffer(GL_UNIFORM_BUFFER, uboDirLight);
-
     glm::vec4 testcolor = glm::vec4(1, 0, 0, 0);
-
-
     //Bug: Those values are not reaching the shader
 
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec4), glm::value_ptr(light.GetDirection()));   //Dir
-
-    glBufferSubData(GL_UNIFORM_BUFFER, 16, sizeof(glm::vec4), glm::value_ptr(light.GetAmbientColor()));     //Ambient
-     
+    glBufferSubData(GL_UNIFORM_BUFFER, 16, sizeof(glm::vec4), glm::value_ptr(light.GetAmbient()));     //Ambient    
     glm::vec4 debug = light.GetVec4Diffuse();
-
     glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(glm::vec4), glm::value_ptr(light.GetDiffuse()));    //Diff
-
     glBufferSubData(GL_UNIFORM_BUFFER, 48, sizeof(glm::vec4), glm::value_ptr(light.GetSpecular()));   //Spec
-
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 

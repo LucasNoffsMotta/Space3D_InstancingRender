@@ -86,7 +86,6 @@ void EditorUI::ShowMainMenu()
 
         ImGui::Text("Direct Light");
         ImGui::Text("Color");
-        EditorUI::CreateLightColorOptions("DirectLightColor", ContentManager::DirectionalLights["0"]->GetColor());
         EditorUI::CreateLightDiffuseOptions("DirectLightDiffuse", ContentManager::DirectionalLights["0"]->GetDiffuse());
         EditorUI::CreateLightSpecularOptions("DirectLightSpecular", ContentManager::DirectionalLights["0"]->GetSpecular());
         EditorUI::CreateLightAmbientOptions("DirectLightAmbient", ContentManager::DirectionalLights["0"]->GetAmbient());

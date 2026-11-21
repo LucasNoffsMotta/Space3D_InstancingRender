@@ -8,6 +8,15 @@ struct RenderMode {
 	 int Full_LightsAndReflection;
 };
 
+//layout (std140) uniform DirLight
+//{
+//	vec4 direction;
+//    vec4 ambient;
+//    vec4 diffuse;
+//    vec4 specular;
+//};
+//
+
 layout (std140) uniform DirLight
 {
 	vec3 direction;
@@ -15,6 +24,13 @@ layout (std140) uniform DirLight
     vec3 diffuse;
     vec3 specular;
 };
+
+
+//uniform		vec3 direction;
+// uniform   vec3 ambient;
+// uniform   vec3 diffuse;
+// uniform   vec3 specular;
+
 
 uniform RenderMode rm;
 
