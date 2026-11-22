@@ -52,6 +52,7 @@ int main()
     ContentManager::SetPostProcessEffect(ePostProcessEffect::NightVision);
 
     ImGui::CreateContext();
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -62,6 +63,8 @@ int main()
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_MULTISAMPLE);
 
     float dt = 0.f;
     float lastFrame = 0.f;

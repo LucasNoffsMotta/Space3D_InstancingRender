@@ -81,6 +81,8 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* frameBufferTestModel = new Model();
     Model* skyBoxCube = new Model();
     Model* testCube = new Model();
+    Texture t = Texture("res/textures/woodenFloor.jpg");
+    testCube->Load3DCube(t);
 
     Texture sky = Texture();
     sky.CreateCubemapTexture("res/textures/skybox");
@@ -89,7 +91,7 @@ void SceneManager::LoadModelsAndSetPositions()
     Texture momoFace = Texture();
     momoFace.CreateCubemapTexture("res/textures/momoSkyBox");
     momoFace.SetTextureType(eTextureType::Diffuse_CubeMap);
-    skyBoxCube->Load3DCubeVertices(sky);
+    skyBoxCube->Load3DCubeMap(sky);
 
     //Pushing the skybox texture to create reflection effect (used as a texture on those models, shader use this texture to sample values from)
     //Test: Enviroment map texture 
@@ -107,7 +109,6 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* grassModel = new Model();
     grassModel->Load2DQuadTextureMesh("res/textures/grass.png", 1);
 
-    //TODO: Create instanced tiles to make ground and create different instanced methods to trees / grass
     grassModel->SetUseInstanced(100000, 0.5);
     tree->SetUseInstanced(1000, 4);
 
@@ -116,6 +117,7 @@ void SceneManager::LoadModelsAndSetPositions()
     */
     DynamicReflectiveObject = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(14, 2, 1), glm::vec3(1), 0, false, false);
 
+    ContentManager::CreateEntity(NO_STENCIL_TEST, cube, sceneOrigin, glm::vec3(10), 0, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, floor, sceneOrigin, glm::vec3(1000), 90, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, tree, glm::vec3(14, 1.0, 1), glm::vec3(1), 270, false, false);

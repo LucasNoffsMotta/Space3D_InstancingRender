@@ -188,7 +188,48 @@ void Model::Load2DQuadTextureMesh(Texture& texture, float uvFactor)
 }
 
 //It is working only for cubemap
-void Model::Load3DCubeVertices(Texture& texture)
+//Because it is not loading the texture coord on the vertex
+void Model::Load3DCubeMap(Texture& texture)
+{
+    std::vector<Vertex> vertices = LoadCustomPrimitiveMesh(ePrimitive::CubeMap, 1);
+
+    std::vector<unsigned int> indices = {
+        // Back face (-Z)
+        0, 1, 2,
+        2, 3, 0,
+
+        // Left face (-X)
+        1, 5, 4,
+        4, 0, 1,
+
+        // Right face (+X)
+        2, 6, 7,
+        7, 3, 2,
+
+        // Front face (+Z)
+        5, 6, 7,
+        7, 4, 5,
+
+        // Top face (+Y)
+        0, 3, 7,
+        7, 4, 0,
+
+        // Bottom face (-Y)
+        1, 5, 6,
+        6, 2, 1
+    };
+
+    std::vector<Texture> textures;
+    textures.push_back(texture);
+    glm::vec4 color = glm::vec4(0);
+    float s = 1.f;
+
+    Mesh mesh = Mesh(vertices, indices, textures, color, s, 1);
+
+    meshes.push_back(mesh);
+}
+
+void Model::Load3DCube(Texture& texture)
 {
     std::vector<Vertex> vertices = LoadCustomPrimitiveMesh(ePrimitive::Cube, 1);
 
@@ -347,18 +388,112 @@ std::vector<Vertex> Model::LoadCustomPrimitiveMesh(ePrimitive primitive, float u
         Vertex vert3;
         Vertex vert4;
 
+        glm::vec3 normal = glm::vec3(0, 0, -1);
+
         vert1.Position = glm::vec3(0.5f, 0.5f, 0.0f);
         vert1.TexCoords = glm::vec2(uvFactor, uvFactor);
+        vert1.Normal = normal;
 
         vert2.Position = glm::vec3(0.5f, -0.5f, 0.0f);
         vert2.TexCoords = glm::vec2(uvFactor, 0.0f);
+        vert2.Normal = normal;
 
         vert3.Position = glm::vec3(-0.5f, -0.5f, 0.0f);
         vert3.TexCoords = glm::vec2(0.0f, 0.0f);
+        vert3.Normal = normal;
 
         vert4.Position = glm::vec3(-0.5f, 0.5f, 0.0f);
         vert4.TexCoords = glm::vec2(0.0f, uvFactor);
+        vert4.Normal = normal;
 
+
+        vertices.push_back(vert1);
+        vertices.push_back(vert2);
+        vertices.push_back(vert3);
+        vertices.push_back(vert4);
+    }
+
+    else if (primitive == ePrimitive::Cube)
+    {
+        Vertex vert1;
+        Vertex vert2;
+        Vertex vert3;
+        Vertex vert4;
+
+        glm::vec3 normal;
+
+        // ---------- Front (+Z) ----------
+        normal = glm::vec3(0, 0, 1);
+
+        vert1.Position = glm::vec3(-1.0f, -1.0f, 1.0f);  vert1.TexCoords = glm::vec2(0.0f, 0.0f);            vert1.Normal = normal;
+        vert2.Position = glm::vec3(1.0f, -1.0f, 1.0f);  vert2.TexCoords = glm::vec2(uvFactor, 0.0f);        vert2.Normal = normal;
+        vert3.Position = glm::vec3(1.0f, 1.0f, 1.0f);  vert3.TexCoords = glm::vec2(uvFactor, uvFactor);    vert3.Normal = normal;
+        vert4.Position = glm::vec3(-1.0f, 1.0f, 1.0f);  vert4.TexCoords = glm::vec2(0.0f, uvFactor);        vert4.Normal = normal;
+
+        vertices.push_back(vert1);
+        vertices.push_back(vert2);
+        vertices.push_back(vert3);
+        vertices.push_back(vert4);
+
+        // ---------- Back (-Z) ----------
+        normal = glm::vec3(0, 0, -1);
+
+        vert1.Position = glm::vec3(1.0f, -1.0f, -1.0f); vert1.TexCoords = glm::vec2(0.0f, 0.0f);            vert1.Normal = normal;
+        vert2.Position = glm::vec3(-1.0f, -1.0f, -1.0f); vert2.TexCoords = glm::vec2(uvFactor, 0.0f);        vert2.Normal = normal;
+        vert3.Position = glm::vec3(-1.0f, 1.0f, -1.0f); vert3.TexCoords = glm::vec2(uvFactor, uvFactor);    vert3.Normal = normal;
+        vert4.Position = glm::vec3(1.0f, 1.0f, -1.0f); vert4.TexCoords = glm::vec2(0.0f, uvFactor);        vert4.Normal = normal;
+
+        vertices.push_back(vert1);
+        vertices.push_back(vert2);
+        vertices.push_back(vert3);
+        vertices.push_back(vert4);
+
+        // ---------- Left (-X) ----------
+        normal = glm::vec3(-1, 0, 0);
+
+        vert1.Position = glm::vec3(-1.0f, -1.0f, -1.0f); vert1.TexCoords = glm::vec2(0.0f, 0.0f);            vert1.Normal = normal;
+        vert2.Position = glm::vec3(-1.0f, -1.0f, 1.0f); vert2.TexCoords = glm::vec2(uvFactor, 0.0f);        vert2.Normal = normal;
+        vert3.Position = glm::vec3(-1.0f, 1.0f, 1.0f); vert3.TexCoords = glm::vec2(uvFactor, uvFactor);    vert3.Normal = normal;
+        vert4.Position = glm::vec3(-1.0f, 1.0f, -1.0f); vert4.TexCoords = glm::vec2(0.0f, uvFactor);        vert4.Normal = normal;
+
+        vertices.push_back(vert1);
+        vertices.push_back(vert2);
+        vertices.push_back(vert3);
+        vertices.push_back(vert4);
+
+        // ---------- Right (+X) ----------
+        normal = glm::vec3(1, 0, 0);
+
+        vert1.Position = glm::vec3(1.0f, -1.0f, 1.0f);  vert1.TexCoords = glm::vec2(0.0f, 0.0f);            vert1.Normal = normal;
+        vert2.Position = glm::vec3(1.0f, -1.0f, -1.0f);  vert2.TexCoords = glm::vec2(uvFactor, 0.0f);        vert2.Normal = normal;
+        vert3.Position = glm::vec3(1.0f, 1.0f, -1.0f);  vert3.TexCoords = glm::vec2(uvFactor, uvFactor);    vert3.Normal = normal;
+        vert4.Position = glm::vec3(1.0f, 1.0f, 1.0f);  vert4.TexCoords = glm::vec2(0.0f, uvFactor);        vert4.Normal = normal;
+
+        vertices.push_back(vert1);
+        vertices.push_back(vert2);
+        vertices.push_back(vert3);
+        vertices.push_back(vert4);
+
+        // ---------- Top (+Y) ----------
+        normal = glm::vec3(0, 1, 0);
+
+        vert1.Position = glm::vec3(-1.0f, 1.0f, 1.0f);  vert1.TexCoords = glm::vec2(0.0f, 0.0f);            vert1.Normal = normal;
+        vert2.Position = glm::vec3(1.0f, 1.0f, 1.0f);  vert2.TexCoords = glm::vec2(uvFactor, 0.0f);        vert2.Normal = normal;
+        vert3.Position = glm::vec3(1.0f, 1.0f, -1.0f);  vert3.TexCoords = glm::vec2(uvFactor, uvFactor);    vert3.Normal = normal;
+        vert4.Position = glm::vec3(-1.0f, 1.0f, -1.0f);  vert4.TexCoords = glm::vec2(0.0f, uvFactor);        vert4.Normal = normal;
+
+        vertices.push_back(vert1);
+        vertices.push_back(vert2);
+        vertices.push_back(vert3);
+        vertices.push_back(vert4);
+
+        // ---------- Bottom (-Y) ----------
+        normal = glm::vec3(0, -1, 0);
+
+        vert1.Position = glm::vec3(-1.0f, -1.0f, -1.0f); vert1.TexCoords = glm::vec2(0.0f, 0.0f);            vert1.Normal = normal;
+        vert2.Position = glm::vec3(1.0f, -1.0f, -1.0f); vert2.TexCoords = glm::vec2(uvFactor, 0.0f);        vert2.Normal = normal;
+        vert3.Position = glm::vec3(1.0f, -1.0f, 1.0f); vert3.TexCoords = glm::vec2(uvFactor, uvFactor);    vert3.Normal = normal;
+        vert4.Position = glm::vec3(-1.0f, -1.0f, 1.0f); vert4.TexCoords = glm::vec2(0.0f, uvFactor);        vert4.Normal = normal;
 
         vertices.push_back(vert1);
         vertices.push_back(vert2);
@@ -370,19 +505,19 @@ std::vector<Vertex> Model::LoadCustomPrimitiveMesh(ePrimitive primitive, float u
     //SHIT CODE!
     // Done in a rush.. if it works:
     //To improve: Might create a method that receive an array of float and an vertex offset (similar to set attrib array) to create the Vertices vector 
-    else if (primitive == ePrimitive::Cube)
+    else if (primitive == ePrimitive::CubeMap)
     {
-        float skyboxVertices[] = {
-            // Positions
-            -1.0f,  1.0f, -1.0f, // 0: Top-left-back
-            -1.0f, -1.0f, -1.0f, // 1: Bottom-left-back
-             1.0f, -1.0f, -1.0f, // 2: Bottom-right-back
-             1.0f,  1.0f, -1.0f, // 3: Top-right-back
-            -1.0f,  1.0f,  1.0f, // 4: Top-left-front
-            -1.0f, -1.0f,  1.0f, // 5: Bottom-left-front
-             1.0f, -1.0f,  1.0f, // 6: Bottom-right-front
-             1.0f,  1.0f,  1.0f  // 7: Top-right-front
-        };
+        //float cube[] = {
+        //    // Positions
+        //    -1.0f,  1.0f, -1.0f, // 0: Top-left-back
+        //    -1.0f, -1.0f, -1.0f, // 1: Bottom-left-back
+        //     1.0f, -1.0f, -1.0f, // 2: Bottom-right-back
+        //     1.0f,  1.0f, -1.0f, // 3: Top-right-back
+        //    -1.0f,  1.0f,  1.0f, // 4: Top-left-front
+        //    -1.0f, -1.0f,  1.0f, // 5: Bottom-left-front
+        //     1.0f, -1.0f,  1.0f, // 6: Bottom-right-front
+        //     1.0f,  1.0f,  1.0f  // 7: Top-right-front
+        //};
 
         Vertex vert1 = Vertex();
         Vertex vert2 = Vertex();

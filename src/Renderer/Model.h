@@ -10,6 +10,7 @@
 enum ePrimitive :uint8_t
 {
     Quad,
+    CubeMap,
     Cube
 };
 
@@ -45,10 +46,12 @@ public:
     {
         loadModel(path);
     }
-    void Load3DCubeVertices(Texture& texture);
+
     Model();
     void Load2DQuadTextureMesh(std::string filePath, float uvFactor);
     void Load2DQuadTextureMesh(Texture& texture, float uvFactor);
+    void Load3DCubeMap(Texture& texture);
+    void Load3DCube(Texture& texture);
  
     void SetNewTexturelForSingleMesh(int meshIndex, int textureIndex, Texture& newTexture);
     void PushNewTexture(Texture& newTexture);
