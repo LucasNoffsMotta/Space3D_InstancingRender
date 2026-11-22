@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\GraphicsProgramming\glad.c" />
+    <ClCompile Include="..\GraphicsProgramming\glad.c" />
     <ClCompile Include="src\Editor\EditorUI.cpp" />
     <ClCompile Include="src\Helper\ContentManager.cpp" />
     <ClCompile Include="src\Helper\InputManager.cpp" />

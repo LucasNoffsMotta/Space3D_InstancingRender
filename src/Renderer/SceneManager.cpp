@@ -64,22 +64,27 @@ void SceneManager::LoadModelsAndSetPositions()
     Model* carModel = ContentManager::LoadModel("/Car/evo_blendswap.obj", "car");
     Model* cube = ContentManager::LoadModel("/Cube/PinkCube.obj", "cube");
     Model* otherCube = ContentManager::LoadModel("/Cube/PinkCube.obj", "cube");
- //   Model* terrainModel = ContentManager::LoadModel("/Floor/Floor.obj", "terrain");
     Model* pumpkin = ContentManager::LoadModel("/Pumpkin/HalloweenPumpkin.obj", "pumpkin");
     Model* spiderMan = ContentManager::LoadModel("/spiderman/Spiderman.obj", "spider");
     Model* tree = ContentManager::LoadModel("/LowPolyTree/LowPolyTree.obj", "tree");
 
+    /*
+    *  TEXTURED FLOOR:
+    */
+
     Texture grassFloor = Texture("res/textures/grass_floor.jpg", true);
+    grassFloor.SetTextureType(eTextureType::Diffuse);
     Model* floor = new Model();
     floor->Load2DQuadTextureMesh(grassFloor, 500);
 
-
-
-  //  terrainModel->PushNewTexture(grassFloor);
+    /*
+    *  END OF TEXTURED FLOOR!
+    */
 
     Model* transparentWindow = new Model();
     Model* frameBufferTestModel = new Model();
     Model* skyBoxCube = new Model();
+
     Model* testCube = new Model();
     Texture t = Texture("res/textures/woodenFloor.jpg");
     testCube->Load3DCube(t);
@@ -93,11 +98,21 @@ void SceneManager::LoadModelsAndSetPositions()
     momoFace.SetTextureType(eTextureType::Diffuse_CubeMap);
     skyBoxCube->Load3DCubeMap(sky);
 
+    /*
+    *   REFLECTIVE OBJ:
+    */
+
     //Pushing the skybox texture to create reflection effect (used as a texture on those models, shader use this texture to sample values from)
     //Test: Enviroment map texture 
     //Obs: To render a framebuffer texture to a model, just Push new texture calling GetFramebufferTexture and make sure that the fbo is receiving data on the render pass
-    cube->PushNewTexture(*ContentManager::GlobalRenderer->GetEnviromentMapTexture());
-    //cube->PushNewTexture(sky);
+    //cube->PushNewTexture(*ContentManager::GlobalRenderer->GetEnviromentMapTexture());
+
+   //DynamicReflectiveObject = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(14, 2, 1), glm::vec3(1), 0, false, false);
+
+    /*
+    *   END OF REFLECTIVE OBJ
+    */
+
     
     pumpkin->PushNewTexture(momoFace);
     spiderMan->PushNewTexture(momoFace);
@@ -115,12 +130,12 @@ void SceneManager::LoadModelsAndSetPositions()
     /*
     *  ENTITIES
     */
-    DynamicReflectiveObject = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(14, 2, 1), glm::vec3(1), 0, false, false);
 
-    ContentManager::CreateEntity(NO_STENCIL_TEST, cube, sceneOrigin, glm::vec3(10), 0, false, false);
+
+   ContentManager::CreateEntity(NO_STENCIL_TEST, testCube, sceneOrigin, glm::vec3(1), 0, false, false);
     ContentManager::CreateEntity(NO_STENCIL_TEST, floor, sceneOrigin, glm::vec3(1000), 90, false, false);
-    ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 270, false, false);
-    ContentManager::CreateEntity(NO_STENCIL_TEST, tree, glm::vec3(14, 1.0, 1), glm::vec3(1), 270, false, false);
+    ContentManager::CreateEntity(NO_STENCIL_TEST, carModel, glm::vec3(7, 2.0, 1), glm::vec3(1), 0, false, false);
+   ContentManager::CreateEntity(NO_STENCIL_TEST, tree, glm::vec3(14, 1.0, 1), glm::vec3(1), 270, false, false);
 
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(10, 2, 1), glm::vec3(1), 0, false, true);
     ContentManager::CreateEntity(TRANSLUCID, transparentWindow, glm::vec3(13, 2, 1), glm::vec3(1), 0, false, true);
@@ -143,6 +158,7 @@ void SceneManager::LoadModelsAndSetPositions()
             ContentManager::CreateEntity(NO_STENCIL_TEST, pointLightModel, GlobalLights[i]->GetWorldPosition(), glm::vec3(0.4), 90, false, false);
         }
     }
+
 }
 
 void SceneManager::LoadGlobalLigths()
@@ -386,6 +402,8 @@ void SceneManager::RenderScene(Window& window)
 
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
 
+    /*
+    * 
     //Second pass: Enviroment map - Render the scene 6x  
     ContentManager::GlobalRenderer->BindEnviromentFramebuffer();
 
@@ -394,6 +412,8 @@ void SceneManager::RenderScene(Window& window)
     //Clear and unbind the fbo
     ContentManager::GlobalRenderer->UnbindEnviromentFramebuffer();
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
+
+    */
 
     //Draw Scene nodes recursively:
     RootNode->UpdateNode(true, false);

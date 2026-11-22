@@ -244,11 +244,10 @@ void EditorUI::CreateLightDirectionOptions(std::string id)
 {
     glm::vec3 newDir = ContentManager::DirectionalLights["0"]->GetDirection();
 
-    ImGui::InputFloat("X: ", &newDir.x);
-    ImGui::InputFloat("Y: ", &newDir.y);
-    ImGui::InputFloat("Z: ", &newDir.z);
+    ImGui::InputFloat("X: ", &newDir.x, -1, 1);
+    ImGui::InputFloat("Y: ", &newDir.y, -1 , 1);
+    ImGui::InputFloat("Z: ", &newDir.z, -1 , 1);
 
-    newDir = glm::normalize(newDir);
     ContentManager::DirectionalLights["0"]->SetDirection(newDir) ;
 }
 

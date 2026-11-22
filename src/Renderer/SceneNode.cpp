@@ -260,7 +260,7 @@ void SceneNode::RenderStencilTestOn(Shader* shader)
 void SceneNode::RenderSkyBox(Shader* shader)
 {
 	glDepthFunc(GL_LEQUAL);
-	glDisable(GL_CULL_FACE);
+	//glDisable(GL_CULL_FACE);
 
 	for (int i = 0; i < Entities.size(); i++)
 	{
@@ -269,7 +269,7 @@ void SceneNode::RenderSkyBox(Shader* shader)
 	}
 
 	glDepthFunc(GL_LESS);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 }
 
 void SceneNode::RenderOutlineMask(Shader* shader)

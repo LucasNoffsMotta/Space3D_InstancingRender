@@ -62,7 +62,7 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, st
 	setupMesh(layouts);
 }
 
-
+///TODO: Refactor this and sync with DrawInstanced!
 void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 {
 	unsigned int diffuseNr = 1;
@@ -72,6 +72,11 @@ void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 	//0 = none
 	int hasTexture = material.textures.size() > 0 ? 1 : 0;
 	int hasReflection = 0;
+
+	//Count number of textures used, so then it will be possible to properly clean the shader program:
+	int totalActiveTextureUnits = 0;
+
+
 	shader.Activate();
 	shader.SetUniformInt("hasTexture", hasTexture);
 	shader.SetUniformInt("material.useColor", 1); //Use color by default
@@ -80,6 +85,7 @@ void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 	for (unsigned int i = 0; i < material.textures.size(); i++)
 	{
 		material.textures[i].ActiveTextureUnit(i);
+		totalActiveTextureUnits++;
 
 		material.textures[i].BindTexture();
 		shader.SetUniformInt("material.useColor", 0); //USE TEXTURE IF HAS TEXTURE!
@@ -135,9 +141,16 @@ void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 
 	//Very important: Had a anoying bug with textures not being rendered due to that. It is important to reset the shader uniform flag to default after changing it inside a conditional clausule. 
 	//The objects share the same shader program, so if a shader uniform flag is changed between frames, the next object can receive a "dirt" shader
+
+	//RESET ALL CONFIG TO DEFAULT (CLEAN THE SHADER PROGRAM)
 	shader.SetUniformInt("HasReflectionTexture", 0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+
+	for (int i = 0; i < totalActiveTextureUnits; i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
 }
 
 void Mesh::DrawInstanced(Shader& shader, int amount)

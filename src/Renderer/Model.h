@@ -29,11 +29,6 @@ private:
     void InitInstancesTranslations(float offSet);
     std::vector<Vertex> LoadCustomPrimitiveMesh(ePrimitive primitive, float uvFactor);
 
-
-
-    
-
-
     std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, eTextureType eType);
 
 
