@@ -244,9 +244,9 @@ void EditorUI::CreateLightDirectionOptions(std::string id)
 {
     glm::vec3 newDir = ContentManager::DirectionalLights["0"]->GetDirection();
 
-    ImGui::InputFloat("X: ", &newDir.x, -1, 1);
-    ImGui::InputFloat("Y: ", &newDir.y, -1 , 1);
-    ImGui::InputFloat("Z: ", &newDir.z, -1 , 1);
+    ImGui::SliderFloat("X: ", &newDir.x, -1, 0);
+    ImGui::SliderFloat("Y: ", &newDir.y, -1 , 0);
+    ImGui::SliderFloat("Z: ", &newDir.z, -1 , 0);
 
     ContentManager::DirectionalLights["0"]->SetDirection(newDir) ;
 }

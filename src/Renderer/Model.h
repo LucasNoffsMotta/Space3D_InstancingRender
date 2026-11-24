@@ -53,7 +53,6 @@ public:
     //void SetFramebufferTexture(Texture& texture);
     bool useInstanced;
     void Draw(Shader& shader);
-    void DrawInstanced(Shader& shader, int amount);
     void CreateInstancedModelMatrices(int amount);
 
     void RotatePitch(float offSet);

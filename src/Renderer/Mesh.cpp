@@ -127,6 +127,7 @@ void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 	shader.SetUniformFloat("material.shininess", material.shininess);
 
 	glBindVertexArray(VAO);
+
 	if (useInstanced)
 	{
 		glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0, instancedAmmount);
@@ -151,49 +152,4 @@ void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-}
-
-void Mesh::DrawInstanced(Shader& shader, int amount)
-{
-	unsigned int diffuseNr = 1;
-	unsigned int specularNr = 1;
-
-	//1 = has texture
-	//0 = none
-	int hasTexture = material.textures.size() > 0 ? 1 : 0;
-	shader.Activate();
-	shader.SetUniformInt("hasTexture", hasTexture);
-
-	for (unsigned int i = 0; i < material.textures.size(); i++)
-	{
-		material.textures[i].ActiveTextureUnit(i);
-		material.textures[i].BindTexture();
-
-		bool isDiffuse = material.textures[i].type == eTextureType::Diffuse;
-
-		std::string number;
-		std::string name = isDiffuse ? "texture_diffuse" : "texture_specular";
-
-		if (isDiffuse)
-		{
-			number = std::to_string(diffuseNr++);
-		}
-
-		else
-		{
-			number = std::to_string(specularNr++);
-		}
-
-		shader.SetUniformInt(("material." + name + number).c_str(), i);
-	}
-
-	shader.SetUniform4fv("material.color", material.color);
-	shader.SetUniformFloat("material.shininess", material.shininess);
-
-	glBindVertexArray(VAO);
-	glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0, amount);
-	glBindVertexArray(0);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
