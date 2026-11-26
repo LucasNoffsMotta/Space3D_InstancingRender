@@ -62,24 +62,24 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, st
 	setupMesh(layouts);
 }
 
-///TODO: Refactor this and sync with DrawInstanced!
+///TODO: Ongoing -> REFACTORING THIS
 void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 {
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
 
-	//1 = has texture
-	//0 = none
-	int hasTexture = material.textures.size() > 0 ? 1 : 0;
-	int hasReflection = 0;
 
 	//Count number of textures used, so then it will be possible to properly clean the shader program:
 	int totalActiveTextureUnits = 0;
 
 
 	shader.Activate();
-	shader.SetUniformInt("hasTexture", hasTexture);
-	shader.SetUniformInt("material.useColor", 1); //Use color by default
+	shader.SetUniformInt("hasTexture", this->material.hasTexture);
+	shader.SetUniformInt("material.useColor", this->material.useColor);
+	shader.SetUniformInt("HasReflectionTexture", this->material.hasReflection);
+	shader.SetUniform4fv("material.color", material.color);
+	shader.SetUniformFloat("material.ior", 0.5f); 	// material.IndiceOfReflection
+	shader.SetUniformFloat("material.shininess", material.shininess);
 
 
 	for (unsigned int i = 0; i < material.textures.size(); i++)
@@ -88,8 +88,6 @@ void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 		totalActiveTextureUnits++;
 
 		material.textures[i].BindTexture();
-		shader.SetUniformInt("material.useColor", 0); //USE TEXTURE IF HAS TEXTURE!
-
 		std::string number;
 		std::string name = material.textures[i].TextureTypeToUniform(material.textures[i].type);
 
@@ -106,25 +104,11 @@ void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 		else if (material.textures[i].type == eTextureType::Diffuse_CubeMap)
 		{
 			shader.SetUniformInt(("material." + name).c_str(), i);
-			hasReflection = 1;
-
-			//If mesh has only 1 texture, and it is the skybox texture, the shader will use mtl color to calculate frag color
-			//Otherwise, can use the diffuse
-			if (material.textures.size() == 1)
-			{
-				shader.SetUniformInt("material.useColor", 1); //USE COLOR IF THE ONLY TEXTURE IS FOR REFLECTION (IT WILL MIX THE COLOR AND REFLECTION INSIDE THE SHADER)!
-			}
-
 			continue;
 		}
 
 		shader.SetUniformInt(("material." + name + number).c_str(), i);
 	}
-
-	shader.SetUniformInt("HasReflectionTexture", hasReflection);
-	shader.SetUniform4fv("material.color", material.color);
-	shader.SetUniformFloat("material.ior", 0.5f); 	// material.IndiceOfReflection
-	shader.SetUniformFloat("material.shininess", material.shininess);
 
 	glBindVertexArray(VAO);
 
@@ -146,10 +130,14 @@ void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 	//RESET ALL CONFIG TO DEFAULT (CLEAN THE SHADER PROGRAM)
 	shader.SetUniformInt("HasReflectionTexture", 0);
 
-	for (int i = 0; i < totalActiveTextureUnits; i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
+
+	////This code is being called a lot of times on random moments
+	//for (int i = 0; i < totalActiveTextureUnits; i++)
+	//{
+	//	glActiveTexture(GL_TEXTURE0 + i);
+	//	glBindTexture(GL_TEXTURE_2D, 0);
+	//}
 }

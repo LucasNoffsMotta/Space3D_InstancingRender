@@ -404,6 +404,7 @@ void Model::PushNewTexture(Texture& newTexture)
     for (auto& mesh : meshes)
     {
         mesh.material.textures.push_back(newTexture);
+        mesh.material.SetMaterialProperties();
     }
 }
 

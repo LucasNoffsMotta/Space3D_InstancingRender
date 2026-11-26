@@ -105,9 +105,9 @@ void SceneManager::LoadModelsAndSetPositions()
     //Pushing the skybox texture to create reflection effect (used as a texture on those models, shader use this texture to sample values from)
     //Test: Enviroment map texture 
     //Obs: To render a framebuffer texture to a model, just Push new texture calling GetFramebufferTexture and make sure that the fbo is receiving data on the render pass
-    //cube->PushNewTexture(*ContentManager::GlobalRenderer->GetEnviromentMapTexture());
+    cube->PushNewTexture(*ContentManager::GlobalRenderer->GetEnviromentMapTexture());
 
-   //DynamicReflectiveObject = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(14, 2, 1), glm::vec3(1), 0, false, false);
+    DynamicReflectiveObject = ContentManager::CreateEntity(NO_STENCIL_TEST, cube, glm::vec3(14, 2, 1), glm::vec3(1), 0, false, false);
 
     /*
     *   END OF REFLECTIVE OBJ
@@ -402,8 +402,8 @@ void SceneManager::RenderScene(Window& window)
 
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
 
-    /*
-    * 
+    
+    
     //Second pass: Enviroment map - Render the scene 6x  
     ContentManager::GlobalRenderer->BindEnviromentFramebuffer();
 
@@ -413,7 +413,7 @@ void SceneManager::RenderScene(Window& window)
     ContentManager::GlobalRenderer->UnbindEnviromentFramebuffer();
     window.GL_ClearBuffers(0, 0, 0, 1.0f); //glClear Color, Stencil and Depth buffer
 
-    */
+    
 
     //Draw Scene nodes recursively:
     RootNode->UpdateNode(true, false);
