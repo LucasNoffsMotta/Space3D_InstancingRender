@@ -45,6 +45,7 @@ struct Material {
 	samplerCube skybox; 
 	vec4 color;
 	bool useColor;
+	bool useSpecular;
 }; 
   
 uniform Material material;
@@ -232,7 +233,12 @@ vec3 GetFullLitColorResult(vec4 diffuseColor)
 	vec3 normal = normalize(fs_in.FragmentShader_Normal);
 	vec3 viewDir = normalize(viewPos - fs_in.FragPos);
 	vec3 result = vec3(0);
-	vec3 specularColor = vec3(texture(material.texture_specular1, fs_in.texCoord));
+	vec3 specularColor =  vec3(0);
+	
+	if (material.useSpecular) 
+	{
+		specularColor = vec3(texture(material.texture_specular1, fs_in.texCoord));
+	}
 
 	result += GetDirLight(normal, viewDir, diffuseColor, specularColor);
 

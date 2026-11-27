@@ -167,7 +167,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\lnoff\Desktop\Programming\GraphicsProgramming\OpenGLLibaries\Include\ImGui\backends;C:\Users\lnoff\Desktop\Programming\GraphicsProgramming\OpenGLLibaries\Include\ImGui;C:\Users\lnoff\Desktop\Programming\GraphicsProgramming\OpenGLLibaries\Include;D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\imgui-master\backends;D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\imgui-master;D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\lnoff\Desktop\Programming\GraphicsProgramming\OpenGLLibaries\Libs;D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\Libs;$(LibraryPath)</LibraryPath>
+    <LibraryPath>D:\Projetos\c++\OpenGL\GraphicsProgramming\OpenGLLibaries\Libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\lnoff\Desktop\Programming\GraphicsProgramming\OpenGLLibaries\Include\ImGui\backends;C:\Users\lnoff\Desktop\Programming\GraphicsProgramming\OpenGLLibaries\Include\ImGui;C:\Users\lnoff\Desktop\Programming\GraphicsProgramming\OpenGLLibaries\Include;C:\Users\lnoff\Desktop\Programming\GraphicsProgramming\OpenGLLibaries\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>

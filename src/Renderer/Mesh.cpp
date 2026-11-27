@@ -80,6 +80,7 @@ void Mesh::Draw(Shader& shader, bool useInstanced, int instancedAmmount)
 	shader.SetUniform4fv("material.color", material.color);
 	shader.SetUniformFloat("material.ior", 0.5f); 	// material.IndiceOfReflection
 	shader.SetUniformFloat("material.shininess", material.shininess);
+	shader.SetUniformInt("material.useSpecular", material.useSpecular);
 
 
 	for (unsigned int i = 0; i < material.textures.size(); i++)

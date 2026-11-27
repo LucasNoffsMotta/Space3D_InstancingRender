@@ -12,6 +12,7 @@ struct Material
 	int hasTexture = 0;
 	int hasReflection = 0;
 	int useColor = 1;
+	bool useSpecular = false;
 
 	Material(std::vector<Texture> _textures, glm::vec4 _color, float _shininess, float IOR)
 	{
@@ -31,6 +32,19 @@ struct Material
 		SetHasTexture();
 		SetHasReflection();
 		SetUseColor();
+		SetUseSpecular();
+	}
+
+	void SetUseSpecular()
+	{
+		for (int i = 0; i < textures.size(); i++)
+		{
+			if (textures[i].type == eTextureType::Specular)
+			{
+				useSpecular = true;
+				return;
+			}
+		}
 	}
 
 	void SetHasTexture()
